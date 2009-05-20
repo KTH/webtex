@@ -1,0 +1,104 @@
+# Copyright: (c) 2007 The Open University, Milton Keynes, UK.
+# License: GPL version 2 or (at your option) any later version.
+# Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
+# $Source$
+# $Revision: 101 $ $Date: 2007-04-23 13:12:59 +0200 (Mon, 23 Apr 2007) $
+
+Security
+
+The purpose of this file is to document the various potential security
+holes in TeX, and the steps that should be taken to avoid opening
+them.
+
+
+1.  Access to primitive commands.  By moving all primitive commands to
+    control sequences whose name begins with '_', and changing the
+    catcode of '_' back to other, we can prevent users accessing the
+    primitive commands.
+
+GOTCHA:  In 
+    \_catcode`_12\_end
+the \_end is read without the change of catcodes.  This is because TeX
+is looking for an optional space.
+
+PRINCIPLE: The user is not to be allowed to change catcodes.
+
+
+2.  Restoring the catcode of '_'.  We recommend and assume that
+    applications place a NUL character (character code zero) at the
+    end of user input.  The application should ensure that any NUL
+    characters in the actual user input are removed.  The secure TeX
+    style can then give NUL an appropriate meaning - for example make
+    it an \outer macro.
+
+GOTCHA: If ^ is a superscript character, then ^^00 will be read by TeX
+as an NUL character.  To avoid this, make ^ an active character, whose
+meaning is superscript.  This will prevent ^^00 being read as NUL.
+(In this document, we will let Z stand for the NUL character.)
+
+GOTCHA: TeX allows `Z as syntax for a number.  Thus, \mathchar`Z will
+consume the NUL character.
+
+GOTCHA: TeX uses % to provide a comment to the end of the line.  Thus,
+if the NUL is not preceeded by a new line, user input can comment it
+out.
+
+PRINCIPLE: The user is not to be allowed to generate or consume the
+NUL character.
+
+
+3.  Allowing { ... } grouping.  Suppose the template looks like
+    \_shipout\_hbox{%
+        \_catcode`_ 12
+        \_let Z \_egroup
+        <user input goes here>
+    Z % Represents NUL.
+
+GOTCHA: If right brace is an end-group character, the user can
+effectively provide the NUL character, and then follow it with
+additional input.
+    
+SOLUTION: TeX treats \begingroup ... \endgroup as higher level
+grouping commands than { ... }. It will discard a } if the current
+grouping command is \begingroup.  Similarly, it will supply a }
+command when it comes to an \endgroup, if the current level if {, and
+there is a \begingroup waiting to be closed.  
+
+This is not as complicated as it sounds, and can be tested by using
+TeX at the command line.  The same applies to the closing of $ and $$
+groups.
+
+Instead, use the template:
+    \_shipout\_hbox{%
+        \_begingroup
+        \_catcode`_ 12
+        \_def Z {\_endgroup \_egroup}%
+        <user input goes here>
+    Z % Represents NUL.
+
+
+4.  Allowing \begingroup ... \endgroup grouping.  This will be harder,
+    because TeX does not provide a \beginsupergroup command.
+
+SOLUTION: For now, don't do it.  Don't allow the user access to
+\begingroup and \endgroup commands.
+
+For later, two mechanisms.  First, use \aftergroup.  Call
+    \_begingroup\_aftergroup\_specialtoken
+and have \_specialtoken check for mischief.  This will provide, so to
+speak, top-level protection which might work even if the user manages
+to access the \endgroup command.
+
+Second, have the commands that call \endgroup disabled until TeX
+enters are group.  Thus
+   \_def \midinsert {
+         \_begingroup 
+             \_let\user_endgroup\_endgroup
+             [...]
+    }
+    \_def \endinsert {
+          [...]
+          \user_endgroup
+          [...]
+    }
+

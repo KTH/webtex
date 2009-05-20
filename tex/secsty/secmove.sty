@@ -1,0 +1,396 @@
+% Copyright: (c) 2007 The Open University, Milton Keynes, UK.
+% License: GPL version 2 or (at your option) any later version.
+% Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
+% $Source$
+% $Revision: 89 $
+
+% This file is to be loaded first.
+
+% For all primitive control words \xxx, move the meaning
+% of \xxx to \_xxx and undefine \xxx.  In addition, we set 
+% \par to be \_par.
+
+% We also move the single-character control sequences \ , 
+% \/ and \- to \_ex_space, \_ital_corr and \_disc_hyph 
+% respectively, and undefine \ , \/ and \-.  (The names 
+% ex_space and ital_corr are taken from tex.web.  The symbol 
+% \- corresponds to a special case of discretionary.)
+
+% To avoid being painted into a corner, we change the 
+% catcode of _ to be a letter.
+
+\catcode`\_=11
+
+\begingroup
+\catcode`\{=1
+\catcode`\}=2
+\catcode`\#=6
+\catcode`\ =9
+\endlinechar=-1
+\escapechar=-1
+
+% Set up these values by hand.
+\let \_string \string
+\let \_expandafter \expandafter
+\let \_csname \csname
+\let \_endcsname \endcsname
+\let \_begingroup \begingroup
+\let \_endgroup \endgroup
+\let \_global \global
+\let \_let \let
+\let \_def \def
+\let \_gdef \gdef
+
+% Helper macros, whose definition is local to the group.
+% Macro \A forms the target control sequence, and passes
+% it and the original control sequecnce to a helper macro
+% \B.
+\long \def \A #1
+{
+  \_begingroup \_expandafter \_endgroup
+    \_expandafter \B 
+        \_csname _ \_string #1 \_endcsname
+        #1
+}
+
+% Macro \B does the deed.
+\long \def \B #1 #2 
+{
+  \_global \_let #1 #2 
+  \_global \_let #2 \_undefined
+}
+
+% Do \par by hand, to avoid undefining \par.
+\global \let \_par \par
+
+% Do the single-character primitives by hand.
+\B \_disc_hyph \- 
+\B \_ital_corr \/
+\B \_ex_space \   % This comment ensures we get a space here.
+
+% All control words, except \par.
+\A \above
+\A \abovedisplayshortskip
+\A \abovedisplayskip
+\A \abovewithdelims
+\A \accent
+\A \adjdemerits
+\A \advance
+\A \afterassignment
+\A \aftergroup
+\A \atop
+\A \atopwithdelims
+\A \badness
+\A \baselineskip
+\A \batchmode
+\A \begingroup
+\A \belowdisplayshortskip
+\A \belowdisplayskip
+\A \binoppenalty
+\A \botmark
+\A \box
+\A \boxmaxdepth
+\A \brokenpenalty
+\A \catcode
+\A \char
+\A \chardef
+\A \cleaders
+\A \closein
+\A \closeout
+\A \clubpenalty
+\A \copy
+\A \count
+\A \countdef
+\A \cr
+\A \crcr
+\A \csname
+\A \day
+\A \deadcycles
+\A \def
+\A \defaulthyphenchar
+\A \defaultskewchar
+\A \delcode
+\A \delimiter
+\A \delimiterfactor
+\A \delimitershortfall
+\A \dimen
+\A \dimendef
+\A \discretionary
+\A \displayindent
+\A \displaylimits
+\A \displaystyle
+\A \displaywidowpenalty
+\A \displaywidth
+\A \divide
+\A \doublehyphendemerits
+\A \dp
+\A \dump
+\A \edef
+\A \else
+\A \emergencystretch
+\A \end
+\A \endcsname
+\A \endgroup
+\A \endinput
+\A \endlinechar
+\A \eqno
+\A \errhelp
+\A \errmessage
+\A \errorcontextlines
+\A \errorstopmode
+\A \escapechar
+\A \everycr
+\A \everydisplay
+\A \everyhbox
+\A \everyjob
+\A \everymath
+\A \everypar
+\A \everyvbox
+\A \exhyphenpenalty
+\A \expandafter
+\A \fam
+\A \fi
+\A \finalhyphendemerits
+\A \firstmark
+\A \floatingpenalty
+\A \font
+\A \fontdimen
+\A \fontname
+\A \futurelet
+\A \gdef
+\A \global
+\A \globaldefs
+\A \halign
+\A \hangafter
+\A \hangindent
+\A \hbadness
+\A \hbox
+\A \hfil
+\A \hfill
+\A \hfilneg
+\A \hfuzz
+\A \hoffset
+\A \holdinginserts
+\A \hrule
+\A \hsize
+\A \hskip
+\A \hss
+\A \ht
+\A \hyphenation
+\A \hyphenchar
+\A \hyphenpenalty
+\A \if
+\A \ifcase
+\A \ifcat
+\A \ifdim
+\A \ifeof
+\A \iffalse
+\A \ifhbox
+\A \ifhmode
+\A \ifinner
+\A \ifmmode
+\A \ifnum
+\A \ifodd
+\A \iftrue
+\A \ifvbox
+\A \ifvmode
+\A \ifvoid
+\A \ifx
+\A \ignorespaces
+\A \immediate
+\A \indent
+\A \input
+\A \inputlineno
+\A \insert
+\A \insertpenalties
+\A \interlinepenalty
+\A \jobname
+\A \kern
+\A \language
+\A \lastbox
+\A \lastkern
+\A \lastpenalty
+\A \lastskip
+\A \lccode
+\A \leaders
+\A \left
+\A \lefthyphenmin
+\A \leftskip
+\A \leqno
+\A \let
+\A \limits
+\A \linepenalty
+\A \lineskip
+\A \lineskiplimit
+\A \long
+\A \looseness
+\A \lower
+\A \lowercase
+\A \mag
+\A \mark
+\A \mathaccent
+\A \mathbin
+\A \mathchar
+\A \mathchardef
+\A \mathchoice
+\A \mathclose
+\A \mathcode
+\A \mathinner
+\A \mathop
+\A \mathopen
+\A \mathord
+\A \mathpunct
+\A \mathrel
+\A \mathsurround
+\A \maxdeadcycles
+\A \maxdepth
+\A \meaning
+\A \medmuskip
+\A \message
+\A \mkern
+\A \month
+\A \moveleft
+\A \moveright
+\A \mskip
+\A \multiply
+\A \muskip
+\A \muskipdef
+\A \newlinechar
+\A \noalign
+\A \noboundary
+\A \noexpand
+\A \noindent
+\A \nolimits
+\A \nonscript
+\A \nonstopmode
+\A \nulldelimiterspace
+\A \nullfont
+\A \number
+\A \omit
+\A \openin
+\A \openout
+\A \or
+\A \outer
+\A \output
+\A \outputpenalty
+\A \over
+\A \overfullrule
+\A \overline
+\A \overwithdelims
+\A \pagedepth
+\A \pagefilllstretch
+\A \pagefillstretch
+\A \pagefilstretch
+\A \pagegoal
+\A \pageshrink
+\A \pagestretch
+\A \pagetotal
+\A \parfillskip
+\A \parindent
+\A \parshape
+\A \parskip
+\A \patterns
+\A \pausing
+\A \penalty
+\A \postdisplaypenalty
+\A \predisplaypenalty
+\A \predisplaysize
+\A \pretolerance
+\A \prevdepth
+\A \prevgraf
+\A \radical
+\A \raise
+\A \read
+\A \relax
+\A \relpenalty
+\A \right
+\A \righthyphenmin
+\A \rightskip
+\A \romannumeral
+\A \scriptfont
+\A \scriptscriptfont
+\A \scriptscriptstyle
+\A \scriptspace
+\A \scriptstyle
+\A \scrollmode
+\A \setbox
+\A \setlanguage
+\A \sfcode
+\A \shipout
+\A \show
+\A \showbox
+\A \showboxbreadth
+\A \showboxdepth
+\A \showlists
+\A \showthe
+\A \skewchar
+\A \skip
+\A \skipdef
+\A \spacefactor
+\A \spaceskip
+\A \span
+\A \special
+\A \splitbotmark
+\A \splitfirstmark
+\A \splitmaxdepth
+\A \splittopskip
+\A \string
+\A \tabskip
+\A \textfont
+\A \textstyle
+\A \the
+\A \thickmuskip
+\A \thinmuskip
+\A \time
+\A \toks
+\A \toksdef
+\A \tolerance
+\A \topmark
+\A \topskip
+\A \tracingcommands
+\A \tracinglostchars
+\A \tracingmacros
+\A \tracingonline
+\A \tracingoutput
+\A \tracingpages
+\A \tracingparagraphs
+\A \tracingrestores
+\A \tracingstats
+\A \uccode
+\A \uchyph
+\A \underline
+\A \unhbox
+\A \unhcopy
+\A \unkern
+\A \unpenalty
+\A \unskip
+\A \unvbox
+\A \unvcopy
+\A \uppercase
+\A \vadjust
+\A \valign
+\A \vbadness
+\A \vbox
+\A \vcenter
+\A \vfil
+\A \vfill
+\A \vfilneg
+\A \vfuzz
+\A \voffset
+\A \vrule
+\A \vsize
+\A \vskip
+\A \vsplit
+\A \vss
+\A \vtop
+\A \wd
+\A \widowpenalty
+\A \write
+\A \xdef
+\A \xleaders
+\A \xspaceskip
+\A \year
+
+\_endgroup
+
+% End of file.

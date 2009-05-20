@@ -1,0 +1,83 @@
+/* Mathtran client library style sheet.
+ *
+ * Copyright: (c) 2007 The Open University, Milton Keynes, UK
+ * License: GPL version 2 or (at your option) any later version.
+ * Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
+ */
+
+/* MathTran image depth adjustment. */
+img.dp0 { vertical-align: 0px }
+img.dp1 { vertical-align: -1px }
+img.dp2 { vertical-align: -2px }
+img.dp3 { vertical-align: -3px }
+img.dp4 { vertical-align: -4px }
+img.dp5 { vertical-align: -5px }
+img.dp6 { vertical-align: -6px }
+img.dp7 { vertical-align: -7px }
+img.dp8 { vertical-align: -8px }
+img.dp9 { vertical-align: -9px }
+img.dp10 { vertical-align: -10px }
+img.dp11 { vertical-align: -11px }
+img.dp12 { vertical-align: -12px }
+img.dp13 { vertical-align: -13px }
+img.dp14 { vertical-align: -14px }
+img.dp15 { vertical-align: -15px }
+img.dp16 { vertical-align: -16px }
+img.dp17 { vertical-align: -17px }
+img.dp18 { vertical-align: -18px }
+img.dp19 { vertical-align: -19px }
+img.dp20 { vertical-align: -20px }
+img.dp20 { vertical-align: -20px }
+img.dp21 { vertical-align: -21px }
+img.dp22 { vertical-align: -22px }
+img.dp23 { vertical-align: -23px }
+img.dp24 { vertical-align: -24px }
+img.dp25 { vertical-align: -25px }
+img.dp26 { vertical-align: -26px }
+img.dp27 { vertical-align: -27px }
+img.dp28 { vertical-align: -28px }
+img.dp29 { vertical-align: -29px }
+img.dp30 { vertical-align: -30px }
+
+img.dp_1 { vertical-align: 1px }
+img.dp_2 { vertical-align: 2px }
+img.dp_3 { vertical-align: 3px }
+img.dp_4 { vertical-align: 4px }
+img.dp_5 { vertical-align: 5px }
+img.dp_6 { vertical-align: 6px }
+img.dp_7 { vertical-align: 7px }
+img.dp_8 { vertical-align: 8px }
+img.dp_9 { vertical-align: 9px }
+img.dp_10 { vertical-align: 10px }
+img.dp_11 { vertical-align: 11px }
+img.dp_12 { vertical-align: 12px }
+img.dp_13 { vertical-align: 13px }
+img.dp_14 { vertical-align: 14px }
+img.dp_15 { vertical-align: 15px }
+img.dp_16 { vertical-align: 16px }
+img.dp_17 { vertical-align: 17px }
+img.dp_18 { vertical-align: 18px }
+img.dp_19 { vertical-align: 19px }
+img.dp_20 { vertical-align: 20px }
+img.dp_21 { vertical-align: 21px }
+img.dp_22 { vertical-align: 22px }
+img.dp_23 { vertical-align: 23px }
+img.dp_24 { vertical-align: 24px }
+img.dp_25 { vertical-align: 25px }
+img.dp_26 { vertical-align: 26px }
+img.dp_27 { vertical-align: 27px }
+img.dp_28 { vertical-align: 28px }
+img.dp_29 { vertical-align: 29px }
+img.dp_30 { vertical-align: 30px }
+
+.textips img.tex { 
+    cursor: pointer;
+    border: 1px dotted blue;
+    margin: 0px 3px;
+    padding: 3px;
+}
+.textips .output { line-height: 4em; }
+.textips .output img { 
+    padding: 3px;
+    border: 1px dotted green; 
+}

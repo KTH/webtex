@@ -1,0 +1,408 @@
+% Copyright: (c) 2007 The Open University, Milton Keynes, UK
+% and Jonathan Fine (based on JF's atcode.sty).
+% License: GPL version 2 or (at your option) any later version.
+% Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
+% $Source$
+% $Revision: 97 $ $Date: 2007-04-16 12:48:24 +0200 (Mon, 16 Apr 2007) $
+
+% This file defines the \_code command, which provides an
+% improved environment for writing TeX macros. Security requires 
+% clear and readable TeX code.
+
+% TODO: Why \csname ? ^^nn \endcsname instead of a \let?
+%       It is like looking up in another dictionary.
+% TODO: Useful constants to be defined in a different file.
+% TODO: Remove redundant stuff.
+% TODO: Introduce \do.symbols?
+% TODO: ', " and so on.
+% TODO: math.sub, math.sup, tab.align as control sequences, 
+%  for assignment to active characters.
+% TODO: Avoid internal use of !% and !; and !".
+% TODO: List control sequences exported.
+% TODO: \doX and \do.
+% TODO: Initialse all symbols, in code, to be non_letter.
+% TOD0: Any more symbols missed, befides @?
+% TODO: Allow identifiers to begin with _.
+% TODO: Allow ^^NN notation (perhaps).
+% TOD0: Allow source code to be indexed - perform some 'lint' functions.
+% TODO: '    def wibble\n\n{}\n\n    def xxx {}\n' bombs.
+% TODO: String constants going over end of line - recover better.
+
+\_begingroup
+
+% Set up category and similar codes.
+\_catcode `\{ = 1               % Left brace is begin-group character.
+\_catcode `\} = 2               % Right brace is end-group character.
+\_catcode `\# = 6               % Hash mark is macro parameter character.
+\_catcode `\^ = 7               % Superscript character for ^^nn notation.
+\_catcode `\  = 9               % Ignore space characters.
+\_catcode `\^^M = 9             % Ignore the end of the line
+\_catcode `\; = 9               % Ignored: use to end commands.
+\_catcode `\, = 9               % Ignored: use to separate macro arguments etc.
+\_catcode `\~ = 10              % Produce an ordinary space character.
+\_catcode `\. = 11              % Treat as a letter.
+\_catcode `\_ = 11              % Treat as letter.
+\_catcode `\^^00 = 12           % Used as prefix.
+\_catcode `\? = 13              % \uppercase for `random' active characters.
+\_escapechar = -1               % For when we \string a control sequence.
+\_newlinechar = -1              % In case we print a ^^00 character.
+
+% Some useful constants and registers.
+\_global \_chardef \_char.zero 0~ % A shorthand for the number 0.
+\_global\_chardef \_char.one 1~ % A shorthand for the number 1.
+\_global \_chardef \_catcode.active 13~ % Category code of active characters.
+\_global \_chardef \_catcode.invalid 15~ % Category code of invalid characters.
+\_global \_countdef \_count.tmp 255~     % Temporary counter, for local use.
+
+% The \app command appends tokens to an existing macro definition.
+% It is \long, in case we add \par tokens.
+    \_long \_gdef \_app #1 #2
+        { \_expandafter \_def \_expandafter #1 \_expandafter { #1 #2 } }
+
+% Here's the main macro.  We'll append more code to it later.
+    \_gdef \_code { \_begingroup ; \_active.init } ;
+
+% \_active.init will make all the standard 7 bit characters active.
+% The special 7 bit characters are invalid, but not TAB and RE.
+% The behaviour of characters 128 to 255 is undefined.
+
+% An unwound \_loop is the quickest way to set the \_catcode's.
+% The helpers make a character active or invalid respectively.
+    \_def \a 
+    { 
+        \_catcode \_count.tmp \_catcode.active ; 
+        \_advance \_count.tmp \_char.one 
+    } 
+    \_def \i
+    { 
+        \_catcode \_count.tmp \_catcode.invalid ; 
+        \_advance \_count.tmp \_char.one 
+    } 
+
+% Here is the category code table.  TAB and RE are made active.
+    \_xdef \_active.init
+    {
+      \_count.tmp \_char.zero ;
+      \i\i\i\i \i\i\i\i ; \i\a\i\i \i\a\i\i ;
+      \i\i\i\i \i\i\i\i ; \i\i\i\i \i\i\i\i ;
+      \a\a\a\a \a\a\a\a ; \a\a\a\a \a\a\a\a ;
+      \a\a\a\a \a\a\a\a ; \a\a\a\a \a\a\a\a ;
+      \a\a\a\a \a\a\a\a ; \a\a\a\a \a\a\a\a ;
+      \a\a\a\a \a\a\a\a ; \a\a\a\a \a\a\a\a ;
+      \a\a\a\a \a\a\a\a ; \a\a\a\a \a\a\a\a ;
+      \a\a\a\a \a\a\a\a ; \a\a\a\a \a\a\a\a ;
+    }
+
+% Active letters and digits get fixed global values. The helper feeds
+% active characters to \_next, until we come to \_relax.
+    \_def \_do #1
+    {
+      \_ifx #1 \_relax , \_expandafter \_noexpand ;
+      \_else
+        \_uccode ` \? ~ = ` #1 ~ ;
+        \_uppercase { \_next ? } ;
+      \_fi ; \_do ;
+    }
+
+% We use \_do to define active letters and digits.
+    \_def \_next #1 { \_gdef #1 { \_active.lcletter #1 } } ;
+    \_do abcdefghijklmnopqrstuvwxyz \_relax ;
+    \_def \_next #1 { \_gdef #1 { \_active.ucletter #1 } } ;
+    \_do ABCDEFGHIJKLMNOPQRSTUVWXYZ \_relax ;
+    \_def \_next #1 { \_gdef #1 { \_active.digit #1 } } ;
+    \_do 0123456789 \_relax ;
+
+% We need to know when we have come to the end of control sequence.
+    \_global \_let \_code.non_letter \_relax
+
+% Add symbol initialisation to \_code.
+    \_begingroup
+      \_aftergroup \_app ; 
+      \_aftergroup \_code ;
+      \_aftergroup { ;
+          \_def \_next #1 
+          { 
+              % Add symbol initialisation to \_code.
+              \_aftergroup \_let ;
+              \_aftergroup #1 ;
+              \_expandafter \_aftergroup \_csname ^^00 \_string #1 \_endcsname ;
+              % Default value, to be changed later for some control sequences.
+              \_expandafter \_gdef \_csname ^^00 \_string #1 \_endcsname 
+                  { \_code.non_letter \_code.error #1 }
+          }
+          \_do  \! \" \# \$ \% \& \' \( \) \* \+ \, \- \. \/ \:
+                \; \< \= \> \? \_ \[ \\ \] \^ \_ \` \{ \| \} \~
+
+                \@  % TODO: Any more symbol missing?
+                \_relax ;
+      \_aftergroup } ;
+    \_endgroup ;
+
+
+% Now to define the \_code symbols.  We use a constructor.
+    \_def \_do #1 #2
+      { \_expandafter #1 \_csname ^^00 \_string #2 \_endcsname } ;
+
+    \_def \_doX #1 #2
+    { 
+        \_expandafter \_gdef \_csname ^^00 \_string #1 \_endcsname
+            { \_code.non_letter #2 }
+    } 
+
+% To get going, here are the easier symbols.
+    \_doX \, {}                 % Punctuation.
+    \_doX \! { \_aftergroup }   % Contribute active character.
+    \_doX \# { \_aftergroup ## } % Macro parameter character
+    \_doX \' { \_expandafter \_aftergroup \_string } ;  % inert char
+
+% Need a trick to get space token into defintion for ~.
+    \_def \_next #1 { \_doX \~ { \_aftergroup #1 } }
+    \_next { ~ }
+
+% Some symbols produce themselves, with their usual category code.
+    \_def \_next #1 { \_doX #1 { \_aftergroup #1 } } ;
+    \_next < ; \_next = ; \_next > ; 
+    \_next + ; \_next - ;  % arithmetic
+    \_next ` ;  % used to convert char into ASCII code
+
+% We will count braces.
+    \_global \_app \_code { \_count.tmp \_char.zero }
+    \_doX \{
+    {
+        \_advance \_count.tmp \_char.one ;
+        \_aftergroup { ; \_iffalse } \_fi ;
+    }
+    \_doX \}
+    {
+        \_advance \_count.tmp - \_char.one ;
+        \_iffalse { \_fi ; \_aftergroup } ;
+    }
+    \_doX \;
+    {
+        \_ifcase \_count.tmp ,
+            \_expandafter \_endgroup ; \_expandafter \_code ;
+        \_fi
+    }
+
+% Comment is out of date.
+% Backslash is for forming control sequences.
+    \_global \_app \_code 
+    { 
+        \_let \_active.lcletter \_code.letter 
+        \_let \_active.ucletter \_code.letter 
+    }
+
+    \_do \_gdef \\ #1
+    {
+      \_code.non_letter ;
+      \_begingroup ;
+        \_let \_active.lcletter \_string ;
+        \_let \_active.ucletter \_string ;
+        \_let \_code.non_letter \_endcsname ;
+        \_let \_active.digit \_code.non_letter;
+        % Comment is out of date.
+        % We can now finish off backslash.  It contributes a control sequence.
+      \_expandafter \_endgroup ;
+      \_expandafter \_aftergroup ;
+      \_csname ;
+      \_string #1 ;  % TODO: Fix this fudge.
+      \_ifcase \_lccode `#1 \_endcsname \_fi
+    }
+      
+    \_gdef \_code.letter
+    {
+      \_begingroup ;
+        \_let \_active.lcletter \_string ;
+        \_let \_active.ucletter \_string ;
+        \_let \_active.digit \_string ;
+        \_let \_code.non_letter \_endcsname ;
+        \_uccode`?`. ; \_uppercase{\_def ? {.}} ; % FIXME
+        \_uccode`?`_ ; \_uppercase{\_def ? {_}} ; % FIXME
+        % Comment is out of date.
+        % We can now finish off backslash.  It contributes a control sequence.
+      \_expandafter \_endgroup ;
+      \_expandafter \_aftergroup ;
+      \_csname ;
+      _ ;
+    }
+
+% Macros containing active SP character.
+    \_uccode `\? 32 ; \_uppercase
+    {
+      \_global \_app \_code { \_def ? { \_code.non_letter}} ;
+    }
+
+% Macros containing active TAB character.
+    \_uccode `\? 9 ; \_uppercase
+    {
+      \_global \_app \_code { \_def ? { \_code.non_letter}} ;
+    }
+
+% Macros containing active RE character.
+    \_uccode `\? = 13  ; \_uppercase
+    {
+      \_global \_app \_code { \_def ? { \_code.non_letter ; \_code.RE }} ;
+      \_do \_gdef \% #1 ? { ? } ;  % half line comment character
+    }
+    \_global \_let \_code.RE \_relax ;  % temporary value
+
+% Next, letters and digits are given their values.
+    \_global \_app \_code 
+        { \_def \_active.digit { \_expandafter \_aftergroup \_string } }
+
+% We now slip into \_code mode to finish off.  At present, \_code is
+% only half-working.
+    \_code
+
+% Use [[ and ]] to open and close groupings.
+    do gdef ![ ![
+    {
+        begingroup ;            % Open an inner accumulation group.
+        count.tmp char.zero ;   % Reset the brace counter.
+    } ;
+
+    do gdef !] !]
+    {
+        ifcase count.tmp , expandafter endgroup ; % If OK, end the group.
+        else code.error !] fi ; % Otherwise generate an error.
+    } ;
+
+% Now for access to arbitrary character tokens.  Just for now, have |*|
+% produce unusual NUL character
+    [[ def !* #1
+        { catcode '` '^ 7 catcode 0~ '" string #'1 ' aftergroup } ]]
+
+% We can now make the definition.  It's tricky.
+    do gdef '| #1 #2 #3
+    {
+      begingroup ;
+        let *D^^00 undefined;   % In case it is an \outer macro.
+        uccode 0~ '" string #2 string #3 ~ ;
+        uccode 32~ uccode 0~ ;
+        uppercase
+        {
+          endgroup ;
+          ifcase '" string #1 ~ ,
+            begingroup  expandafter endgroup
+              expandafter aftergroup csname *C^^00 endcsname ;
+          or aftergroup *1^^00 ; % begin group character
+          or aftergroup *2^^00 ; % end group character
+          or aftergroup *3^^00 ; % math shift
+          or aftergroup *4^^00 ; % alignment tab
+          or code.error !| ;    % end of line
+          or aftergroup *6^^00 *6^^00 ; % macro parameter
+          or aftergroup *7^^00 ; % superscript
+          or aftergroup *8^^00 ; % subscript
+          or code.error !|  ;   % ignored character
+          or aftergroup ~ ;     % space character (NUL not possible)
+          or aftergroup *B^^00 ; % letter
+          or aftergroup *C^^00 ; % other
+          or aftergroup *D^^00 ; % active
+          else code.error !|  ;  % invalid
+          fi
+        }
+    } ;
+
+% Lines not beginning with white space will be discarded.
+    gdef code.RE #1
+    { 
+        ifx #1 !  ,
+                                % Do nothing.
+        else ifx #1 |D0D
+            !;                  % Trigger emission.
+        else
+            expandafter expandafter
+            expandafter !%      % Comment to end of line.
+        fi fi
+        #1 
+    } ;
+
+String constants continue until the matching double quote is found.
+    do gdef !" #1
+    {
+        code.non_letter;
+        ifx #1 |D0D, code.string.RE fi
+        ifx #1 !" ,
+            expandafter noexpand ;
+        else ifx #1 !\
+            code.string.escape ;
+        else 
+            expandafter aftergroup string #1 ;
+        fi fi ;
+        !" ;
+    } ;
+
+    gdef code.string.RE #1 fi fi !"
+    {
+        fi
+        code.error {"RE"}
+        fix_before_continuing
+    }
+    
+    gdef code.string.escape #1 fi fi !" #2
+    {
+        fi fi ;
+        expandafter aftergroup string #2 ;
+        !" ;
+    }
+
+From now on, we will discard unbalanced right braces.
+    doX  !}
+    {
+      ifcase count.tmp , code.error !} ;
+      else
+        advance count.tmp - char.one ;
+        iffalse { fi ; aftergroup } ;
+      fi
+    }
+    
+
+    doX !$ { aftergroup |324 }
+    doX !& { aftergroup |426 }
+    doX !. { aftergroup '. }
+
+This is a hack, but it is good enough to allow us to write secplain.
+
+    doX !@ {code.atsign}
+
+    gdef code.atsign #1 !{
+    {
+        begingroup
+            let active.lcletter string
+            let active.ucletter string
+            expandafter
+        endgroup
+        csname "_code.atsign."#1 endcsname
+        !{
+    }
+
+    gdef code.atsign.hex !{ #1 !}
+    {
+        aftergroup '";
+        !" #1 !"
+        aftergroup ~
+    }
+
+%    message {@hex{123}relax}
+
+
+
+Finally, here's the error routine.  It gives the line number, and the
+offending character.
+    gdef code.error #1
+    {
+      immediate write 16~
+      {
+        "! l." the inputlineno ; ~ ;
+        noexpand code ; "error: misplaced " string #1 ;
+      }
+    }
+
+%    show code ;
+
+%    [[ show !@ ]]
+
+    ]]
+    \_endgroup
+
+% End of file.

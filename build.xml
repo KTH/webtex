@@ -1,0 +1,46 @@
+<project name="webtex">
+	<property name="project.version" value="0.1"/>
+	<property name="war" value="${ant.project.name}.war"/>
+	
+	<fileset id="files.lib" dir="lib">
+		<include name="*.jar"/>
+	</fileset>
+	
+    <tstamp>
+        <format property="project.lastchangedate" pattern="yyyy-MM-dd"/>
+    </tstamp>
+	
+	<target name="compile">
+		<echo message="About to compile sources using ${ant.version}" level="info"/>
+		<delete dir="WebContent/WEB-INF/classes"/>
+		<mkdir dir="WebContent/WEB-INF/classes"/>
+		<javac srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on" encoding="ISO8859_1" target="1.5">
+			<classpath>
+				<fileset refid="files.lib"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="war" depends="compile" description="Build the war file">
+		<delete file="${war}"/>
+		<echo message="About to build ${war} using ${ant.version}" level="info"/>
+		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">
+			<classes dir="WebContent/WEB-INF/classes">
+				<include name="**/*.class"/>
+			</classes>
+			<fileset dir="WebContent">
+				<exclude name="WEB-INF/web.xml"/>
+				<exclude name="WEB-INF/classes/**"/>
+			</fileset>
+		</war>
+	</target>
+	
+	<target name="build-dist" depends="war" description="Build the distribution">
+		<zip destfile="dist/${ant.project.name}-${project.version}.zip">
+			<fileset dir=".">
+				<filename name="${war}"/>
+			</fileset>
+			<fileset dir="tex" />
+		</zip>
+	</target>
+</project>
