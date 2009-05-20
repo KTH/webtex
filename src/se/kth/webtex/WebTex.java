@@ -101,7 +101,6 @@ public class WebTex extends HttpServlet {
 		response.addHeader("X-MathImage-tex", expression);
 		response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
 		response.setContentType("image/png");
-		response.setContentLength((int) file.length());
 	}
 
 	private void writeImage(HttpServletResponse response, String expression, int resolution) throws ServletException, IOException {
