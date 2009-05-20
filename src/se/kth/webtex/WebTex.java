@@ -79,7 +79,7 @@ public class WebTex extends HttpServlet {
 			resolution = Math.min(resolution, TexRunner.MAX_RESOLUTION);
 			return Math.max(resolution, TexRunner.MIN_RESOLUTION);
 		} else {
-			return 0;
+			return TexRunner.DEFAULT_RESOLUTION;
 		}
 	}
 

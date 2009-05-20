@@ -17,9 +17,10 @@ public class TexRunner {
 	 */
 	public static int MAX_RESOLUTION = 10;
 	public static int MIN_RESOLUTION = 0;
+	public static int DEFAULT_RESOLUTION = 1;
 
 	private static String TMP_DIRECTORY = "/tmp/webtex/tex";
-	private static String DVI_COMMAND = "/usr/bin/dvipng -depth -bg Transparent -D %s -o %s %s";
+	private static String DVI_COMMAND = "/usr/bin/dvipng -depth -D %s -o %s %s";
 	private static String TEX_COMMAND = "/usr/bin/tex -fmt secplain -interaction batchmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
