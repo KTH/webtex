@@ -52,7 +52,9 @@
 			<fileset dir=".">
 				<filename name="${war}"/>
 			</fileset>
-<!--			<fileset dir="tex" />-->
+			<fileset dir="doc">
+				<filename name="README.txt"/>
+			</fileset>
 		</zip>
 	</target>
 </project>
