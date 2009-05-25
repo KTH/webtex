@@ -21,7 +21,19 @@
 		</javac>
 	</target>
 	
-	<target name="war" depends="compile" description="Build the war file">
+	<target name="texini">
+		<echo message="Building tex format"/>
+		<exec dir="WebContent/WEB-INF/secsty" executable="/usr/bin/tex">
+			<arg value="--ini"/>
+			<arg value="secplain.sty"/>
+		</exec>
+		<echo message="Creating ls-R"/>
+		<exec dir="WebContent/WEB-INF/secsty" executable="texhash">
+			<arg value="."/>
+		</exec>
+	</target>
+	
+	<target name="war" depends="compile, texini" description="Build the war file">
 		<delete file="${war}"/>
 		<echo message="About to build ${war} using ${ant.version}" level="info"/>
 		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">

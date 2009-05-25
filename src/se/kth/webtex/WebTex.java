@@ -33,7 +33,7 @@ public class WebTex extends HttpServlet {
     
     public void init(ServletConfig config) {
         setCache(new Cache());
-        setTexRunner(new TexRunner());
+        setTexRunner(new TexRunner(config.getServletContext().getRealPath("")));
     }
     
     
@@ -45,7 +45,7 @@ public class WebTex extends HttpServlet {
 		if (expression != null) {
 			int resolution = getResolution(request);
 			createImage(expression, resolution);
-			writeHeaders(response, expression, resolution);
+			writeHeaders(response, expression, resolution);		
 		} else {
 			// Handle the case where there is no parameter.
 			// Probably use some sort of default error image.

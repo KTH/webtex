@@ -6,6 +6,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Run TeX and DVIpng to generate the PNG images.
@@ -25,10 +30,12 @@ public class TexRunner {
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
 	private String dir;
+	private String texInputs;
 	
-	public TexRunner() {
+	public TexRunner(String servletPath) {
 		setDirectory(TMP_DIRECTORY);
 		new File(dir).mkdirs();
+		this.texInputs = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
 	}
 	
 	public void create(String expression, int resolution, Cache cache) throws IOException {
@@ -80,7 +87,15 @@ public class TexRunner {
 
 	private String runTex(String fileName) throws IOException, InterruptedException {
 		String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
-		Process tex = Runtime.getRuntime().exec(command);
+		String[] commands = command.split(" ");
+		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(commands));
+		System.out.println(pb.command());
+		Map<String, String> env = pb.environment();
+		env.put("TEXFORMATS", texInputs + File.pathSeparator);
+		System.out.println(texInputs + File.pathSeparator);
+		Process tex = pb.start();
+//		Runtime runTime = Runtime.getRuntime();
+//		Process tex = runTime.exec(command);
 		String output = null;
 
 		tex.waitFor();
