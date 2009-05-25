@@ -61,7 +61,12 @@ public class Cache {
 	public Cache() {
 		setCache(CACHE_DIRECTORY);
 	}
-	
+
+	/**
+	 * @param key
+	 * @param resolution
+	 * @return the image file as a File object.
+	 */
 	public File file(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
@@ -71,6 +76,11 @@ public class Cache {
 		}
 	}
 
+	/**
+	 * @param key
+	 * @param resolution
+	 * @return an integer representing offset from the x-axis.
+	 */
 	public int depth(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
@@ -80,6 +90,11 @@ public class Cache {
 		}
 	}
 
+	/**
+	 * @param key
+	 * @param resolution
+	 * @return the log message from the image generation.
+	 */
 	public String logMessage(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
@@ -88,7 +103,12 @@ public class Cache {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * @param key
+	 * @param resolution
+	 * @return true if an entry exists for the key - resolution combination.
+	 */
 	public boolean contains(String key, int resolution) {
 		return cache.containsKey(new CacheKey(key, resolution));
 	}
@@ -123,11 +143,6 @@ public class Cache {
 		}
 	}
 
-	/**
-	 * Creates a file object for given key.
-	 * @param key for the file
-	 * @return a file object corresponding to the key
-	 */
 	private File fileForKey(String key, int resolution) {
 		String fileName;
 
