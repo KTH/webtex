@@ -32,8 +32,9 @@ public class WebTex extends HttpServlet {
 
     
     public void init(ServletConfig config) {
-        setCache(new Cache());
-        setTexRunner(new TexRunner(config.getServletContext().getRealPath("")));
+    	String root = config.getServletContext().getRealPath("");
+    	this.cache = new Cache(root);
+    	this.texRunner = new TexRunner(root);
     }
     
     
@@ -97,15 +98,16 @@ public class WebTex extends HttpServlet {
 			return;
 		}
 		
-		response.addDateHeader("Last-Modified", file.lastModified());
 		response.addHeader("X-MathImage-tex", expression);
 		response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
+		response.addHeader("Cache-Control", "max-age=7200");
+		response.addDateHeader("Last-Modified", file.lastModified());
 		response.setContentType("image/png");
+		response.setContentLength((int)file.length());
 	}
 
 	private void writeImage(HttpServletResponse response, String expression, int resolution) throws ServletException, IOException {
 		File file = cache.file(expression, resolution);
-		response.setContentLength((int)file.length());
 
 		InputStream fileContents;
 		fileContents = new FileInputStream(file);
@@ -121,13 +123,5 @@ public class WebTex extends HttpServlet {
 		if (! cache.contains(expression, depth)) {
 			texRunner.create(expression, depth, cache);
 		}
-	}
-
-	private void setCache(Cache cache) {
-		this.cache = cache;
-	}
-
-	private void setTexRunner(TexRunner texRunner) {
-		this.texRunner = texRunner;
 	}
 }

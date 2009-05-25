@@ -27,16 +27,15 @@ public class TexRunner {
 	 */
 	public static String IMAGE_SUFFIX = ".png";
 	
-	private static String TMP_DIRECTORY = "/tmp/webtex/tex";
-	private static String DVI_COMMAND = "/usr/bin/dvipng -depth -D %s -o %s %s";
-	private static String TEX_COMMAND = "/usr/bin/tex -fmt secplain -interaction batchmode --output-comment '' -output-directory %s %s";
+	private static String DVI_COMMAND = "dvipng -depth -D %s -o %s %s";
+	private static String TEX_COMMAND = "tex -fmt secplain -interaction batchmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
 	private String dir;
 	private String texFormats;
 	
 	public TexRunner(String servletPath) {
-		setDirectory(TMP_DIRECTORY);
+		this.dir = servletPath + File.separator + "tmp" + File.separator + "tex";
 		new File(dir).mkdirs();
 		this.texFormats = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
 	}
@@ -60,7 +59,7 @@ public class TexRunner {
 	}	
 	
 	private String temporaryFile() throws IOException {
-		File tmpFile = File.createTempFile("webtex", "", new File(TMP_DIRECTORY));
+		File tmpFile = File.createTempFile("webtex", "", new File(dir));
 		return tmpFile.getAbsolutePath();
 	}
 	
@@ -75,10 +74,6 @@ public class TexRunner {
 		file.delete();
 	}
 	
-	public void setDirectory(String dir) {
-		this.dir = dir;
-	}
-
 	private void createTexFile(String fileName, String expression) throws IOException {
 		PrintWriter texFile = new PrintWriter(new FileWriter(fileName + ".tex"));
 		texFile.println("\\_par\\_secure_hbox");

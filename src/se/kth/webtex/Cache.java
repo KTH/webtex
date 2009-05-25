@@ -50,16 +50,16 @@ public class Cache {
 		}
 	}
 	
-	private static final String CACHE_DIRECTORY = "/tmp/webtex/cache";
-	
 	private String dir;
 	private Map<CacheKey, CacheData> cache; 
 	
 	/**
 	 * Constructor, initializes cache.
+	 * @param root 
 	 */
-	public Cache() {
-		setCache(CACHE_DIRECTORY);
+	public Cache(String root) {
+		setCache(root + File.separator + "tmp" + File.separator + "cache");
+		new File(dir).mkdirs();
 	}
 
 	/**
