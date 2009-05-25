@@ -52,7 +52,7 @@
 			<fileset dir=".">
 				<filename name="${war}"/>
 			</fileset>
-			<fileset dir="tex" />
+<!--			<fileset dir="tex" />-->
 		</zip>
 	</target>
 </project>
