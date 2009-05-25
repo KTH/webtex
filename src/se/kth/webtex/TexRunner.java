@@ -84,17 +84,12 @@ public class TexRunner {
 	}
 
 	private String runTex(String fileName) throws IOException, InterruptedException {
+		String output = null;
 		String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
-		String[] commands = command.split(" ");
-		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(commands));
-		System.out.println(pb.command());
+		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(command.split(" ")));
 		Map<String, String> env = pb.environment();
 		env.put("TEXFORMATS", texInputs + File.pathSeparator);
-		System.out.println(texInputs + File.pathSeparator);
 		Process tex = pb.start();
-//		Runtime runTime = Runtime.getRuntime();
-//		Process tex = runTime.exec(command);
-		String output = null;
 
 		tex.waitFor();
 		if (tex.exitValue() != 0) {
