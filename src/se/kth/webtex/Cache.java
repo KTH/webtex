@@ -110,7 +110,8 @@ public class Cache {
 	 * @return true if an entry exists for the key - resolution combination.
 	 */
 	public boolean contains(String key, int resolution) {
-		return cache.containsKey(new CacheKey(key, resolution));
+		File file = file(key, resolution);
+		return (file != null) && file.exists();
 	}
 	
 	/**
