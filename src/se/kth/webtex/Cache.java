@@ -139,6 +139,6 @@ public class Cache {
 		
 		fileName += "-" + resolution;
 
-		return new File(dir + File.separator + fileName + ".png");
+		return new File(dir + File.separator + fileName + TexRunner.IMAGE_SUFFIX);
 	}
 }

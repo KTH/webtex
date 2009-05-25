@@ -22,18 +22,23 @@ public class TexRunner {
 	public static int MIN_RESOLUTION = 0;
 	public static int DEFAULT_RESOLUTION = 1;
 
+	/**
+	 * The image format suffix.
+	 */
+	public static String IMAGE_SUFFIX = ".png";
+	
 	private static String TMP_DIRECTORY = "/tmp/webtex/tex";
 	private static String DVI_COMMAND = "/usr/bin/dvipng -depth -D %s -o %s %s";
 	private static String TEX_COMMAND = "/usr/bin/tex -fmt secplain -interaction batchmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
 	private String dir;
-	private String texInputs;
+	private String texFormats;
 	
 	public TexRunner(String servletPath) {
 		setDirectory(TMP_DIRECTORY);
 		new File(dir).mkdirs();
-		this.texInputs = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
+		this.texFormats = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
 	}
 	
 	public void create(String expression, int resolution, Cache cache) throws IOException {
@@ -44,7 +49,7 @@ public class TexRunner {
 			String output = runTex(fileName);
 			int depth = runDvi(fileName, resolution);
 
-			cache.put(expression, resolution, depth, new File(fileName + ".png"), output);
+			cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -88,7 +93,7 @@ public class TexRunner {
 		String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
 		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(command.split(" ")));
 		Map<String, String> env = pb.environment();
-		env.put("TEXFORMATS", texInputs + File.pathSeparator);
+		env.put("TEXFORMATS", texFormats + File.pathSeparator);
 		Process tex = pb.start();
 
 		tex.waitFor();
@@ -123,7 +128,7 @@ public class TexRunner {
 		
 		String command = String.format(DVI_COMMAND, 
 				Integer.toString(RESOLUTIONS[resolution]), 
-				fileName + ".png",
+				fileName + IMAGE_SUFFIX,
 				fileName + ".dvi");
 		Process dvi = Runtime.getRuntime().exec(command);
 
