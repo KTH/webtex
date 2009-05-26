@@ -1,67 +1,22 @@
 package se.kth.webtex;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Cache meta data and keep track of the generated image files.
+ * Cache meta data and keep track of the generated image files. The cache
+ * has a built-in thread that expires data after one week.
  */
-public class Cache {
-	/**
-	 * Cache entries are keyed on the expression string and resolution.
-	 */
-	private class CacheKey {
-		public String key;
-		public int resolution;
-		
-		public CacheKey(String key, Integer resolution) {
-			this.key = key;
-			this.resolution = resolution;
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			CacheKey otherKey = (CacheKey) o;
-			return this.key.equals(otherKey.key) && this.resolution == otherKey.resolution;
-		}
-		
-		@Override
-		public int hashCode() {
-			String hashKey = this.resolution + "-" + this.key;
-			return hashKey.hashCode();
-		}
-	}
-
-	/**
-	 * The cached data is the File object and the depth, i.e., the distance
-	 * along the y-axis the image should be transposed in order to line up
-	 * correctly on the web page.
-	 */
-	private class CacheData {
-		public int depth;
-		public File file;
-		public String logMessage;
-		
-		public CacheData(int depth, File file, String logMessage) {
-			this.depth = depth;
-			this.file = file;
-			this.logMessage = logMessage;
-		}
-	}
+public class Cache implements Runnable {
+	// One week expiration time in milliseconds on cached items.
+	private static final long EXPIRATION_TIME = 1000*60*60*24*7;
 	
 	private String dir;
 	private Map<CacheKey, CacheData> cache; 
+	private Thread cachePurger;
 	
-	/**
-	 * Constructor, initializes cache.
-	 * @param root 
-	 */
-	public Cache(String root) {
-		setCache(root + File.separator + "tmp" + File.separator + "cache");
-		new File(dir).mkdirs();
-	}
-
 	/**
 	 * @param key
 	 * @param resolution
@@ -114,34 +69,47 @@ public class Cache {
 		return (file != null) && file.exists();
 	}
 	
+	@Override
+	public void run() {
+		while(true) {
+			for (CacheKey key : cache.keySet()) {
+				Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
+				if (timestamp(key.key, key.resolution).before(bestAfter)) {
+					remove(key.key, key.resolution);
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param key
+	 * @param resolution
+	 * @return
+	 */
+	private Date timestamp(String key, int resolution) {
+		CacheKey cacheKey = new CacheKey(key, resolution);
+		if (cache.containsKey(cacheKey)) {
+			return cache.get(cacheKey).timestamp;
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * Add given file to cache.
+	 * @param key
+	 * @param resolution
 	 * @param file to add
-	 * @param logMessage TODO
+	 * @param logMessage
 	 */
 	public void put(String key, int resolution, int depth, File file, String logMessage) {
 		File cacheFile = fileForKey(key, resolution);
 		file.renameTo(cacheFile);
 		cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
-	}
-
-	/**
-	 * Set the root directory to cache files in. The directory will be created if it
-	 * does not exist. It must be writable.
-	 * @param dir root path.
-	 */
-	public void setCache(String dir) {
-		new File(dir).mkdirs();
-		emptyCache(dir);
-		this.dir = dir;
-		this.cache = new ConcurrentHashMap<CacheKey, CacheData>(); 
-	}
-	
-	private void emptyCache(String dir) {
-		File directory = new File(dir);
-		for (File file : directory.listFiles()) {
-			file.delete();
-		}
 	}
 
 	private File fileForKey(String key, int resolution) {
@@ -152,9 +120,88 @@ public class Cache {
 		} else {
 			fileName = "B" + key.hashCode();
 		}
-		
 		fileName += "-" + resolution;
 
 		return new File(dir + File.separator + fileName + TexRunner.IMAGE_SUFFIX);
+	}
+
+	/**
+	 * Constructor, initializes cache.
+	 * @param root 
+	 */
+	public Cache(String root) {
+		setCache(root + File.separator + "tmp" + File.separator + "cache");
+		this.cache = new ConcurrentHashMap<CacheKey, CacheData>();
+		this.cachePurger = new Thread(this);
+		cachePurger.start();
+	}
+
+	private void setCache(String dir) {
+		new File(dir).mkdirs();
+		emptyCache(dir);
+		this.dir = dir;
+	}
+	
+	private void emptyCache(String dir) {
+		File directory = new File(dir);
+		for (File file : directory.listFiles()) {
+			file.delete();
+		}
+	}
+
+	/**
+	 * Remove an entry from the cache.
+	 * @param key
+	 * @param resolution
+	 */
+	private void remove(String key, int resolution) {
+		File cacheFile = file(key, resolution);
+		cache.remove(new CacheKey(key, resolution));
+		cacheFile.delete();
+	}
+	
+
+	/**
+	 * Cache entries are keyed on the expression string and resolution.
+	 */
+	private class CacheKey {
+		public String key;
+		public int resolution;
+		
+		public CacheKey(String key, Integer resolution) {
+			this.key = key;
+			this.resolution = resolution;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			CacheKey otherKey = (CacheKey) o;
+			return this.key.equals(otherKey.key) && this.resolution == otherKey.resolution;
+		}
+		
+		@Override
+		public int hashCode() {
+			String hashKey = this.resolution + "-" + this.key;
+			return hashKey.hashCode();
+		}
+	}
+
+	/**
+	 * The cached data is the File object and the depth, i.e., the distance
+	 * along the y-axis the image should be transposed in order to line up
+	 * correctly on the web page.
+	 */
+	private class CacheData {
+		public int depth;
+		public File file;
+		public String logMessage;
+		public Date timestamp;
+		
+		public CacheData(int depth, File file, String logMessage) {
+			this.depth = depth;
+			this.file = file;
+			this.logMessage = logMessage;
+			this.timestamp = new Date();
+		}
 	}
 }

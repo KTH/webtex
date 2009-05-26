@@ -20,4 +20,4 @@ cd webtex
 ant build-dist
 
 # Den färdiga ZIP-filen finns i dist och ska läggas här:
-smb://ugapps01.ug.kth.se/infosys/webtex
+smb://ugapps01.ug.kth.se/infosys/Virtuellt%20Campus/webtex
