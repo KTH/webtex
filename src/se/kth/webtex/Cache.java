@@ -25,6 +25,7 @@ public class Cache implements Runnable {
 	public File file(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
+			touch(cacheKey);
 			return cache.get(cacheKey).file;
 		} else {
 			return null;
@@ -39,6 +40,7 @@ public class Cache implements Runnable {
 	public int depth(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
+			touch(cacheKey);
 			return cache.get(cacheKey).depth;
 		} else {
 			return 0;
@@ -53,19 +55,25 @@ public class Cache implements Runnable {
 	public String logMessage(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
+			touch(cacheKey);
 			return cache.get(cacheKey).logMessage;
 		} else {
 			return null;
 		}
 	}
 
+	private void touch(CacheKey key) {
+		CacheData data = cache.get(key);
+		data.timestamp = new Date();
+	}
+	
 	/**
 	 * @param key
 	 * @param resolution
 	 * @return true if an entry exists for the key - resolution combination.
 	 */
 	public boolean contains(String key, int resolution) {
-		File file = file(key, resolution);
+		File file = file(key, resolution);		
 		return (file != null) && file.exists();
 	}
 	
@@ -84,7 +92,7 @@ public class Cache implements Runnable {
 			}
 		}
 	}
-
+	
 	/**
 	 * @param key
 	 * @param resolution
@@ -98,7 +106,7 @@ public class Cache implements Runnable {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Add given file to cache.
 	 * @param key

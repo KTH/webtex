@@ -57,4 +57,18 @@
 			</fileset>
 		</zip>
 	</target>
+	
+	<target name="hudson" depends="compile" description="Build stuff without touching TeX bits">
+		<delete file="${war}"/>
+		<echo message="About to build ${war} using ${ant.version}" level="info"/>
+		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">
+			<classes dir="WebContent/WEB-INF/classes">
+				<include name="**/*.class"/>
+			</classes>
+			<fileset dir="WebContent">
+				<exclude name="WEB-INF/web.xml"/>
+				<exclude name="WEB-INF/classes/**"/>
+			</fileset>
+		</war>
+	</target>
 </project>
