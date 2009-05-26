@@ -12,8 +12,8 @@
 	
 	<target name="compile">
 		<echo message="About to compile sources using ${ant.version}" level="info"/>
-		<delete dir="WebContent/WEB-INF/classes"/>
-		<mkdir dir="WebContent/WEB-INF/classes"/>
+		<delete dir="WebContent/WEB-INF/classes/se"/>
+		<mkdir dir="WebContent/WEB-INF/classes/se"/>
 		<javac srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on" encoding="ISO8859_1" target="1.5">
 			<classpath>
 				<fileset refid="files.lib"/>
