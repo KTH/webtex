@@ -1,0 +1,14 @@
+
+WebTex 0.2.1
+============
+
+* Bug fix in the cache.
+
+* Hudson support.
+
+WebTex 0.2.0
+============
+
+* Cache data in webapp folder.
+
+* Remove data that has not been read for one week.
