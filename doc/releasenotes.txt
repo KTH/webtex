@@ -1,3 +1,8 @@
+WebTex 0.2.x
+============
+
+* Minor syntax fixes in demo page.
+
 
 WebTex 0.2.1
 ============
