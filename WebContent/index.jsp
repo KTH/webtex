@@ -42,7 +42,7 @@ in the HEAD of your web page.</p>
 <p>Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
 <code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code> in its HTML.  That's all
 you need to do.  More complicated equations are done in the same way,
-of course. MathTran will vertically align the formula for you, like
+of course. WebTex will vertically align the formula for you, like
 this <img alt="tex:\int_0^1 x\, dx" /> and this <img
 alt="tex:{}^2"/>
 </p>
