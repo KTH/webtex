@@ -183,6 +183,9 @@ public class Cache implements Runnable {
 
 		@Override
 		public boolean equals(Object o) {
+		    if (!(o instanceof CacheKey)) {
+		        return false;
+		    }
 			CacheKey otherKey = (CacheKey) o;
 			return this.key.equals(otherKey.key) && this.resolution == otherKey.resolution;
 		}
