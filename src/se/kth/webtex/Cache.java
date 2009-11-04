@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Cache meta data and keep track of the generated image files. The cache
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Cache implements Runnable {
 	// One week expiration time in milliseconds on cached items.
-	private static final long EXPIRATION_TIME = 1000*60*60*24*7;
+	private static final long EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
 	
 	private String dir;
 	private Map<CacheKey, CacheData> cache; 
