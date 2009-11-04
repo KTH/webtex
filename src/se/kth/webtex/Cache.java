@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class Cache implements Runnable {
 	// One week expiration time in milliseconds on cached items.
 	private static final long EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
-	
+
 	private String dir;
 	private Map<CacheKey, CacheData> cache; 
 	private Thread cachePurger;
@@ -87,7 +87,7 @@ public class Cache implements Runnable {
 					remove(key.key, key.resolution);
 				}
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(TimeUnit.SECONDS.toMillis(1));
 				} catch (InterruptedException e) {
 				}
 			}
