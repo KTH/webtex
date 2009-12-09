@@ -1180,6 +1180,7 @@ Not a user command, until we remove the \end.
     def \longleftrightarrow {\leftarrow; joinrel; \rightarrow}
     def \Longleftrightarrow {\Leftarrow; joinrel; \Rightarrow}
     def \iff {\; \Longleftrightarrow \;}
+    def \implies {\Rightarrow}
 
     mathchardef ldotp @hex{613A} % ldot as a punctuation mark
     mathchardef cdotp @hex{6201} % cdot as a punctuation mark
@@ -1290,6 +1291,8 @@ Not a user command, until we remove the \end.
     def \lceil {delimiter @hex{4264306}}
     def \rfloor {delimiter @hex{5263305}}
     def \lfloor {delimiter @hex{4262304}}
+    def \rceiling {\rceil}
+    def \lceiling {\lceil}
 
     def \bigl {mathopen \big}
     def \bigm {mathrel \big}
@@ -1472,6 +1475,7 @@ Not a user command, until we remove the \end.
     def \Pr {mathop{\rm "Pr"}}
     def \gcd {mathop{\rm "gcd"}}
     def \deg {mathop{\rm "deg"}, nolimits}
+    def \lcm {mathop{\rm "lcm"}}
 
     def \bmod {
         nonscript mskip -medmuskip
