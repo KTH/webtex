@@ -28,7 +28,7 @@ public class TexRunner {
 	public static String IMAGE_SUFFIX = ".png";
 	
 	private static String DVI_COMMAND = "dvipng -depth -D %s -o %s %s";
-	private static String TEX_COMMAND = "tex -fmt secplain -interaction batchmode --output-comment '' -output-directory %s %s";
+	private static String TEX_COMMAND = "tex -fmt secplain -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
 	private String dir;
