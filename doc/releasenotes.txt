@@ -1,8 +1,9 @@
-WebTex 0.2.x
+WebTex 0.3.0
 ============
 
+* Add some TeX commands used by Virtuellt Campus. 
+* Add version number to service front page.
 * Minor syntax fixes in demo page.
-
 
 WebTex 0.2.1
 ============

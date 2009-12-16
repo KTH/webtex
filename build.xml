@@ -1,11 +1,11 @@
 <project name="webtex">
-	<property name="project.version" value="0.2.2-pre"/>
+	<property name="project.version" value="0.3.0"/>
 	<property name="war" value="${ant.project.name}.war"/>
 	
 	<fileset id="files.lib" dir="lib">
 		<include name="*.jar"/>
 	</fileset>
-	
+
     <tstamp>
         <format property="project.lastchangedate" pattern="yyyy-MM-dd"/>
     </tstamp>
@@ -21,6 +21,15 @@
 		</javac>
 	</target>
 	
+	<target name="properties">
+		<filter token="PROJECT_VERSION" value="${project.version}"/>
+		<copy todir="WebContent/WEB-INF/classes" filtering="true" overwrite="true">
+		    <fileset dir="src">
+		        <include name="*.properties"/>
+		    </fileset>
+		</copy>
+	</target>
+	
 	<target name="texini">
 		<echo message="Building tex format"/>
 		<exec dir="WebContent/WEB-INF/secsty" executable="/usr/bin/tex">
@@ -33,12 +42,13 @@
 		</exec>
 	</target>
 	
-	<target name="war" depends="compile, texini" description="Build the war file">
+	<target name="war" depends="compile, properties, texini" description="Build the war file">
 		<delete file="${war}"/>
 		<echo message="About to build ${war} using ${ant.version}" level="info"/>
 		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">
 			<classes dir="WebContent/WEB-INF/classes">
-				<include name="**/*.class"/>
+                <include name="**/*.class"/>
+			    <include name="**/*.properties"/>
 			</classes>
 			<fileset dir="WebContent">
 				<exclude name="WEB-INF/web.xml"/>
