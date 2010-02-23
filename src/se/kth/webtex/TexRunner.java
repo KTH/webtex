@@ -26,8 +26,8 @@ public class TexRunner {
 	 * The image format suffix.
 	 */
 	public static String IMAGE_SUFFIX = ".png";
-	
-	private static String DVI_COMMAND = "dvipng -depth -D -bg Transparent %s -o %s %s";
+
+	private static String DVI_COMMAND = "dvipng -depth -bg Transparent -D %s -o %s %s";
 	private static String TEX_COMMAND = "tex -fmt secplain -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
@@ -54,7 +54,7 @@ public class TexRunner {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
-			removeTemporaryFiles(fileName);
+		    removeTemporaryFiles(fileName);
 		}
 	}	
 	
