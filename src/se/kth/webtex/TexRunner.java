@@ -27,7 +27,7 @@ public class TexRunner {
 	 */
 	public static String IMAGE_SUFFIX = ".png";
 	
-	private static String DVI_COMMAND = "dvipng -depth -bg Transparent -D %s -o %s %s";
+	private static String DVI_COMMAND = "dvipng -depth -D -bg Transparent %s -o %s %s";
 	private static String TEX_COMMAND = "tex -fmt secplain -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
@@ -68,38 +68,19 @@ public class TexRunner {
 		file.delete();
 		file = new File(nameWithoutSuffix + ".log");
 		file.delete();
-        file = new File(nameWithoutSuffix + ".dvi");
-        file.delete();
-        file = new File(nameWithoutSuffix + ".aux");
-        file.delete();
+		file = new File(nameWithoutSuffix + ".dvi");
+		file.delete();
 		file = new File(nameWithoutSuffix);
 		file.delete();
 	}
 	
 	private void createTexFile(String fileName, String expression) throws IOException {
-        PrintWriter texFile = new PrintWriter(new FileWriter(fileName + ".tex"));
-        texFile.println("\\documentclass[10pt]{article}");
-        texFile.println("\\usepackage[latin1]{inputenc}");
-        texFile.println("\\usepackage{amsmath}");
-        texFile.println("\\usepackage{amsfonts}");
-        texFile.println("\\usepackage{amssymb}");
-        texFile.println("\\usepackage[active,textmath,displaymath]{preview}");
-	    /*"\\usepackage{bm}\n"*/    /* bold math */
-	    texFile.println("\\pagestyle{empty}");
-	    texFile.println("\\begin{document}");
-	    texFile.println("%%%\\renewcommand{\\input}[1]{\\mbox{[[$\\backslash$input\\{#1\\} illegal]]}}");
-//	    texFile.println("%%fontsize%%");
-//	    texFile.println("%%beginmath%% ");
-	    texFile.println("$" + expression + "$");
-//	    texFile.println("%%endmath%%");
-	    texFile.println("\\end{document}");
-	    texFile.close();
-	    
-//		texFile.println("\\_par\\_secure_hbox");
-//		texFile.println("$" + expression + "$");
-//		texFile.println("\u0000");
-//		texFile.println("\\_end");
-//		texFile.close();
+		PrintWriter texFile = new PrintWriter(new FileWriter(fileName + ".tex"));
+		texFile.println("\\_par\\_secure_hbox");
+		texFile.println("$" + expression + "$");
+		texFile.println("\u0000");
+		texFile.println("\\_end");
+		texFile.close();
 	}
 
 	private String runTex(String fileName) throws IOException, InterruptedException {
