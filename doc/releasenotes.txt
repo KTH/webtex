@@ -1,3 +1,11 @@
+WebTex 0.3.1
+============
+
+* Transparent backgrounds in generated images.
+* Make \text synonym of \rm
+* Make it possible to use \\ instead of \cr in matrix.
+* Add version number to test page.
+
 WebTex 0.3.0
 ============
 
