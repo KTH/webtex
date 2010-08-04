@@ -119,7 +119,7 @@ public class WebTex extends HttpServlet {
 		}
 	}
 
-	private void createImage(String expression, Integer depth) throws IOException {
+	private void createImage(String expression, Integer depth) throws IOException, ServletException {
 		if (! cache.contains(expression, depth)) {
 			texRunner.create(expression, depth, cache);
 		}

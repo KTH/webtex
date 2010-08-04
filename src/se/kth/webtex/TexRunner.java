@@ -1,14 +1,14 @@
 package se.kth.webtex;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Map;
 
+import javax.servlet.ServletException;
+
+import se.kth.sys.util.lang.SystemCommandHandler;
 
 /**
  * Run TeX and DVIpng to generate the PNG images.
@@ -31,16 +31,16 @@ public class TexRunner {
 	private static String TEX_COMMAND = "tex -fmt secplain -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
-	private String dir;
+	private File dir;
 	private String texFormats;
 	
 	public TexRunner(String servletPath) {
-		this.dir = servletPath + File.separator + "tmp" + File.separator + "tex";
-		new File(dir).mkdirs();
+		this.dir = new File(servletPath + File.separator + "tmp" + File.separator + "tex");
+		dir.mkdirs();
 		this.texFormats = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
 	}
 	
-	public void create(String expression, int resolution, Cache cache) throws IOException {
+	public void create(String expression, int resolution, Cache cache) throws IOException, ServletException {
 		String fileName = temporaryFile();
 		
 		try {
@@ -59,7 +59,7 @@ public class TexRunner {
 	}	
 	
 	private String temporaryFile() throws IOException {
-		File tmpFile = File.createTempFile("webtex", "", new File(dir));
+		File tmpFile = File.createTempFile("webtex", "", dir);
 		return tmpFile.getAbsolutePath();
 	}
 	
@@ -86,25 +86,23 @@ public class TexRunner {
 	private String runTex(String fileName) throws IOException, InterruptedException {
 		String output = null;
 		String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
-		ProcessBuilder pb = new ProcessBuilder(Arrays.asList(command.split(" ")));
-		Map<String, String> env = pb.environment();
+		SystemCommandHandler tex = new SystemCommandHandler(command.split(" "));
+		tex.setDirectory(dir);
+		Map<String, String> env = tex.environment();
 		env.put("TEXFORMATS", texFormats + File.pathSeparator);
-		Process tex = pb.start();
-
-		tex.waitFor();
-		if (tex.exitValue() != 0) {
+		tex.enableStdOutStore();
+		tex.executeAndWait();
+		if (tex.getExitCode() != 0) {
 			output = getErrorMessage(tex);
 		}
 		return output;
 	}
 
-	private String getErrorMessage(Process tex) throws IOException {
-		BufferedReader texOutput = new BufferedReader(new InputStreamReader(tex.getInputStream()));
+	private String getErrorMessage(SystemCommandHandler tex) throws IOException {
 		String output = "";
 		boolean errorMessage = false;
-		String line;
-
-		while ((line = texOutput.readLine()) != null) {
+		
+		for (String line : tex.getStdOutStore()) {
 			if (line.matches("!.*")) {
 				errorMessage = true;
 			} else if (line.matches(".*see the transcript file for additional information.*")) {
@@ -117,25 +115,31 @@ public class TexRunner {
 		return output;
 	}
 
-	private int runDvi(String fileName, int resolution) throws IOException, InterruptedException {
+	private int runDvi(String fileName, int resolution) throws IOException, InterruptedException, ServletException {
 		int depth = 0;
-		String output;
 		
-		String command = String.format(DVI_COMMAND, 
+		String[] command = String.format(DVI_COMMAND, 
 				Integer.toString(RESOLUTIONS[resolution]), 
 				fileName + IMAGE_SUFFIX,
-				fileName + ".dvi");
-		Process dvi = Runtime.getRuntime().exec(command);
+				fileName + ".dvi").split(" ");
+		SystemCommandHandler dvi = new SystemCommandHandler(command);
+		dvi.setDirectory(dir);
+		dvi.enableStdOutStore();
+		dvi.executeAndWait();
+		if (dvi.getStdOutIOException() != null)
+			throw new ServletException("An IO error occuring when running 'dvi'.", dvi.getStdOutIOException());
+		if (dvi.getStdErrIOException() != null)
+			throw new ServletException("An IO error occuring when running 'dvi'.", dvi.getStdErrIOException());
+		if (dvi.getExitCode() != 0)
+			throw new ServletException("Command 'dvi' failed during execution.");
 
-		BufferedReader dviOutput = new BufferedReader(new InputStreamReader(dvi.getInputStream()));
-		while ((output = dviOutput.readLine()) != null) {
+		for (String output : dvi.getStdOutStore()) {
 			String[] split = output.split("=|]");
 			if (split.length > 1) {
 				depth = Integer.parseInt(split[1]);
 			}
 		}
 
-		dvi.waitFor();
 		return depth;
 	}
 }
