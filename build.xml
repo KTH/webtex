@@ -54,6 +54,9 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/classes/**"/>
 			</fileset>
+			<lib dir="../common/infosys/java/lib" >
+			    <include name="**/infosysutil-0.13.jar"/>
+			</lib>
 		</war>
 	</target>
 	
