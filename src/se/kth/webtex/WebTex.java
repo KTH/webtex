@@ -117,6 +117,7 @@ public class WebTex extends HttpServlet {
 		while ((c = fileContents.read()) >= 0) {
 			outputStream.write(c);
 		}
+                fileContents.close();
 	}
 
 	private void createImage(String expression, Integer depth) throws IOException, ServletException {
