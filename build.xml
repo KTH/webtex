@@ -1,12 +1,12 @@
 <project name="webtex">
-	<property name="project.version" value="0.3.5"/>
+	<property name="project.version" value="0.3.6"/>
 	<property name="war" value="${ant.project.name}.war"/>
 	
 	<fileset id="files.lib" dir="lib">
 		<include name="*.jar"/>
 	</fileset>
 	<fileset id="external.lib" dir="../common/infosys/java/lib">
-	    <include name="**/infosysutil-0.13.jar"/>
+	    <include name="infosysutil-0.13.jar"/>
 	</fileset>
 
     <tstamp>
@@ -32,7 +32,10 @@
 		        <include name="*.properties"/>
 		    </fileset>
 		</copy>
-		<copy todir="WebContent/WEB-INF/lib" filtering="true" overwrite="true">
+	</target>
+	
+	<target name="libs">
+		<copy todir="WebContent/WEB-INF/lib" overwrite="true">
 		    <fileset refid="external.lib"/>
 		</copy>
 	</target>
@@ -49,7 +52,7 @@
 		</exec>
 	</target>
 	
-	<target name="war" depends="compile, properties, texini" description="Build the war file">
+	<target name="war" depends="compile, properties, libs, texini" description="Build the war file">
 		<delete file="${war}"/>
 		<echo message="About to build ${war} using ${ant.version}" level="info"/>
 		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">
