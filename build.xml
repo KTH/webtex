@@ -32,6 +32,9 @@
 		        <include name="*.properties"/>
 		    </fileset>
 		</copy>
+		<copy todir="WebContent/WEB-INF/lib" filtering="true" overwrite="true">
+		    <fileset refid="external.lib"/>
+		</copy>
 	</target>
 	
 	<target name="texini">
@@ -58,7 +61,6 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/classes/**"/>
 			</fileset>
-			<fileset refid="external.lib"/>
 		</war>
 	</target>
 	
@@ -81,7 +83,6 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/classes/**"/>
 			</fileset>
-			<fileset refid="external.lib"/>
 		</war>
 	</target>
 </project>
