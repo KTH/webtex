@@ -5,6 +5,9 @@
 	<fileset id="files.lib" dir="lib">
 		<include name="*.jar"/>
 	</fileset>
+	<fileset id="external.lib" dir="../common/infosys/java/lib">
+	    <include name="**/infosysutil-0.13.jar"/>
+	</fileset>
 
     <tstamp>
         <format property="project.lastchangedate" pattern="yyyy-MM-dd"/>
@@ -17,6 +20,7 @@
 		<javac srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on" encoding="ISO8859_1" target="1.5">
 			<classpath>
 				<fileset refid="files.lib"/>
+				<fileset refid="external.lib"/>
 			</classpath>
 		</javac>
 	</target>
@@ -54,9 +58,7 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/classes/**"/>
 			</fileset>
-			<lib dir="../common/infosys/java/lib" >
-			    <include name="**/infosysutil-0.13.jar"/>
-			</lib>
+			<fileset refid="external.lib"/>
 		</war>
 	</target>
 	
@@ -79,9 +81,7 @@
 				<exclude name="WEB-INF/web.xml"/>
 				<exclude name="WEB-INF/classes/**"/>
 			</fileset>
-			<lib dir="../common/infosys/java/lib" >
-			    <include name="**/infosysutil-0.13.jar"/>
-			</lib>
+			<fileset refid="external.lib"/>
 		</war>
 	</target>
 </project>
