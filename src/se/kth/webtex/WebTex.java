@@ -86,12 +86,13 @@ public class WebTex extends HttpServlet {
 
 	private void writeHeaders(HttpServletResponse response, String expression, int resolution) {
 		File file = cache.file(expression, resolution);
-		String logMessage = cache.logMessage(expression, resolution);
+		Iterable<String> logMessages = cache.logMessage(expression, resolution);
 
-		if (logMessage == null) {
+		if (logMessages == null) {
 			response.addHeader("X-MathImage-log", "OK");
 		} else {
-			response.addHeader("X-MathImage-log", logMessage);
+			for (String logMessage : logMessages)
+				response.addHeader("X-MathImage-log", logMessage);
 		}
 		
 		if (file == null) {
