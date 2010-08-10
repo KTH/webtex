@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -47,7 +45,7 @@ public class TexRunner {
 		
 		try {
 			createTexFile(fileName, expression);
-			Iterable<String> output = runTex(fileName);
+			String output = runTex(fileName);
 			int depth = runDvi(fileName, resolution);
 
 			cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
@@ -85,8 +83,8 @@ public class TexRunner {
 		texFile.close();
 	}
 
-	private Iterable<String> runTex(String fileName) throws IOException, InterruptedException {
-		Iterable<String> output = null;
+	private String runTex(String fileName) throws IOException, InterruptedException {
+		String output = null;
 		String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
 		SystemCommandHandler tex = new SystemCommandHandler(command.split(" "));
 		tex.setDirectory(dir);
@@ -100,8 +98,8 @@ public class TexRunner {
 		return output;
 	}
 
-	private Iterable<String> getErrorMessage(SystemCommandHandler tex) throws IOException {
-		List<String> output = null;
+	private String getErrorMessage(SystemCommandHandler tex) throws IOException {
+		String output = null;
 		boolean errorMessage = false;
 		
 		for (String line : tex.getStdOutStore()) {
@@ -112,8 +110,9 @@ public class TexRunner {
 			}
 			if (errorMessage) {
 				if (output == null)
-					output = new LinkedList<String>();
-				output.add(line);
+					output = "[[" + line + "]]";
+				else
+					output += ", [[" + line + "]]";
 			}
 		}
 		return output;

@@ -53,7 +53,7 @@ public class Cache implements Runnable {
 	 * @param resolution
 	 * @return the log message from the image generation.
 	 */
-	public Iterable<String> logMessage(String key, int resolution) {
+	public String logMessage(String key, int resolution) {
 		CacheKey cacheKey = new CacheKey(key, resolution);
 		if (cache.containsKey(cacheKey)) {
 			touch(cacheKey);
@@ -115,7 +115,7 @@ public class Cache implements Runnable {
 	 * @param file to add
 	 * @param logMessage
 	 */
-	public void put(String key, int resolution, int depth, File file, Iterable<String> logMessage) {
+	public void put(String key, int resolution, int depth, File file, String logMessage) {
 		File cacheFile = fileForKey(key, resolution);
 		file.renameTo(cacheFile);
 		cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
@@ -206,10 +206,10 @@ public class Cache implements Runnable {
 	private class CacheData {
 		public int depth;
 		public File file;
-		public Iterable<String> logMessage;
+		public String logMessage;
 		public Date timestamp;
 		
-		public CacheData(int depth, File file, Iterable<String> logMessage) {
+		public CacheData(int depth, File file, String logMessage) {
 			this.depth = depth;
 			this.file = file;
 			this.logMessage = logMessage;
