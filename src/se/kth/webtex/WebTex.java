@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ public class WebTex extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String PARAMETER_TEX = "tex";
 	private static final String PARAMETER_RESOLUTION = "D";
+	private static int EXPIRES_AFTER = 24*60*60; // 24 hours in seconds.
 	
 	private Cache cache;
 	private TexRunner texRunner;
@@ -100,7 +102,8 @@ public class WebTex extends HttpServlet {
 		
 		response.addHeader("X-MathImage-tex", expression);
 		response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
-		response.addHeader("Cache-Control", "max-age=7200");
+		response.addHeader("Cache-Control", "max-age=" + EXPIRES_AFTER);
+	    response.addDateHeader("Expires", System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(EXPIRES_AFTER, TimeUnit.SECONDS));
 		response.addDateHeader("Last-Modified", file.lastModified());
 		response.setContentType("image/png");
 		response.setContentLength((int)file.length());

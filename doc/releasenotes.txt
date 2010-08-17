@@ -1,3 +1,8 @@
+WebTex 0.3.X
+============
+
+* Add "Expires" header and increase http cache recommendation to 24 hours.
+
 WebTex 0.3.2
 ============
 
