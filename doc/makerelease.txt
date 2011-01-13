@@ -1,13 +1,13 @@
 Check that the release number in the build.xml file is correct. Otherwise
 update and check in.
 
-SVN_TAG=WEBTEX_X_X_X
+SVN_TAG=WEBTEX_0_X_X
 SP_VERSION=0.X.X
 REPO=https://svn-1.sys.kth.se/svn/infosys-private/repos/infosys-private
 
 svn mkdir $REPO/tags/$SVN_TAG -m "Tag directory for release $SP_VERSION"
 
-svn copy $REPO/trunk/math.se/webtex $REPO/tags/$SVN_TAG/webtex -m "Tag for release $SP_VERSION"
+svn copy $REPO/trunk/common $REPO/trunk/math.se/webtex $REPO/tags/$SVN_TAG/webtex -m "Tag for release $SP_VERSION"
 
 mkdir webtex-$SP_VERSION
 
@@ -19,5 +19,5 @@ cd webtex
 
 ant build-dist
 
-# Den f‰rdiga ZIP-filen finns i dist och ska l‰ggas h‰r:
+# Den f√§rdiga ZIP-filen finns p√• toppniv√•n och ska l√§ggas h√§r:
 smb://ugapps01.ug.kth.se/infosys/Virtuellt%20Campus/webtex

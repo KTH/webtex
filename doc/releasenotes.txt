@@ -1,7 +1,11 @@
 WebTex 0.3.X
 ============
 
+WebTex 0.3.8-3
+==============
+
 * Add "Expires" header and increase http cache recommendation to 24 hours.
+* Several other fixes.
 
 WebTex 0.3.2
 ============
