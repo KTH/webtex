@@ -11,10 +11,12 @@ Installation
 
 Prerequisites
 
-WebTeX (as well as mathtran) needs a TeX (plain tex) installation. 
-It also needs the dvipng software to create images from the TeX DVI 
-output. Both the tex and dvipng binaries must be executable using the 
-system path of the servlet container.
+WebTeX needs a LaTeX installation. It also needs the dvipng software to
+create images from the TeX DVI output. Both the latex and dvipng 
+binaries must be executable using the system path of the servlet container.
+
+This require at least the texlive-latex and dvipng packages to be
+installed on RHEL6.
 
 Deployment
 
