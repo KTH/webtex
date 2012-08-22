@@ -1,5 +1,10 @@
-WebTex 0.3.X
-============
+WebTex 1.0.1
+==============
+* Use latex instead of plain tex with secsty format. Most of the cases
+  secsty handles are not valid with our way of running tex. The remaining
+  known issues to handle are taken care of with a simple validation of
+  the user input.
+* The project is moved to gitolite@social-git.sys.kth.se:webtex.
 
 WebTex 0.3.8-3
 ==============
