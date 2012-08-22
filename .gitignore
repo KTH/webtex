@@ -1,0 +1,4 @@
+# Compiled package
+webtex.war
+WebContent/WEB-INF/classes
+*~
