@@ -2,3 +2,4 @@
 webtex.war
 WebContent/WEB-INF/classes
 *~
+/build

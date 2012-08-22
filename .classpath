@@ -7,6 +7,5 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="/common/infosys/java/lib/infosysutil-0.13.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/common/external/java/lib/log4j.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
