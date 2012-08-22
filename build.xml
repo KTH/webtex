@@ -17,7 +17,7 @@
 		<echo message="About to compile sources using ${ant.version}" level="info"/>
 		<delete dir="WebContent/WEB-INF/classes/se"/>
 		<mkdir dir="WebContent/WEB-INF/classes/se"/>
-		<javac srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on" encoding="ISO8859_1" target="1.5">
+		<javac includeantruntime="false" srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on" encoding="ISO8859_1" target="1.5">
 			<classpath>
 				<fileset refid="files.lib"/>
 				<fileset refid="webinf.lib"/>
@@ -34,19 +34,9 @@
 		</copy>
 	</target>
 	
-	<target name="texini">
-		<echo message="Building tex format"/>
-		<exec dir="WebContent/WEB-INF/secsty" executable="/usr/bin/tex">
-			<arg value="--ini"/>
-			<arg value="secplain.sty"/>
-		</exec>
-		<echo message="Creating ls-R"/>
-		<exec dir="WebContent/WEB-INF/secsty" executable="texhash">
-			<arg value="."/>
-		</exec>
-	</target>
-	
-	<target name="war" depends="compile, properties, texini" description="Build the war file">
+    <target name="hudson" depends="war" description="Now just an alias for war"/>
+
+	<target name="war" depends="compile, properties" description="Build the war file">
 		<delete file="${war}"/>
 		<echo message="About to build ${war} using ${ant.version}" level="info"/>
 		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">
@@ -67,19 +57,5 @@
 			<fileset dir="doc" includes="releasenotes.txt"/>
 			<fileset dir="doc" includes="README.txt"/>
 		</zip>
-	</target>
-	
-	<target name="hudson" depends="compile" description="Build stuff without touching TeX bits">
-		<delete file="${war}"/>
-		<echo message="About to build ${war} using ${ant.version}" level="info"/>
-		<war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">
-			<classes dir="WebContent/WEB-INF/classes">
-				<include name="**/*.class"/>
-			</classes>
-			<fileset dir="WebContent">
-				<exclude name="WEB-INF/web.xml"/>
-				<exclude name="WEB-INF/classes/**"/>
-			</fileset>
-		</war>
 	</target>
 </project>
