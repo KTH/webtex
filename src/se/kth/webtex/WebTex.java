@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,6 +13,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import se.kth.sys.util.StringUtil;
 
 /**
  * Servlet implementation. Does the parameter handling and response/request logic.
@@ -21,6 +24,8 @@ public class WebTex extends HttpServlet {
 	private static final String PARAMETER_TEX = "tex";
 	private static final String PARAMETER_RESOLUTION = "D";
 	private static int EXPIRES_AFTER = 24*60*60; // 24 hours in seconds.
+    private static final Pattern INVALID_PATTERNS = 
+            Pattern.compile(".*(\\\\def|\\\\input|\\\\output|\\\\read|\\\\write|\\\\openin|\\\\openout|\\\\catcode).*");
 	
 	private Cache cache;
 	private TexRunner texRunner;
@@ -45,7 +50,7 @@ public class WebTex extends HttpServlet {
 	 */
 	protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String expression = request.getParameter(PARAMETER_TEX);
-		if (expression != null) {
+		if (isValid(expression)) {
 			int resolution = getResolution(request);
 			createImage(expression, resolution);
 			writeHeaders(response, expression, resolution);		
@@ -53,7 +58,7 @@ public class WebTex extends HttpServlet {
 			// Handle the case where there is no parameter.
 			// Probably use some sort of default error image.
 			System.out.println(request.getQueryString());
-			response.sendError(404);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
@@ -63,7 +68,7 @@ public class WebTex extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String expression = request.getParameter(PARAMETER_TEX);
-		if (expression != null) {
+		if (isValid(expression)) {
 			int resolution = getResolution(request);
 			createImage(expression, resolution);
 			writeHeaders(response, expression, resolution);
@@ -72,11 +77,21 @@ public class WebTex extends HttpServlet {
 			// Handle the case where there is no parameter.
 			// Probably use some sort of default error image.
 			System.out.println(request.getQueryString());
-			response.sendError(404);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
-	private int getResolution(HttpServletRequest request) {
+	private boolean isValid(String expression) {
+	    if (StringUtil.isValue(expression) && 
+	        !INVALID_PATTERNS.matcher(expression).matches()) {
+	        return true;
+	    }
+
+	    return false;
+    }
+
+
+    private int getResolution(HttpServletRequest request) {
 		if (request.getParameter(PARAMETER_RESOLUTION) != null) {
 			int resolution = Integer.parseInt(request.getParameter(PARAMETER_RESOLUTION));
 			resolution = Math.min(resolution, TexRunner.MAX_RESOLUTION);

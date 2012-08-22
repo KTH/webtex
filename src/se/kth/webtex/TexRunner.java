@@ -28,7 +28,7 @@ public class TexRunner {
 	public static String IMAGE_SUFFIX = ".png";
 
 	private static String DVI_COMMAND = "dvipng --depth -bg Transparent -D %s -o %s %s";
-	private static String TEX_COMMAND = "latex -interaction nonstopmode --output-comment '' -output-directory %s %s";
+	private static String TEX_COMMAND = "latex -halt-on-error -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
 	private File dir;
@@ -66,8 +66,10 @@ public class TexRunner {
 	private void removeTemporaryFiles(String nameWithoutSuffix) {
 		File file = new File(nameWithoutSuffix + ".tex");
 		file.delete();
-		file = new File(nameWithoutSuffix + ".log");
-		file.delete();
+        file = new File(nameWithoutSuffix + ".log");
+        file.delete();
+        file = new File(nameWithoutSuffix + ".aux");
+        file.delete();
 		file = new File(nameWithoutSuffix + ".dvi");
 		file.delete();
 		file = new File(nameWithoutSuffix);
