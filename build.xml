@@ -34,8 +34,6 @@
 		</copy>
 	</target>
 	
-    <target name="hudson" depends="war" description="Now just an alias for war"/>
-
 	<target name="war" depends="compile, properties" description="Build the war file">
 		<delete file="${war}"/>
 		<echo message="About to build ${war} using ${ant.version}" level="info"/>
