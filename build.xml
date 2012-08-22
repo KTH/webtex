@@ -1,5 +1,5 @@
 <project name="webtex">
-	<property name="project.version" value="1.0"/>
+	<property name="project.version" value="1.0.1"/>
 	<property name="war" value="${ant.project.name}.war"/>
 	
 	<fileset id="files.lib" dir="lib">
