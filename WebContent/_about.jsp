@@ -23,6 +23,9 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       <dt>Version:</dt>
       <dd><%= resources.getString("webtex.version") %></dd>
 
+      <dt>Build date:</dt>
+      <dd><%= resources.getString("webtex.builddate") %></dd>
+
       <dt>ServerName:</dt>
       <dd><%=serverName%></dd>
 

@@ -10,7 +10,7 @@
 	</fileset>
 
     <tstamp>
-        <format property="project.lastchangedate" pattern="yyyy-MM-dd"/>
+        <format property="project.builddate" pattern="yyyy-MM-dd"/>
     </tstamp>
 	
 	<target name="compile">
@@ -26,7 +26,8 @@
 	</target>
 	
 	<target name="properties">
-		<filter token="PROJECT_VERSION" value="${project.version}"/>
+        <filter token="PROJECT_VERSION" value="${project.version}"/>
+        <filter token="PROJECT_BUILDDATE" value="${project.builddate}"/>
 		<copy todir="WebContent/WEB-INF/classes" filtering="true" overwrite="true">
 		    <fileset dir="src">
 		        <include name="*.properties"/>
