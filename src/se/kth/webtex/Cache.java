@@ -151,12 +151,14 @@ public class Cache implements Runnable {
 	 * Constructor, initializes cache.
 	 * @param root 
 	 */
-	public Cache(String root) {
+	private Cache(String root) {
 		setCache(root + File.separator + "tmp" + File.separator + "cache");
 		this.cache = new ConcurrentHashMap<CacheKey, CacheData>();
 		this.cachePurger = new Thread(this);
 		cachePurger.start();
 	}
+
+    private Cache() {}
 
 	private synchronized void setCache(String dir) {
 		new File(dir).mkdirs();
