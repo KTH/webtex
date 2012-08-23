@@ -25,10 +25,9 @@
     <url-pattern>/_about</url-pattern>
   </servlet-mapping>
   
-<!-- 
   <servlet>
     <servlet-name>Monitor</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <servlet-class>se.kth.webtex.Monitor</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
@@ -36,5 +35,4 @@
     <servlet-name>Monitor</servlet-name>
     <url-pattern>/_monitor</url-pattern>
   </servlet-mapping>
--->
 </web-app>
