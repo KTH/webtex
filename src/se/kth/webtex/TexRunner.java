@@ -28,7 +28,7 @@ public class TexRunner {
 	public static String IMAGE_SUFFIX = ".png";
 
 	private static String DVI_COMMAND = "dvipng -T tight --depth -bg Transparent -D %s -o %s %s";
-	private static String TEX_COMMAND = "latex -halt-on-error -interaction nonstopmode --output-comment '' -output-directory %s %s";
+	private static String TEX_COMMAND = "latex -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
 	private File dir;
@@ -54,7 +54,7 @@ public class TexRunner {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
-		    removeTemporaryFiles(fileName);
+                    removeTemporaryFiles(fileName);
 		}
 	}	
 	
@@ -108,15 +108,11 @@ public class TexRunner {
 		
 		for (String line : tex.getStdOutStore()) {
 			if (line.matches("!.*")) {
-				errorMessage = true;
-			} else if (line.matches(".*see the transcript file for additional information.*")) {
-				errorMessage = false;
-			}
-			if (errorMessage) {
-				if (output == null)
-					output = "[[" + line + "]]";
-				else
-					output += ", [[" + line + "]]";
+                            output = line + " ";
+                            errorMessage = true;
+			} else if (errorMessage) {
+                            output += line;
+                            errorMessage = false;
 			}
 		}
 		return output;
