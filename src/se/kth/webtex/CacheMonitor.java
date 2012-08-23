@@ -15,6 +15,8 @@ public class CacheMonitor extends ApplicationMonitor implements
 
     @Override
     public Status call() throws Exception {
-        return Status.OK(cache.size() + " items in cache.");
+        return Status.OK(cache.size() + " items in cache. Totals: " 
+                         + cache.getAdditions() + " additions, " 
+                         + cache.getExpired() + " expirations.");
     }
 }

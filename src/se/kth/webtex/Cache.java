@@ -19,6 +19,10 @@ public class Cache implements Runnable {
 	private String dir;
 	private ConcurrentMap<CacheKey, CacheData> cache; 
 	private Thread cachePurger;
+
+    // Performance counters
+    private long additions = 0;
+    private long expired = 0;
 	
     public static synchronized Cache initCache(ServletContext context, String dir) {
         if (context.getAttribute("cache") == null) {
@@ -29,6 +33,14 @@ public class Cache implements Runnable {
 
     public int size() {
         return this.cache.size();
+    }
+
+    public long getAdditions() {
+        return this.additions;
+    }
+
+    public long getExpired() {
+        return this.expired;
     }
 
 	/**
@@ -132,6 +144,7 @@ public class Cache implements Runnable {
 		File cacheFile = fileForKey(key, resolution);
 		file.renameTo(cacheFile);
 		cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
+                this.additions++;
 	}
 
 	private File fileForKey(String key, int resolution) {
@@ -182,6 +195,7 @@ public class Cache implements Runnable {
 		File cacheFile = file(key, resolution);
 		cache.remove(new CacheKey(key, resolution));
 		cacheFile.delete();
+                this.expired++;
 	}
 	
 
