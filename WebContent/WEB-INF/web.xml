@@ -14,4 +14,27 @@
     <servlet-name>WebTex</servlet-name>
     <url-pattern>/WebTex</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>about</servlet-name>
+    <jsp-file>/_about.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>about</servlet-name>
+    <url-pattern>/_about</url-pattern>
+  </servlet-mapping>
+  
+<!-- 
+  <servlet>
+    <servlet-name>Monitor</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Monitor</servlet-name>
+    <url-pattern>/_monitor</url-pattern>
+  </servlet-mapping>
+-->
 </web-app>
