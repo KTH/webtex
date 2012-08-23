@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -39,8 +40,14 @@ public class WebTex extends HttpServlet {
 
     
     public void init(ServletConfig config) {
-    	String root = config.getServletContext().getRealPath("");
-    	this.cache = new Cache(root);
+        ServletContext context = config.getServletContext();
+        String root = context.getRealPath("");
+        if (context.getAttribute("cache") != null) {
+            this.cache = (Cache) context.getAttribute("cache");
+        } else {
+            this.cache = new Cache(root);
+            context.setAttribute("cache", this.cache);
+        }
     	this.texRunner = new TexRunner(root);
     }
     

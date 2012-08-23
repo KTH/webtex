@@ -2,8 +2,8 @@ package se.kth.webtex;
 
 import java.io.File;
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,7 +15,7 @@ public class Cache implements Runnable {
 	private static final long EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
 
 	private String dir;
-	private Map<CacheKey, CacheData> cache; 
+	private ConcurrentMap<CacheKey, CacheData> cache; 
 	private Thread cachePurger;
 	
 	/**
@@ -115,7 +115,7 @@ public class Cache implements Runnable {
 	 * @param file to add
 	 * @param logMessage
 	 */
-	public void put(String key, int resolution, int depth, File file, String logMessage) {
+	public synchronized void put(String key, int resolution, int depth, File file, String logMessage) {
 		File cacheFile = fileForKey(key, resolution);
 		file.renameTo(cacheFile);
 		cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
@@ -145,7 +145,7 @@ public class Cache implements Runnable {
 		cachePurger.start();
 	}
 
-	private void setCache(String dir) {
+	private synchronized void setCache(String dir) {
 		new File(dir).mkdirs();
 		emptyCache(dir);
 		this.dir = dir;
@@ -163,7 +163,7 @@ public class Cache implements Runnable {
 	 * @param key
 	 * @param resolution
 	 */
-	private void remove(String key, int resolution) {
+	private synchronized void remove(String key, int resolution) {
 		File cacheFile = file(key, resolution);
 		cache.remove(new CacheKey(key, resolution));
 		cacheFile.delete();

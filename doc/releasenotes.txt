@@ -1,5 +1,6 @@
 WebTex 1.1.0-pre
 ==============
+* Use single cache for servlet, not one per thread.
 * Added _monitor and _about pages.
 * Use mathtools rather than amsmath.
 
