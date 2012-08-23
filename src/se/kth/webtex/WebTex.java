@@ -42,16 +42,19 @@ public class WebTex extends HttpServlet {
     public void init(ServletConfig config) {
         ServletContext context = config.getServletContext();
         String root = context.getRealPath("");
+        initCache(context, root);
+    	this.texRunner = new TexRunner(root);
+    }
+    
+
+    public synchronized void initCache(ServletContext context, String root) {
         if (context.getAttribute("cache") != null) {
             this.cache = (Cache) context.getAttribute("cache");
         } else {
             this.cache = new Cache(root);
             context.setAttribute("cache", this.cache);
         }
-    	this.texRunner = new TexRunner(root);
     }
-    
-    
 	/**
 	 * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
 	 */
