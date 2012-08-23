@@ -24,9 +24,9 @@ public class WebTex extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String PARAMETER_TEX = "tex";
 	private static final String PARAMETER_RESOLUTION = "D";
-	private static int EXPIRES_AFTER = 24*60*60; // 24 hours in seconds.
+	private static int EXPIRES_AFTER = 7*24*60*60;
     private static final Pattern INVALID_PATTERNS = 
-            Pattern.compile(".*(\\\\def|\\\\input|\\\\output|\\\\read|\\\\write|\\\\openin|\\\\openout|\\\\catcode).*");
+            Pattern.compile(".*(\\\\def|\\\\input|\\\\output|\\\\read|\\\\write|\\\\openin|\\\\openout|\\\\catcode|\\\\let).*");
 	
 	private Cache cache;
 	private TexRunner texRunner;
