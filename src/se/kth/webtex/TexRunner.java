@@ -27,7 +27,7 @@ public class TexRunner {
 	 */
 	public static String IMAGE_SUFFIX = ".png";
 
-	private static String DVI_COMMAND = "dvipng --depth -bg Transparent -D %s -o %s %s";
+	private static String DVI_COMMAND = "dvipng -T tight --depth -bg Transparent -D %s -o %s %s";
 	private static String TEX_COMMAND = "latex -halt-on-error -interaction nonstopmode --output-comment '' -output-directory %s %s";
 	private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 	
@@ -78,11 +78,11 @@ public class TexRunner {
 	
 	private void createTexFile(String fileName, String expression) throws IOException {
 		PrintWriter texFile = new PrintWriter(new FileWriter(fileName + ".tex"));
-		texFile.println("\\documentclass{minimal}");
-        texFile.println("\\usepackage{amsmath}");
+		texFile.println("\\documentclass[fleqn]{minimal}");
+        texFile.println("\\usepackage{mathtools}");
 		texFile.println("\\usepackage[displaymath,active,textmath,tightpage]{preview}");
         texFile.println("\\begin{document}");
-        texFile.println("$" + expression + "$");
+        texFile.println("\\(" + expression + "\\)");
         texFile.println("\\end{document}");
 		texFile.close();
 	}

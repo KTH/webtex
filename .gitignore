@@ -3,4 +3,4 @@ webtex.war
 WebContent/WEB-INF/classes
 *~
 /build
-*.zip
+webtex-*.zip
