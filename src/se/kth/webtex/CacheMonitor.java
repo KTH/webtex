@@ -7,11 +7,14 @@ import se.kth.sys.util.ApplicationMonitor.Status;
 
 public class CacheMonitor extends ApplicationMonitor implements
         Callable<Status> {
+    private Cache cache;
+
+    public void setCache(Cache cache) {
+        this.cache = cache;
+    }
 
     @Override
     public Status call() throws Exception {
-        // TODO Auto-generated method stub
-        return Status.OK("I'm alive");
+        return Status.OK(cache.size() + " items in cache.");
     }
-
 }

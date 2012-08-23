@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.ServletContext;
+
 /**
  * Cache meta data and keep track of the generated image files. The cache
  * has a built-in thread that expires data after one week.
@@ -18,6 +20,17 @@ public class Cache implements Runnable {
 	private ConcurrentMap<CacheKey, CacheData> cache; 
 	private Thread cachePurger;
 	
+    public static synchronized Cache initCache(ServletContext context, String dir) {
+        if (context.getAttribute("cache") == null) {
+            context.setAttribute("cache", new Cache(dir));
+        }
+        return (Cache) context.getAttribute("cache");
+    }
+
+    public int size() {
+        return this.cache.size();
+    }
+
 	/**
 	 * @param key
 	 * @param resolution
