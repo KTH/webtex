@@ -39,6 +39,10 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 	<hr />
 
 	<dl>
+        <dt>For testing and demo:</dt>
+        <dd>
+            <a href="./">Demo page</a>
+        </dd>
 		<dt>System status:</dt>
 		<dd>
 			<a href="_monitor">System status</a>
