@@ -205,9 +205,7 @@ mathtran.httpCallback = function(xmlhttp, img, post_fn) {
 		if (xmlhttp.status==200) { //"OK"
 
 			img.math = new Object();
-			var log = xmlhttp.getResponseHeader("X-MathImage-log");
-			img.math.log = decodeURIComponent(log);
-
+			img.math.log = decodeURIComponent(xmlhttp.getResponseHeader("X-MathImage-log"));
 			img.math.depth = xmlhttp.getResponseHeader("X-MathImage-depth");
 
 			//img.style.verticalAlign = -img.depth+'px';
@@ -240,12 +238,11 @@ if (!window.mathtran) {
 mathtran.textips = new Object(); 
 
 //We place an input form at the each TEXTIPS DIV.
-mathtran.textips.formStr = '\
-	<form><p><input id="text_1" type="text" size="50" />\
-	<input type="button" value="Try it!" /></p>\
-	<p class="output"><span>Output area.</span></p>\
-	<pre class="log">Log area</pre>\
-	</form>';
+mathtran.textips.formStr = 
+	'<form><p><input id="text_1" type="text" size="50" />\
+	 <input type="button" value="Try it!" /></p>\
+	 <p class="output"><span>Output area.</span></p>\
+	 <pre class="log">Log area</pre></form>';
 
 //We will store the input forms on this page, and their targets.
 mathtran.textips.inputs = new Array();
