@@ -1,9 +1,12 @@
+//Copyright: (c) 2009-2012 KTH, Royal Institute of Technology, Stockholm, Sweden
+//Author: Fredrik Jönsson <fjo@kth.se>
+//
+//Based on:
 //Copyright: (c) 2007 The Open University, Milton Keynes, UK
-//License: GPL version 2 or (at your option) any later version.
 //Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
 
-//Javascript that uses MathTran to add images to your web page via
-//TeX tips. See http://www.mathtran.org/textips for examples.
+//Javascript that uses WebTex to add images to your web page via
+//TeX tips. See http://webtex-1.sys.kth.se/webtex/ for examples.
 
 /* Typical use:
    ...
@@ -19,17 +22,6 @@
    </div>
    ...
  */
-
-//This script will add for example, 'src="http//www.mathtran.org/cgi-bin/mathtran?x^2+y^2=1"
-//The result: the web page will show your formula, as rendered by
-//TeX. Change the Javascript variable mathtran.imgSrc to use a
-//different MathTran server.
-
-//$Revision: 247 $
-//$Source$ 
-
-//TODO: The tricky case of empty SRC in the IMG tag.
-//TODO: Change the names of some of the function - use the namespace.
 
 //Create a namespace, to hold variables and functions.
 mathtran = new Object();
@@ -226,14 +218,6 @@ mathtran.httpCallback = function(xmlhttp, img, post_fn) {
 
 //==========================================================================
 
-//TODO: <Enter> on form, and log not displayed.  [Try it!] works, though.
-//TODO: Click on an image, and log is not displayed.  Click again, it is.
-//TODO: Above has some relation to whether formula is new or cached.
-
-if (!window.mathtran) {
-	alert("web page error: mathtran.js not yet loaded");
-}
-
 //Create a namespace, to hold variables and functions.
 mathtran.textips = new Object(); 
 
@@ -325,142 +309,6 @@ mathtran.textips.init = function () {
 		}
 	}
 	mathtran.hideElementById("mathtran.textips.error");
-};
-
-
-//Added to support mixed content data entry forms.
-mathtran._findTex = function (str, index) {
-	var start;
-	var end;
-
-	start = str.lastIndexOf("<tex>", index);
-	if (start == -1)
-		start = str.indexOf("<tex>", 0);
-
-	end = str.indexOf("</tex>", start);
-	return [start, end];
-};
-
-mathtran._getCursorLocation  = function (textarea) {
-	mathtran._getCaretPositions(textarea);
-	return insertionS;
-};
-
-
-mathtran.previewTexAtCursor = function(textarea, img, log) {
-	//  Find the tex string we wish to preview.
-	var text = textarea.value;
-	var locn = mathtran._getCursorLocation(textarea);
-	var tmp = mathtran._findTex(text, locn);
-	tex = text.substring(tmp[0]+5, tmp[1]);
-
-	//  Change the image source.
-	img.src="http://localhost:8000/cgi-bin/mathtran?D=3;tex=" + encodeURIComponent(tex);
-	img.src="/cgi-bin/mathtran?D=3;tex=" + encodeURIComponent(tex);
-	img.className = '';              // Avoid buildup of depth values.
-
-	var callback = function () { log.innerHTML = img.math.log; };
-	mathtran.httpRequest(img, callback);
-};
-
-
-//This function retrieves the position (in chars, relative to
-//the start of the text) of the edit cursor (caret), or, if
-//text is selected in the TEXTAREA, the start and end positions
-//of the selection.
-
-
-//The definition of getCaretPositions comes from:
-//http://www.codeproject.com/jscript/jvk.asp?msg=2142220
-//Many thanks to Dmitry Khudorozhkov for solving this problem.
-//This function definition is covered by:
-/*
-The zlib/libpng License
-
-Copyright (c) <year> <copyright holders>
-
-This software is provided 'as-is', without any express or implied
-warranty. In no event will the authors be held liable for any damages
-arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
-
-    1. The origin of this software must not be misrepresented; you must not
-    claim that you wrote the original software. If you use this software
-    in a product, an acknowledgment in the product documentation would be
-    appreciated but is not required.
-
-    2. Altered source versions must be plainly marked as such, and must not be
-    misrepresented as being the original software.
-
-    3. This notice may not be removed or altered from any source
-    distribution.
- */
-
-//Here are some other attempts to solve this problem:
-//http://mikeoncode.blogspot.com/2006/04/javascript-key-codes.html
-//http://www.webdeveloper.com/forum/showthread.php?t=74982
-//http://www.bazon.net/mishoo/articles.epl?art_id=1292
-//http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dhtmltechcol/cols/dnwebteam/webteam12032001.asp
-//http://the-stickman.com/web-development/javascript/finding-selection-cursor-position-in-a-textarea-in-internet-explorer/
-//http://blog.vishalon.net/Post/57.aspx
-
-mathtran._getCaretPositions = function(ctrl) {
-	var CaretPosS = -1, CaretPosE = 0;
-
-	if (ctrl.selectionStart || (ctrl.selectionStart == '0')) {
-		// Mozilla way:
-		CaretPosS = ctrl.selectionStart;
-		CaretPosE = ctrl.selectionEnd;
-
-		insertionS = CaretPosS == -1 ? CaretPosE : CaretPosS;
-		insertionE = CaretPosE;
-	} else if(document.selection && ctrl.createTextRange) {
-		// IE way:
-		var start = end = 0;
-		try {
-			start = Math.abs(document.selection.createRange().moveStart("character", -10000000)); // start
-
-			if (start > 0) {
-				try {
-					var endReal = Math.abs(ctrl.createTextRange().moveEnd("character", -10000000));
-					var r = document.body.createTextRange();
-					r.moveToElementText(ctrl);
-					var sTest = Math.abs(r.moveStart("character", -10000000));
-					var eTest = Math.abs(r.moveEnd("character", -10000000));
-
-					if ((ctrl.tagName.toLowerCase() != 'input') && (eTest - endReal == sTest)) {
-						start -= sTest;
-					}
-				} catch(err) {}
-			}
-		} catch (e) {}
-
-		try {
-			end = Math.abs(document.selection.createRange().moveEnd("character", -10000000)); // end
-			if (end > 0) {
-				try {
-					var endReal = Math.abs(ctrl.createTextRange().moveEnd("character", -10000000));
-
-					var r = document.body.createTextRange();
-					r.moveToElementText(ctrl);
-					var sTest = Math.abs(r.moveStart("character", -10000000));
-					var eTest = Math.abs(r.moveEnd("character", -10000000));
-
-					if ((ctrl.tagName.toLowerCase() != 'input') && (eTest - endReal == sTest)) {
-						end -= sTest;
-					}
-				}
-				catch(err) {}
-			}
-		}
-		catch (e) {}
-
-		insertionS = start;
-		insertionE = end;
-	}
 };
 
 //Initialise once the whole document is loaded.
