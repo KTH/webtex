@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 WebTex 1.2.0-pre
 ==============
 
+WebTex 1.1.0
+=======
 WebTex 1.1.1
+>>>>>>> hotfix/1.1.1
 ==============
 * Use single cache for servlet, not one per thread.
 * Added _monitor and _about pages.
