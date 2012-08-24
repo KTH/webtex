@@ -11,36 +11,38 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 %><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <title>About WebTex</title> 
-  </head>
-  <body>
-    <h1>About WebTex</h1>
+<head>
+<title>About WebTex</title>
+</head>
+<body>
+	<h1>About WebTex</h1>
 
-    <hr/>
+	<hr />
 
-    <dl>
-      <dt>Version:</dt>
-      <dd><%= resources.getString("webtex.version") %></dd>
+	<dl>
+		<dt>Version:</dt>
+		<dd><%= resources.getString("webtex.version") %></dd>
 
-      <dt>Build date:</dt>
-      <dd><%= resources.getString("webtex.builddate") %></dd>
+		<dt>Build date:</dt>
+		<dd><%= resources.getString("webtex.builddate") %></dd>
 
-      <dt>ServerName:</dt>
-      <dd><%=serverName%></dd>
+		<dt>ServerName:</dt>
+		<dd><%=serverName%></dd>
 
-      <dt>ServerPort:</dt>
-      <dd><%=serverPort%></dd>
+		<dt>ServerPort:</dt>
+		<dd><%=serverPort%></dd>
 
-      <dt>ServingHost:</dt>
-      <dd><%=hostName%></dd>
-    </dl>
+		<dt>ServingHost:</dt>
+		<dd><%=hostName%></dd>
+	</dl>
 
-    <hr/>
+	<hr />
 
-    <dl>
-      <dt>System status:</dt>
-      <dd><a href="_monitor">System status</a></dd>
-    </dl>
-  </body>
+	<dl>
+		<dt>System status:</dt>
+		<dd>
+			<a href="_monitor">System status</a>
+		</dd>
+	</dl>
+</body>
 </html>

@@ -1,6 +1,7 @@
-<%@page session="false" language="java" contentType="text/html" pageEncoding="ISO-8859-1" %>
+<%@page session="false" language="java" contentType="text/html"
+	pageEncoding="ISO-8859-1"%>
 <%@page import="se.kth.webtex.PageBean"%>
-<jsp:useBean id="pageBean" scope="page" class="se.kth.webtex.PageBean"/>
+<jsp:useBean id="pageBean" scope="page" class="se.kth.webtex.PageBean" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -11,57 +12,61 @@
 <script type="text/javascript" src="js/webtex.js"></script>
 </head>
 <body>
-<h1>WebTex <%= pageBean.getVersion() %> - Online translation of mathematical content</h1>
+	<h1>
+		WebTex
+		<%=pageBean.getVersion()%>
+		- Online translation of mathematical content
+	</h1>
 
-<h2>Demo</h2>
+	<h2>Demo</h2>
 
-<p id="mathtran.textips.error">Sorry, either your browser doesn't have
-Javascript enabled or there's a problem somewhere - so TeX tips won't
-work for you.</p>
+	<p id="mathtran.textips.error">Sorry, either your browser doesn't
+		have Javascript enabled or there's a problem somewhere - so TeX tips
+		won't work for you.</p>
 
-<div class="textips">
-<p>This is an example of TeX tips.  Try clicking on one of the boxed
-images below.  The rendered image and the TeX log will appear below
-the data entry form.<br/>
-<img alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n" />
-<img alt="tex:\sum_0^n 2^{-n}" /> 
-<img alt="tex:\sum_0^\infty x^n/n!" />
-<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" />
-<img alt="tex:\sum_0^\infty x^n/n" />
-</p>
-</div>
+	<div class="textips">
+		<p>
+			This is an example of TeX tips. Try clicking on one of the boxed
+			images below. The rendered image and the TeX log will appear below
+			the data entry form.<br /> <img
+				alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n" /> <img
+				alt="tex:\sum_0^n 2^{-n}" /> <img alt="tex:\sum_0^\infty x^n/n!" />
+			<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" /> <img
+				alt="tex:\sum_0^\infty x^n/n" />
+		</p>
+	</div>
 
-<h2>Adding math to your webpage</h2>
+	<h2>Adding math to your webpage</h2>
 
-<p>It's now quick and easy to put high-quality (typeset by TeX)
-mathematical bitmaps on your web pages.  First, put the magic URL<br/>
-<code>
-&lt;script type="text/javascript" src="http://<%=request.getServerName() %>:<%=request.getServerPort() %><%= request.getContextPath() %>/js/webtex.js"&lt;/script&gt;
-</code>
-<br />
-in the HEAD of your web page.</p>
+	<p>
+		It's now quick and easy to put high-quality (typeset by TeX)
+		mathematical bitmaps on your web pages. First, put the magic URL<br />
+		<code>
+			&lt;script type="text/javascript" src="http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>/js/webtex.js"&lt;/script&gt;
+		</code>
+		<br /> in the HEAD of your web page.
+	</p>
 
-<p>Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
-<code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code> in its HTML.  That's all
-you need to do.  More complicated equations are done in the same way,
-of course. WebTex will vertically align the formula for you, like
-this <img alt="tex:\int_0^1 x\, dx" /> and this <img
-alt="tex:{}^2"/>
-</p>
+	<p>
+		Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
+		<code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code>
+		in its HTML. That's all you need to do. More complicated equations are
+		done in the same way, of course. WebTex will vertically align the
+		formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
+		<img alt="tex:{}^2" />
+	</p>
 
-<p>
-This software is based on the open source software Mathtran, 
-Copyright &copy; 2007 <a href="http://www.open.ac.uk">The Open University</a>. 
-More information can be found on the <a href="http://www.mathtran.org/">mathtran.org</a>
-home page.
-</p>
-<p>
-The source code for the mathtran project is released under the GPL. The resources
-are available here:
-</p>
-<ul>
-<li><a href="http://sourceforge.net/projects/mathtran">http://sourceforge.net/projects/mathtran</a></li>
-<li><a href="http://sourceforge.net/projects/texd">http://sourceforge.net/projects/texd</a></li>
-</ul>
+	<p>
+		This software is based on the open source software Mathtran, Copyright
+		&copy; 2007 <a href="http://www.open.ac.uk">The Open University</a>.
+		More information can be found on the <a
+			href="http://www.mathtran.org/">mathtran.org</a> home page.
+	</p>
+	<p>The source code for the mathtran project is released under the
+		GPL. The resources are available here:</p>
+	<ul>
+		<li><a href="http://sourceforge.net/projects/mathtran">http://sourceforge.net/projects/mathtran</a></li>
+		<li><a href="http://sourceforge.net/projects/texd">http://sourceforge.net/projects/texd</a></li>
+	</ul>
 </body>
 </html>
