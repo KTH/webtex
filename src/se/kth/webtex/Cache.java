@@ -1,6 +1,8 @@
 package se.kth.webtex;
 
+
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -23,6 +25,7 @@ public class Cache implements Runnable {
     // Performance counters
     private long additions = 0;
     private long expired = 0;
+    private Calendar startTime = Calendar.getInstance();
 
     public static synchronized Cache initCache(ServletContext context, String dir) {
         if (context.getAttribute("cache") == null) {
@@ -41,6 +44,12 @@ public class Cache implements Runnable {
 
     public long getExpired() {
         return this.expired;
+    }
+    
+    public long getUptime() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.SECOND, (int) -startTime.getTimeInMillis()/1000);
+        return now.getTimeInMillis();
     }
 
     /**
