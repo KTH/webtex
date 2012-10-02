@@ -1,5 +1,7 @@
-WebTex 1.2.0-pre
+WebTex 1.1.2
 ==============
+* Fix bug with servlet running at 100% when cache is empty.
+* Remove unused stuff from webtex.js.
 
 WebTex 1.1.1
 ==============
