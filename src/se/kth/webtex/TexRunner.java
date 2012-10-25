@@ -50,9 +50,9 @@ public class TexRunner {
 
             cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
         } catch (IOException e) {
-            throw new ServletException("An error occuring when running 'tex'.", e);
+            e.printStackTrace();
         } catch (InterruptedException e) {
-            throw new ServletException("An error occuring when running 'tex'.", e);
+            e.printStackTrace();
         } finally {
             removeTemporaryFiles(fileName);
         }
