@@ -1,9 +1,4 @@
-WebTex 1.1.2
-==============
-* Fix bug with servlet running at 100% when cache is empty.
-* Remove unused stuff from webtex.js.
-
-WebTex 1.1.1
+WebTex 1.1.0
 ==============
 * Use single cache for servlet, not one per thread.
 * Added _monitor and _about pages.

@@ -17,6 +17,8 @@ import javax.servlet.ServletContext;
 public class Cache implements Runnable {
     // One week expiration time in milliseconds on cached items.
     private static final long EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
+    private static final long TIME_BETWEEN_EVICTIONS = 500;
+    private static final long TIME_BETWEEN_EVICTIONRUNS = TimeUnit.SECONDS.toMillis(1);
 
     private String dir;
     private ConcurrentMap<CacheKey, CacheData> cache; 
@@ -121,9 +123,13 @@ public class Cache implements Runnable {
                     remove(key.key, key.resolution);
                 }
                 try {
-                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                    Thread.sleep(TIME_BETWEEN_EVICTIONS);
                 } catch (InterruptedException e) {
                 }
+            }
+            try {
+                Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
+            } catch (InterruptedException e) {
             }
         }
     }
