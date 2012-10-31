@@ -23,7 +23,7 @@ Callable<Status> {
 	    cache.size(),
 	    cache.getAdditions(),
 	    cache.getExpired(),
-	    cache.getSize() / 1024,
+	    cache.getDiskSize() / 1024,
 	    uptime()));
     }
     
