@@ -61,7 +61,7 @@
   <target name="clean" description="Remove build ouput">
     <delete dir="build"/>
     <delete>
-      <fileset dir="." includes="**/*~"/>
+      <fileset dir="." includes="**/*~" defaultexcludes="false"/>
       <fileset dir="." includes="*.war"/>
       <fileset dir="." includes="*.zip"/>
     </delete>
