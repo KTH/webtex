@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="css/master.css" />
 <link rel="stylesheet" type="text/css" href="css/mathtran.css" />
 <script type="text/javascript" src="js/webtex.js"></script>
+<script type="text/javascript" src="js/textips.js"></script>
 </head>
 <body>
 	<h1>
