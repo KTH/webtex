@@ -1,8 +1,12 @@
-<%@page session="false" language="java" contentType="text/html"
-	pageEncoding="ISO-8859-1"%>
-<%@page import="se.kth.webtex.PageBean"%>
-<jsp:useBean id="pageBean" scope="page" class="se.kth.webtex.PageBean" />
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?xml version="1.0" encoding="utf-8"?>
+<%@page import="java.util.ResourceBundle"%>
+<%@page contentType="text/html; charset=utf-8"%>
+<%
+
+ResourceBundle resources = ResourceBundle.getBundle("webtex");
+
+%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,7 +19,7 @@
 <body>
 	<h1>
 		WebTex
-		<%=pageBean.getVersion()%>
+		<%=resources.getString("webtex.version")%>
 		- Online translation of mathematical content
 	</h1>
 
