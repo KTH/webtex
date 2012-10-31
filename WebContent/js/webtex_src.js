@@ -20,27 +20,27 @@
  */
 
 //Create a namespace, to hold variables and functions.
-mathtran = new Object();
+webtex = new Object();
 
 //Change this use a different MathTran server.
-mathtran.imgSrc = "../webtex/WebTex?";
+webtex.imgSrc = "../webtex/WebTex?";
 
-mathtran.MAX_D = 6;
-mathtran.allowResize = false;
+webtex.MAX_D = 6;
+webtex.allowResize = false;
 
 //CAUTION: for development ONLY.
-mathtran.security = new Object();
-mathtran.enableCrossDomain = false;
+webtex.security = new Object();
+webtex.enableCrossDomain = false;
 
-mathtran.security.enableCrossDomain = function() {
-	mathtran.enableCrossDomain = true;
+webtex.security.enableCrossDomain = function() {
+	webtex.enableCrossDomain = true;
 };
 
 //Function to transform the whole document.  Add SRC to each IMG with
 //ALT text starting with "tex:".  However, skip if element already
 //has a SRC.  Note that 'src=""' may be a non-empty src, because the
 //browser will prefix the base URL.
-mathtran.init = function () {
+webtex.init = function () {
     if (! document.getElementsByTagName) {
 	return;
     }
@@ -52,30 +52,30 @@ mathtran.init = function () {
 
     for (i = 0; i<len; i++) {
 	img = objs[i];
-	if (mathtran.isTexImage(img)) {
+	if (webtex.isTexImage(img)) {
 	    
 	    if (!img.src) {
 		tex_src = img.alt.substring(4);
-		size = mathtran.contextSize(img);
-		img.src = mathtran.getImgSrc(tex_src, size);
+		size = webtex.contextSize(img);
+		img.src = webtex.getImgSrc(tex_src, size);
 	    }
 		
 	    // Append TEX to the class of the IMG.
 	    img.className +=' tex';
 	    tex_count++;
-	    mathtran.httpRequest(img);
+	    webtex.httpRequest(img);
 	}
     }
-    mathtran.hideElementById("mathtran.error");
+    webtex.hideElementById("webtex.error");
 };
 
-//Utility function. Could define mathtran.getTexImages=function.
-mathtran.isTexImage = function(img) {
+//Utility function. Could define webtex.getTexImages=function.
+webtex.isTexImage = function(img) {
     return (img.alt.substring(0,4) == 'tex:'); //img.alt.substring(4);
 };
 
 //Utility function.
-mathtran.getImgSrc = function(tex_src, size) {
+webtex.getImgSrc = function(tex_src, size) {
     var size_frag;
 
     if (size == null) {
@@ -85,15 +85,15 @@ mathtran.getImgSrc = function(tex_src, size) {
     }
 
     // See http://xkr.us/articles/javascript/encode-compare/
-    return mathtran.imgSrc + size_frag + 'tex=' + encodeURIComponent(tex_src);
+    return webtex.imgSrc + size_frag + 'tex=' + encodeURIComponent(tex_src);
 };
 
-mathtran.contextSize = function(img) {
-    if (!mathtran.allowResize) {
+webtex.contextSize = function(img) {
+    if (!webtex.allowResize) {
 	return;
     }
     
-    var fontSize = mathtran.getStyle(img, 'font-size'),
+    var fontSize = webtex.getStyle(img, 'font-size'),
         pos = fontSize.indexOf('p'), //Mozilla Opera px | MSIE pt.
         unit = fontSize.substr(pos),
         divide = 11,
@@ -105,8 +105,8 @@ mathtran.contextSize = function(img) {
 
     resize = Math.round(fontSize.substr(0, pos)/divide);
     
-    if (resize > mathtran.MAX_D) {
-	resize = mathtran.MAX_D;
+    if (resize > webtex.MAX_D) {
+	resize = webtex.MAX_D;
     }
 
     img.title = 'Debug: '+ fontSize +' | D='+resize;
@@ -114,7 +114,7 @@ mathtran.contextSize = function(img) {
 };
 
 //Utility function.
-mathtran.hideElementById = function (id) {
+webtex.hideElementById = function (id) {
     var obj = document.getElementById(id);
     if (obj) {
 	obj.style.display = 'none';
@@ -123,7 +123,7 @@ mathtran.hideElementById = function (id) {
 };
 
 //Utility function, should be a prototype on 'document' or 'node'.
-mathtran.getElementsByClassName = function(classname) {
+webtex.getElementsByClassName = function(classname) {
     var a = [],
         re = new RegExp('\\b' + classname + '\\b'),
         els = document.getElementsByTagName("*"), //node
@@ -135,7 +135,7 @@ mathtran.getElementsByClassName = function(classname) {
     return a;
 };
 
-mathtran.getStyle = function(elem, styleProp) {
+webtex.getStyle = function(elem, styleProp) {
     var y = "";
     if (window.getComputedStyle) { //For Mozilla.
 	y = document.defaultView.getComputedStyle(elem, null).getPropertyValue(styleProp);
@@ -150,7 +150,7 @@ mathtran.getStyle = function(elem, styleProp) {
 
 //Thanks to Scott Andrew, we resolve a cross-browser issue.
 //http://scottandrew.com/weblog/articles/cbs-events
-mathtran.addEvent = function (obj, evType, fn, useCapture) {
+webtex.addEvent = function (obj, evType, fn, useCapture) {
     if (obj.addEventListener) { //For Mozilla.
 	obj.addEventListener(evType, fn, useCapture);
 	return true;
@@ -160,7 +160,7 @@ mathtran.addEvent = function (obj, evType, fn, useCapture) {
     }
 };
 
-mathtran.htmlEscape = function(s) {
+webtex.htmlEscape = function(s) {
     s = s.replace(/&/g,'&amp;');
     s = s.replace(/>/g,'&gt;');
     s = s.replace(/</g,'&lt;');
@@ -168,7 +168,7 @@ mathtran.htmlEscape = function(s) {
 };
 
 //Adapted from: http://www.w3schools.com/xml/xml_http.asp
-mathtran.httpRequest = function(img, post_fn) {
+webtex.httpRequest = function(img, post_fn) {
     var xmlhttp = null;
 
     if (window.XMLHttpRequest) { //For Mozilla, etc
@@ -182,10 +182,10 @@ mathtran.httpRequest = function(img, post_fn) {
     if (xmlhttp != null) {
 	
 	xmlhttp.onreadystatechange = function() {
-	    mathtran.httpCallback(xmlhttp, img, post_fn);
+	    webtex.httpCallback(xmlhttp, img, post_fn);
 	};
 	try {
-	    if (mathtran.enableCrossDomain && typeof(netscape) != "undefined") {
+	    if (webtex.enableCrossDomain && typeof(netscape) != "undefined") {
 		netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
 	    }
 	} catch (e) {
@@ -198,7 +198,7 @@ mathtran.httpRequest = function(img, post_fn) {
     }
 };
 
-mathtran.httpCallback = function(xmlhttp, img, post_fn) {
+webtex.httpCallback = function(xmlhttp, img, post_fn) {
     if (xmlhttp.readyState==4) {
 	if (xmlhttp.status==200) { //"OK"
 	    
@@ -222,4 +222,4 @@ mathtran.httpCallback = function(xmlhttp, img, post_fn) {
     }
 };
 
-mathtran.addEvent(window, 'load', mathtran.init, false);
+webtex.addEvent(window, 'load', webtex.init, false);
