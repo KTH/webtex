@@ -23,7 +23,7 @@
 mathtran = new Object();
 
 //Change this use a different MathTran server.
-mathtran.imgSrc = "/webtex/WebTex?";
+mathtran.imgSrc = "../webtex/WebTex?";
 
 mathtran.MAX_D = 6;
 mathtran.allowResize = false;
