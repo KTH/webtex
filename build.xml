@@ -13,6 +13,30 @@
     <format property="project.builddate" pattern="yyyy-MM-dd"/>
   </tstamp>
 
+  <target name="minify" description="Now minifying js and css files">
+    <apply executable="java" parallel="false" dest=".">
+      <fileset dir="." includes="**/*.js" />
+      <arg line="-jar"/>
+      <arg path="lib/yuicompressor-2.4.7.jar" />
+      <arg line="-v"/>
+      <srcfile/>
+      <arg line="-o"/> 
+      <mapper type="glob" from="*_src.js" to="*.js"/>
+      <targetfile/>
+    </apply>
+
+    <apply executable="java" parallel="false" dest=".">
+      <fileset dir="." includes="**/*.css" />
+      <arg line="-jar"/>
+      <arg path="lib/yuicompressor-2.4.7.jar" />
+      <arg line="-v"/>
+      <srcfile/>
+      <arg line="-o"/> 
+      <mapper type="glob" from="*_src.css" to="*.css"/>
+      <targetfile/>
+    </apply>
+  </target>
+
   <target name="compile">
     <echo message="About to compile sources using ${ant.version}" level="info"/>
     <delete dir="WebContent/WEB-INF/classes/se"/>
@@ -35,7 +59,7 @@
     </copy>
   </target>
   
-  <target name="war" depends="compile, properties" description="Build just the war file">
+  <target name="war" depends="compile, properties, minify" description="Build just the war file">
     <delete file="${war}"/>
     <echo message="About to build ${war} using ${ant.version}" level="info"/>
     <war destfile="${war}" duplicate="fail" webxml="WebContent/WEB-INF/web.xml">

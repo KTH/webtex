@@ -4,3 +4,7 @@ WebContent/WEB-INF/classes
 *~
 /build
 webtex-*.zip
+WebContent/css/master.css
+WebContent/css/mathtran.css
+WebContent/js/textips.js
+WebContent/js/webtex.js
