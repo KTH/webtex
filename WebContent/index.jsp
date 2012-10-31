@@ -12,7 +12,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Online translation of mathematical content</title>
 <link rel="stylesheet" type="text/css" href="css/master.css" />
-<link rel="stylesheet" type="text/css" href="css/mathtran.css" />
+<link rel="stylesheet" type="text/css" href="css/webtex.css" />
 <script type="text/javascript" src="js/webtex.js"></script>
 <script type="text/javascript" src="js/textips.js"></script>
 </head>
@@ -25,7 +25,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
 	<h2>Demo</h2>
 
-	<p id="mathtran.textips.error">Sorry, either your browser doesn't
+	<p id="webtex.textips.error">Sorry, either your browser doesn't
 		have Javascript enabled or there's a problem somewhere - so TeX tips
 		won't work for you.</p>
 
@@ -45,8 +45,9 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
 	<p>
 		It's now quick and easy to put high-quality (typeset by TeX)
-		mathematical bitmaps on your web pages. First, put the magic URL<br />
+		mathematical bitmaps on your web pages. First, put the magic URLs<br />
 		<code>
+		        &lt;link rel="stylesheet" type="text/css" href="css/webtex.css" /&gt;
 			&lt;script type="text/javascript" src="http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>/js/webtex.js"&lt;/script&gt;
 		</code>
 		<br /> in the HEAD of your web page.
