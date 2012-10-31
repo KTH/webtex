@@ -15,8 +15,8 @@ WebTeX needs a LaTeX installation. It also needs the dvipng software to
 create images from the TeX DVI output. Both the latex and dvipng 
 binaries must be executable using the system path of the servlet container.
 
-This require at least the texlive-latex and dvipng packages to be
-installed on RHEL6.
+This require, e.g, at least the texlive-latex, dvipng and tomcat6 packages 
+to be installed on RHEL6.
 
 Deployment
 
@@ -25,6 +25,22 @@ copying the WAR file to the application folder in the servlet container.
 The created image files will be cached in a sub directory tmp. Redeploying 
 the application will expire the cache and cause the files to be regenerated
 on demand.
+
+
+Security Considerations
+=======================
+
+There is no particular limit on the cache size. It will continue to fill
+the available disk and memory spaces until out of resources. It is hence
+currently possible to achieve a DoS-attack by generating lots of images.
+
+It is thus recommended to run WebTex on a dedicated server. It is also 
+recommended to use a separate partition for the tomcat folder serving
+WebTex in order not to bring the hosting system down if the disk gets full,
+and size it properly.
+
+A future version of WebTex may provide customizable max settings for 
+number of items and disk size of cache.
 
 
 RATIONALE
@@ -47,12 +63,15 @@ the TeX pipe mode would be rather easy to implement.
 WebTeX
 ======
 
-WebTeX uses some parts of mathtran. In particular the JavaScript is almost
-identical, and the secplain TeX format is identical, apart from a couple of
-additions required by math.se.
+WebTeX uses some parts of mathtran. In particular JavaScripts bits are 
+almost identical thus far.
 
 All the Python code is re-written as a simple Java servlet. WebTeX operates 
 differently, the created images are cached for future reference, so that an 
-image does not need to be regenerated if asked for again. TeX is run in an 
+image does not need to be regenerated if asked for again. LaTeX is run in an 
 ordinary manner whenever necessary. Each servlet thread may run it's own 
-TeX binary, so several instances of TeX may be running simultaneously.
+LaTeX binary, so several instances of LaTeX may be running simultaneously.
+
+The fact that LaTeX is not run in IPC mode means that we can get rid of the
+TeX secsty format and the limitations it brings, and use a full LaTeX with
+mathtools enabled providing many more math features.
