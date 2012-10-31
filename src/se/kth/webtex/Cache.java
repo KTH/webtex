@@ -26,6 +26,7 @@ public class Cache implements Runnable {
 
     // Performance counters
     private long additions = 0;
+    private long size = 0;
     private long expired = 0;
     private Calendar startTime = Calendar.getInstance();
 
@@ -46,6 +47,10 @@ public class Cache implements Runnable {
 
     public long getExpired() {
         return this.expired;
+    }
+    
+    public long getSize() {
+        return this.size;
     }
     
     public long getUptime() {
@@ -160,6 +165,7 @@ public class Cache implements Runnable {
         file.renameTo(cacheFile);
         cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
         this.additions++;
+	this.size += file.length();
     }
 
     private File fileForKey(String key, int resolution) {
@@ -209,10 +215,10 @@ public class Cache implements Runnable {
     private synchronized void remove(String key, int resolution) {
         File cacheFile = file(key, resolution);
         cache.remove(new CacheKey(key, resolution));
-        cacheFile.delete();
+	this.size -= cacheFile.length();
         this.expired++;
+        cacheFile.delete();
     }
-
 
     /**
      * Cache entries are keyed on the expression string and resolution.

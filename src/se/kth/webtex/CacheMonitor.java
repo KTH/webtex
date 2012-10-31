@@ -18,11 +18,13 @@ Callable<Status> {
 
     @Override
     public Status call() throws Exception {
-        return Status.OK(cache.size() + " items in cache. Totals: " 
-                + cache.getAdditions() + " additions, " 
-                + cache.getExpired() + " expirations. "
-                + "Uptime: " + uptime()
-                );
+        return Status.OK(String.format(
+	    "%d items in cache. Totals: %d additions, %d expirations, size: %d kb. Uptime: %s",
+	    cache.size(),
+	    cache.getAdditions(),
+	    cache.getExpired(),
+	    cache.getSize() / 1024,
+	    uptime()));
     }
     
     private String uptime() {
