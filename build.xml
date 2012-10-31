@@ -41,7 +41,7 @@
     <echo message="About to compile sources using ${ant.version}" level="info"/>
     <delete dir="WebContent/WEB-INF/classes/se"/>
     <mkdir dir="WebContent/WEB-INF/classes/se"/>
-    <javac includeantruntime="false" srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on">
+    <javac includeantruntime="false" srcdir="src" destdir="WebContent/WEB-INF/classes" debug="on" source="1.6" target="1.6">
       <classpath>
 	<fileset refid="files.lib"/>
 	<fileset refid="webinf.lib"/>
