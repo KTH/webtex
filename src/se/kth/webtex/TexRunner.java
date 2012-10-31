@@ -28,16 +28,14 @@ public class TexRunner {
     public static String IMAGE_SUFFIX = ".png";
 
     private static String DVI_COMMAND = "dvipng -T tight --depth -bg Transparent -D %s -o %s %s";
-    private static String TEX_COMMAND = "latex -interaction nonstopmode --output-comment '' -output-directory %s %s";
+    private static String TEX_COMMAND = "latex -interaction nonstopmode -no-shell-escape -output-comment '' -output-directory %s %s";
     private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 
     private File dir;
-    private String texFormats;
 
     public TexRunner(String servletPath) {
         this.dir = new File(servletPath + File.separator + "tmp" + File.separator + "tex");
         dir.mkdirs();
-        this.texFormats = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
     }
 
     public void create(String expression, int resolution, Cache cache) throws IOException, ServletException {
@@ -92,8 +90,6 @@ public class TexRunner {
         String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
         SystemCommandHandler tex = new SystemCommandHandler(command.split(" "));
         tex.setDirectory(dir);
-        Map<String, String> env = tex.environment();
-        env.put("TEXFORMATS", texFormats + File.pathSeparator);
         tex.enableStdOutStore();
         tex.executeAndWait();
         if (tex.getExitCode() != 0) {
