@@ -27,16 +27,6 @@
 //Create a namespace, to hold variables and functions.
 webtex.textips = new Object(); 
 
-
-//CAUTION: for development ONLY.
-webtex.textips.security = new Object();
-webtex.textips.enableCrossDomain = false;
-
-webtex.textips.security.enableCrossDomain = function() {
-	webtex.textips.enableCrossDomain = true;
-};
-
-
 //We place an input form at the each TEXTIPS DIV.
 webtex.textips.formStr = 
     '<form><p><input id="text_1" type="text" size="50" />\
@@ -55,7 +45,7 @@ webtex.textips.submit = function (textip_no) {
         img_src = webtex.getImgSrc(tex_src, 1);
     target.innerHTML = '<img src="' + img_src + '" alt="" />';
     img =  target.getElementsByTagName('img')[0];
-    webtex.textips.httpRequest(img, webtex.textips.showLog);
+    webtex.httpRequest(img, webtex.textips.showLog);
 };
 
 webtex.textips.showLog = function(img) {
@@ -121,62 +111,6 @@ webtex.textips.init = function () {
 	}
     }
     webtex.hideElementById("webtex.textips.error");
-};
-
-
-//Adapted from: http://www.w3schools.com/xml/xml_http.asp
-webtex.textips.httpRequest = function(img, post_fn) {
-    var xmlhttp = null;
-
-    if (window.XMLHttpRequest) { //For Mozilla, etc
-	xmlhttp = new XMLHttpRequest();
-    }
-    else if (window.ActiveXObject) { //For Internet Explorer.
-	xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    this.xmlhttp = xmlhttp;
-    
-    if (xmlhttp != null) {
-	
-	xmlhttp.onreadystatechange = function() {
-	    webtex.textips.httpCallback(xmlhttp, img, post_fn);
-	};
-	try {
-	    if (webtex.textips.enableCrossDomain && typeof(netscape) != "undefined") {
-		netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-	    }
-	} catch (e) {
-	    alert("Permission UniversalBrowserRead denied.");
-	}
-	xmlhttp.open("GET", img.src, true);
-	xmlhttp.send(null);
-    } else {
-	alert("Your browser does not support XMLHTTP.");
-    }
-};
-
-webtex.textips.httpCallback = function(xmlhttp, img, post_fn) {
-    if (xmlhttp.readyState==4) {
-	if (xmlhttp.status==200) { //"OK"
-	    
-	    img.math = new Object();
-	    img.math.log = decodeURIComponent(xmlhttp.getResponseHeader("X-MathImage-log"));
-	    img.math.depth = xmlhttp.getResponseHeader("X-MathImage-depth");
-
-	    //img.style.verticalAlign = -img.depth+'px';
-	    if (img.math.depth[0] != '-') {
-		img.className +=' dp' + img.math.depth;
-	    } else {
-		img.className +=' dp_' + img.math.depth.substring(1);
-	    }
-	    
-	    if (post_fn) {
-		post_fn(img);
-	    }
-	} else {
-	    alert("Problem retrieving XML data");
-	}
-    }
 };
 
 

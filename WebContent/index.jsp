@@ -43,26 +43,6 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
     <h2>Adding math to your webpage</h2>
 
-    <h3>Using the utility JavaScript webtex.js</h3>
-    <p>
-      It's now quick and easy to put high-quality (typeset by TeX)
-      mathematical bitmaps on your web pages. First, put the magic URLs<br />
-      <code>
-	&lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;<br/>
-	&lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
-      </code>
-      <br /> in the HEAD of your web page.
-    </p>
-
-    <p>
-      Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
-      <code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code>
-      in its HTML. That's all you need to do. More complicated equations are
-      done in the same way, of course. WebTex will vertically align the
-      formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
-      <img alt="tex:{}^2" />
-    </p>
-
     <h3>Direct link to image generating service</h3>
     <p>
       The image generating service is located at <code><%=request.getRequestURL()%>WebTex</code>
@@ -79,11 +59,53 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
         An optional scaling 1-10 of the image size, defaults to 2.
       </dd>
     </dl>
+
+    <p>
+      Cache control HTTP headers are set in the response to indicate the life span of the 
+      image in the cache. In addition to this, a number of custom headers are set in the 
+      response indicating some properties of the image which can be used:
+    </p>
+    <dl>
+      <dt><code>X-MathImage-tex</code></dt>
+      <dd>Contains the tex expression used to generate the image.</dd>
+      <dt><code>X-MathImage-depth</code></dt>
+      <dd>Contains a numeric value indicating the base line position of the image which can be used for positioning.</dd>
+      <dt><code>X-MathImage-log</code></dt>
+      <dd>The error message from LaTeX or 'OK' if no errors where encountered.</dd>
+    </dl>
+
     <p>
       For example, the img tag <code>&lt;img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/&gt; </code> generates the image:
     </p>
     <p>
       <img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/>
+    </p>
+
+    <h3>Using the utility JavaScript webtex.js</h3>
+    <p>
+      The other method to include mathematical bitmaps in your web pages is to use the utility
+      JavaScript webtex.js. This will also align the bitmaps properly in the text.
+      First, put the magic URLs<br />
+      <code>
+	&lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;<br/>
+	&lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
+      </code>
+      <br /> in the HEAD of your web page.
+    </p>
+
+    <p>
+      Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
+      <code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code>
+      in its HTML. That's all you need to do. More complicated equations are
+      done in the same way, of course. WebTex will vertically align the
+      formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
+      <img alt="tex:{}^2" />
+    </p>
+
+    <p>
+      Note that you have to consider regular javascript cross site issues if you want to use this at some
+      other domain since the script will fetch images in order to align them properly. 
+      You should probably host your own webtex service at your site to avoid them.
     </p>
 
     <h2>Acknowledgements</h2>
