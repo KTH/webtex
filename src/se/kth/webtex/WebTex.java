@@ -140,8 +140,7 @@ public class WebTex extends HttpServlet {
 
         response.addHeader("X-MathImage-tex", expression);
         response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
-        response.addHeader("Cache-Control", "max-age=" + EXPIRES_AFTER);
-        response.addDateHeader("Expires", System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(EXPIRES_AFTER, TimeUnit.SECONDS));
+        response.addHeader("Cache-Control", "public, max-age=" + EXPIRES_AFTER);
         response.setContentType("image/png");
         response.setContentLength((int)file.length());
     }
