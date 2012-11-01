@@ -33,15 +33,55 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       <p>
 	This is an example of TeX tips. Try clicking on one of the boxed
 	images below. The rendered image and the TeX log will appear below
-	the data entry form.<br /> <img
-	alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n" /> <img
-	alt="tex:\sum_0^n 2^{-n}" /> <img alt="tex:\sum_0^\infty x^n/n!" />
-	<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" /> <img
-	alt="tex:\sum_0^\infty x^n/n" />
+	the data entry form.<br />
+        <img alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n" />
+        <img alt="tex:\sum_0^n 2^{-n}" />
+        <img alt="tex:\sum_0^\infty x^n/n!" />
+	<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" />
+        <img alt="tex:\sum_0^\infty x^n/n" />
       </p>
     </div>
 
     <h2>Adding math to your webpage</h2>
+    <p>
+      There are two major ways to use the service, either directly linking 
+      to the service or using a utility JavaScript which takes care of 
+      much of the work, but suffers from cross site scripting limitations
+      you may have to consider. A common limitation for both methods is that
+      the length of the URL limits the size of the LaTeX expressions you can
+      render. Howver, in modern browsers this limit is quite high, in the order
+      of 2000 characters.
+    </p>
+
+    <h3>Using the utility JavaScript webtex.js</h3>
+    <p>
+      The other method to include mathematical bitmaps in your web pages is to use the utility
+      JavaScript webtex.js. This will also align the bitmaps properly in the text.
+      First, put these magic URLs in the head section of the web page.
+    </p>
+    <pre>
+      &lt;head&gt;
+      ...
+      &lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;
+      &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
+      ...
+      &lt;/head&gt;
+    </pre>
+
+    <p>
+      Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
+      <code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code>
+      in its HTML. That's all you need to do. More complicated equations are
+      done in the same way, of course. WebTex will vertically align the
+      formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
+      <img alt="tex:{}^2" />
+    </p>
+
+    <p>
+      Note that you have to consider regular javascript cross site issues if you want to use this at some
+      other domain since the script will fetch images in order to align them properly. 
+      You should probably host your own webtex service at your site to avoid them.
+    </p>
 
     <h3>Direct link to image generating service</h3>
     <p>
@@ -81,38 +121,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       <img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/>
     </p>
 
-    <h3>Using the utility JavaScript webtex.js</h3>
-    <p>
-      The other method to include mathematical bitmaps in your web pages is to use the utility
-      JavaScript webtex.js. This will also align the bitmaps properly in the text.
-      First, put these magic URLs in the head section of the web page.
-    </p>
-    <pre>
-      &lt;head&gt;
-      ...
-      &lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;
-      &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
-      ...
-      &lt;/head&gt;
-    </pre>
-
-    <p>
-      Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
-      <code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code>
-      in its HTML. That's all you need to do. More complicated equations are
-      done in the same way, of course. WebTex will vertically align the
-      formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
-      <img alt="tex:{}^2" />
-    </p>
-
-    <p>
-      Note that you have to consider regular javascript cross site issues if you want to use this at some
-      other domain since the script will fetch images in order to align them properly. 
-      You should probably host your own webtex service at your site to avoid them.
-    </p>
-
     <h2>Acknowledgements</h2>
-
     <p>
       This software is based on the open source software Mathtran, Copyright
       &copy; 2007 <a href="http://www.open.ac.uk">The Open University</a>.
