@@ -13,7 +13,7 @@
     <format property="project.builddate" pattern="yyyy-MM-dd"/>
   </tstamp>
 
-  <target name="minify" description="Now minifying js and css files">
+  <target name="minify">
     <apply executable="java" parallel="false" dest=".">
       <fileset dir="." includes="**/*.js" />
       <arg line="-jar"/>
