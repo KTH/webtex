@@ -49,7 +49,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       much of the work, but suffers from cross site scripting limitations
       you may have to consider. A common limitation for both methods is that
       the length of the URL limits the size of the LaTeX expressions you can
-      render. Howver, in modern browsers this limit is quite high, in the order
+      render. However, in modern browsers this limit is quite high, in the order
       of 2000 characters.
     </p>
 
@@ -78,9 +78,10 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     </p>
 
     <p>
-      Note that you have to consider regular javascript cross site issues if you want to use this at some
-      other domain since the script will fetch images in order to align them properly. 
-      You should probably host your own webtex service at your site to avoid them.
+      Note that you have to consider regular javascript cross site issues if you want to use this
+      at some other domain since the script will fetch images in order to align them properly. 
+      You should probably host your own webtex service at your site to avoid them. This is easy
+      to do.
     </p>
 
     <h3>Direct link to image generating service</h3>
