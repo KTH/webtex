@@ -22,19 +22,12 @@
 //Create a namespace, to hold variables and functions.
 webtex = new Object();
 
-//Change this use a different MathTran server.
-webtex.imgSrc = "../webtex/WebTex?";
-
 webtex.MAX_D = 6;
 webtex.allowResize = false;
 
-//CAUTION: for development ONLY.
-webtex.security = new Object();
-webtex.enableCrossDomain = false;
-
-webtex.security.enableCrossDomain = function() {
-	webtex.enableCrossDomain = true;
-};
+//Set the path to the service script relative.
+webtex.imgSrc = document.getElementsByTagName('script');
+webtex.imgSrc = webtex.imgSrc[webtex.imgSrc.length-1].src.replace("js/webtex.js", "WebTex?");
 
 //Function to transform the whole document.  Add SRC to each IMG with
 //ALT text starting with "tex:".  However, skip if element already
@@ -47,7 +40,6 @@ webtex.init = function () {
 
     var objs = document.getElementsByTagName("img"), 
         len = objs.length, 
-        tex_count = 0,
         i, img, tex_src;
 
     for (i = 0; i<len; i++) {
@@ -59,11 +51,8 @@ webtex.init = function () {
 		size = webtex.contextSize(img);
 		img.src = webtex.getImgSrc(tex_src, size);
 	    }
-		
 	    // Append TEX to the class of the IMG.
 	    img.className +=' tex';
-	    tex_count++;
-	    webtex.httpRequest(img);
 	}
     }
     webtex.hideElementById("webtex.error");
@@ -165,61 +154,6 @@ webtex.htmlEscape = function(s) {
     s = s.replace(/>/g,'&gt;');
     s = s.replace(/</g,'&lt;');
     return s;
-};
-
-//Adapted from: http://www.w3schools.com/xml/xml_http.asp
-webtex.httpRequest = function(img, post_fn) {
-    var xmlhttp = null;
-
-    if (window.XMLHttpRequest) { //For Mozilla, etc
-	xmlhttp = new XMLHttpRequest();
-    }
-    else if (window.ActiveXObject) { //For Internet Explorer.
-	xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    this.xmlhttp = xmlhttp;
-    
-    if (xmlhttp != null) {
-	
-	xmlhttp.onreadystatechange = function() {
-	    webtex.httpCallback(xmlhttp, img, post_fn);
-	};
-	try {
-	    if (webtex.enableCrossDomain && typeof(netscape) != "undefined") {
-		netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-	    }
-	} catch (e) {
-	    alert("Permission UniversalBrowserRead denied.");
-	}
-	xmlhttp.open("GET", img.src, true);
-	xmlhttp.send(null);
-    } else {
-	alert("Your browser does not support XMLHTTP.");
-    }
-};
-
-webtex.httpCallback = function(xmlhttp, img, post_fn) {
-    if (xmlhttp.readyState==4) {
-	if (xmlhttp.status==200) { //"OK"
-	    
-	    img.math = new Object();
-	    img.math.log = decodeURIComponent(xmlhttp.getResponseHeader("X-MathImage-log"));
-	    img.math.depth = xmlhttp.getResponseHeader("X-MathImage-depth");
-	    
-	    //img.style.verticalAlign = -img.depth+'px';
-	    if (img.math.depth[0] != '-') {
-		img.className +=' dp' + img.math.depth;
-	    } else {
-		img.className +=' dp_' + img.math.depth.substring(1);
-	    }
-	    
-	    if (post_fn) {
-		post_fn(img);
-	    }
-	} else {
-	    alert("Problem retrieving XML data");
-	}
-    }
 };
 
 webtex.addEvent(window, 'load', webtex.init, false);
