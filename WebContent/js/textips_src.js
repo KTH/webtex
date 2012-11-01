@@ -105,5 +105,5 @@ webtex.textips.init = function () {
     $('#webtex.textips.error').hide();
 };
 
-$('body').ready(webtex.textips.init);
+$(document).ready(webtex.textips.init);
 
