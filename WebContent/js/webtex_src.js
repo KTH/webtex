@@ -70,9 +70,9 @@ webtex.getImgSrc = function(tex_src, size) {
     var size_frag;
 
     if (size == null) {
-	size_frag = '';
+    	size_frag = '';
     } else {
-	size_frag = 'D=' + size + '&';
+    	size_frag = 'D=' + size + '&';
     }
 
     // See http://xkr.us/articles/javascript/encode-compare/
@@ -80,16 +80,18 @@ webtex.getImgSrc = function(tex_src, size) {
 };
 
 webtex.contextSize = function(img) {
-    if (!webtex.allowResize) {
-	return;
+	if (!webtex.allowResize) {
+		return;
     }
     
-    var fontSize = webtex.getStyle(img, 'font-size'),
+    var fontSize = $(img).css('font-size'),
         pos = fontSize.indexOf('p'), //Mozilla Opera px | MSIE pt.
         unit = fontSize.substr(pos),
         divide = 11,
         resize;
 
+    alert(fontSize);
+    
     if (unit == 'pt') {
 	divide=12;
     }
@@ -102,20 +104,6 @@ webtex.contextSize = function(img) {
 
     img.title = 'Debug: '+ fontSize +' | D='+resize;
     return resize;
-};
-
-webtex.getStyle = function(elem, styleProp) {
-    var y = "";
-    if (window.getComputedStyle) { //For Mozilla.
-    	y = document.defaultView.getComputedStyle(elem, null).getPropertyValue(styleProp);
-    } else if (elem.currentStyle) { //For Internet Explorer.
-    	styleProp = styleProp.replace(/\-(\w)/,
-    			function(str, p1, offset, s) {
-    				return p1.toUpperCase();
-				});
-    	y = elem.currentStyle[styleProp];
-    }
-    return y;
 };
 
 webtex.httpRequest = function(img, post_fn) {
