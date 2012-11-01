@@ -43,7 +43,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
     <h2>Adding math to your webpage</h2>
 
-    <h3>JavaScript way</h3>
+    <h3>Using the utility JavaScript webtex.js</h3>
     <p>
       It's now quick and easy to put high-quality (typeset by TeX)
       mathematical bitmaps on your web pages. First, put the magic URLs<br />
