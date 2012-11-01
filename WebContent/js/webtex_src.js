@@ -34,7 +34,7 @@ webtex = {
 	    $('img[alt^="tex\\:"]:not([src])')
 	    	.addClass('tex')
 	    	.each(function(index, img) {
-	    		var tex_src = img.alt.substring(4), params = {tex : tex_src};
+	    		var params = {tex : img.alt.substring(4)};
 				if (webtex.allowResize) {
 					params.D = webtex.contextSize(img);
 				}
