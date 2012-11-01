@@ -59,49 +59,43 @@ webtex.textips.copyAlt = function (img, textip_no) {
 
 //Initialise the document.
 webtex.textips.init = function () {
+    var htmlStr, r, parsedHTML, form, fn, fn_string;
 
-	// Process each DIV with class textips.
-    var elems = $('.textips'),
-        textip_no = -1,
-        i, htmlStr, r, parsedHTML, form, fn, fn_string;
-    
-    for (i=0; i < elems.length; i++) {
-	div = elems[i];
-	textip_no ++;
-	
-	// Add FORM at end of the DIV.
-	htmlStr = webtex.textips.formStr;
-	// Cross-platform based on http://www.faqts.com/knowledge_base/entry/edit/index.phtml?aid=5756&fid=195&return_url=%2Fknowledge_base%2Fview.phtml%2Faid%2F5756
-	if (div.insertAdjacentHTML){ //For Internet Explorer.
-	    div.insertAdjacentHTML("BeforeEnd", htmlStr);
-	} else { //For Mozilla, etc.
-	    r = div.ownerDocument.createRange();
-	    r.setStartBefore(div);
-	    parsedHTML = r.createContextualFragment(htmlStr);
-	    div.appendChild(parsedHTML);
-	}
-	
-	// Find the form we just made.  Could be done better.
-	form = div.getElementsByTagName("form")[0];
-	
-	// Store the location of the input form and the image target.
-	webtex.textips.inputs.push(form.getElementsByTagName("input")[0]);
-	webtex.textips.targets.push(form.getElementsByTagName("span")[0]);
-	
-	// Add action to submit button and to form.
-	fn_string = "webtex.textips.submit(" + textip_no + ")";
-	fn = new Function(fn_string);
+    // Process each DIV with class textips.
+    $('.textips').each(function(index, div) {
+    	htmlStr = webtex.textips.formStr;
+    	// Add FORM at end of the DIV.
+    	// Cross-platform based on http://www.faqts.com/knowledge_base/entry/edit/index.phtml?aid=5756&fid=195&return_url=%2Fknowledge_base%2Fview.phtml%2Faid%2F5756
+    	if (div.insertAdjacentHTML){ //For Internet Explorer.
+    	    div.insertAdjacentHTML("BeforeEnd", htmlStr);
+    	} else { //For Mozilla, etc.
+    	    r = div.ownerDocument.createRange();
+    	    r.setStartBefore(div);
+    	    parsedHTML = r.createContextualFragment(htmlStr);
+    	    div.appendChild(parsedHTML);
+    	}
+    	
+    	// Find the form we just made.  Could be done better.
+    	form = div.getElementsByTagName("form")[0];
+    	
+    	// Store the location of the input form and the image target.
+    	webtex.textips.inputs.push(form.getElementsByTagName("input")[0]);
+    	webtex.textips.targets.push(form.getElementsByTagName("span")[0]);
+    	
+    	// Add action to submit button and to form.
+    	fn_string = "webtex.textips.submit(" + index + ")";
+    	fn = new Function(fn_string);
         $('input[type=button]').click(fn);
-	form.action = "javascript:" + fn_string;
-	
-	// Create function to be called when image is clicked.
-	// Cross-platform way of passing img to copyAlt function.
-	fn_string = "var img=this; webtex.textips.copyAlt(img," + textip_no + ")";
-	fn = new Function(fn_string);
-	
-	// Process each IMG with tex ALT text.
-	$('img[alt^="tex\\:"]').click(fn);
-    }
+    	form.action = "javascript:" + fn_string;
+    	
+    	// Create function to be called when image is clicked.
+    	// Cross-platform way of passing img to copyAlt function.
+    	fn_string = "var img=this; webtex.textips.copyAlt(img," + index + ")";
+    	fn = new Function(fn_string);
+    	
+    	// Process each IMG with tex ALT text.
+    	$('img[alt^="tex\\:"]').click(fn);
+    });  
     $('#webtex.textips.error').hide();
 };
 
