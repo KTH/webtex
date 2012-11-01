@@ -13,6 +13,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <title>Online translation of mathematical content</title>
     <link rel="stylesheet" type="text/css" href="css/master.css" />
     <link rel="stylesheet" type="text/css" href="css/webtex.css" />
+    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/webtex.js"></script>
     <script type="text/javascript" src="js/textips.js"></script>
   </head>
@@ -57,12 +58,14 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <p>
       The other method to include mathematical bitmaps in your web pages is to use the utility
       JavaScript webtex.js. This will also align the bitmaps properly in the text.
-      First, put these magic URLs in the head section of the web page.
+      First, put these magic URLs in the head section of the web page. You can use your own
+      copy of jQuery if you are already using jquery, provided it is reasonably new.
     </p>
     <pre>
       &lt;head&gt;
       ...
       &lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;
+      &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/jquery.js"/&gt;
       &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
       ...
       &lt;/head&gt;
