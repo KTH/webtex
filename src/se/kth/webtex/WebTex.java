@@ -49,6 +49,26 @@ public class WebTex extends HttpServlet {
 
 
     /**
+     * @see HttpServlet#getLastModified(HttpServletRequest)
+     */
+    protected long getLastModified(HttpServletRequest request) {
+        try {
+            String expression = request.getParameter(PARAMETER_TEX);
+            if (isValid(expression)) {
+                int resolution = getResolution(request);
+                createImage(expression, resolution);
+                File file = cache.file(expression, resolution);
+                return file.lastModified();
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+
+    /**
      * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
      */
     protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -122,7 +142,6 @@ public class WebTex extends HttpServlet {
         response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
         response.addHeader("Cache-Control", "max-age=" + EXPIRES_AFTER);
         response.addDateHeader("Expires", System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(EXPIRES_AFTER, TimeUnit.SECONDS));
-        response.addDateHeader("Last-Modified", file.lastModified());
         response.setContentType("image/png");
         response.setContentLength((int)file.length());
     }
