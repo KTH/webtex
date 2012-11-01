@@ -139,25 +139,6 @@ webtex.getStyle = function(elem, styleProp) {
     return y;
 };
 
-//Thanks to Scott Andrew, we resolve a cross-browser issue.
-//http://scottandrew.com/weblog/articles/cbs-events
-webtex.addEvent = function (obj, evType, fn, useCapture) {
-    if (obj.addEventListener) { //For Mozilla.
-	obj.addEventListener(evType, fn, useCapture);
-	return true;
-    } else if (obj.attachEvent) { //For Internet Explorer.
-	var r = obj.attachEvent("on"+evType, fn);
-	return r;
-    }
-};
-
-webtex.htmlEscape = function(s) {
-    s = s.replace(/&/g,'&amp;');
-    s = s.replace(/>/g,'&gt;');
-    s = s.replace(/</g,'&lt;');
-    return s;
-};
-
 webtex.httpRequest = function(img, post_fn) {
     var res = $.ajax(img.src)
         .done(function() {
@@ -179,4 +160,4 @@ webtex.httpRequest = function(img, post_fn) {
         });
 };
 
-webtex.addEvent(window, 'load', webtex.init, false);
+$('body').ready(webtex.init);

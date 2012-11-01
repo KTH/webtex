@@ -91,7 +91,7 @@ webtex.textips.init = function () {
 	// Add action to submit button and to form.
 	fn_string = "webtex.textips.submit(" + textip_no + ")";
 	fn = new Function(fn_string);
-	webtex.addEvent(form.getElementsByTagName("input")[1], 'click', fn, false);
+        $('input[type=button]').click(fn);
 	form.action = "javascript:" + fn_string;
 	
 	// Create function to be called when image is clicked.
@@ -111,6 +111,5 @@ webtex.textips.init = function () {
     webtex.hideElementById("webtex.textips.error");
 };
 
-
-webtex.addEvent(window, 'load', webtex.textips.init, false);
+$('body').ready(webtex.textips.init);
 
