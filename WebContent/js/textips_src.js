@@ -163,8 +163,6 @@ webtex.textips.httpCallback = function(xmlhttp, img, post_fn) {
 	    img.math.log = decodeURIComponent(xmlhttp.getResponseHeader("X-MathImage-log"));
 	    img.math.depth = xmlhttp.getResponseHeader("X-MathImage-depth");
 
-            alert(img.math.log);
-	    
 	    //img.style.verticalAlign = -img.depth+'px';
 	    if (img.math.depth[0] != '-') {
 		img.className +=' dp' + img.math.depth;
