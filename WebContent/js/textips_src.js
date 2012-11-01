@@ -45,11 +45,9 @@ webtex.textips.submit = function (textip_no) {
         img_src = webtex.getImgSrc(tex_src, 1);
     target.innerHTML = '<img src="' + img_src + '" alt="" />';
     img =  target.getElementsByTagName('img')[0];
-    webtex.httpRequest(img, webtex.textips.showLog);
-};
-
-webtex.textips.showLog = function(img) {
-	img.parentNode.parentNode.parentNode.lastChild.innerHTML = webtex.htmlEscape(img.math.log);
+    webtex.httpRequest(img, function() {
+        $('.log').html(img.math.log);
+    });
 };
 
 //Copy TeX source from image to input form, and submit.
