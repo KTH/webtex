@@ -48,7 +48,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 		mathematical bitmaps on your web pages. First, put the magic URLs<br />
 		<code>
 		        &lt;link rel="stylesheet" type="text/css" href="css/webtex.css"/&gt;<br/>
-			&lt;script type="text/javascript" src="http://<%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>/js/webtex.js"/&gt;
+			&lt;script type="text/javascript" src="http://<%=request.getRequestURL()%>js/webtex.js"/&gt;
 		</code>
 		<br /> in the HEAD of your web page.
 	</p>
