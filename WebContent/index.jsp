@@ -14,8 +14,8 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <link rel="stylesheet" type="text/css" href="css/master.css" />
     <link rel="stylesheet" type="text/css" href="css/webtex.css" />
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/webtex.js"></script>
-    <script type="text/javascript" src="js/textips.js"></script>
+    <script type="text/javascript" src="js/webtex_src.js"></script>
+    <script type="text/javascript" src="js/textips_src.js"></script>
   </head>
   <body>
     <h1>

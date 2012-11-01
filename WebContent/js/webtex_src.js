@@ -27,7 +27,7 @@ webtex.allowResize = false;
 
 //Set the path to the service script relative.
 webtex.imgSrc = document.getElementsByTagName('script');
-webtex.imgSrc = webtex.imgSrc[webtex.imgSrc.length-1].src.replace("js/webtex.js", "WebTex?");
+webtex.imgSrc = webtex.imgSrc[webtex.imgSrc.length-1].src.replace("js/webtex_src.js", "WebTex?");
 
 //Function to transform the whole document.  Add SRC to each IMG with
 //ALT text starting with "tex:".  However, skip if element already
@@ -158,68 +158,25 @@ webtex.htmlEscape = function(s) {
     return s;
 };
 
-//CAUTION: for development ONLY.
-webtex.security = new Object();
-webtex.enableCrossDomain = false;
-
-webtex.security.enableCrossDomain = function() {
-	webtex.enableCrossDomain = true;
-};
-
-
-//Adapted from: http://www.w3schools.com/xml/xml_http.asp
 webtex.httpRequest = function(img, post_fn) {
-    var xmlhttp = null;
-
-    if (window.XMLHttpRequest) { //For Mozilla, etc
-	xmlhttp = new XMLHttpRequest();
-    }
-    else if (window.ActiveXObject) { //For Internet Explorer.
-	xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    this.xmlhttp = xmlhttp;
-    
-    if (xmlhttp != null) {
-	
-	xmlhttp.onreadystatechange = function() {
-	    webtex.httpCallback(xmlhttp, img, post_fn);
-	};
-	try {
-	    if (webtex.enableCrossDomain && typeof(netscape) != "undefined") {
-		netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-	    }
-	} catch (e) {
-	    alert("Permission UniversalBrowserRead denied.");
-	}
-	xmlhttp.open("GET", img.src, true);
-	xmlhttp.send(null);
-    } else {
-	alert("Your browser does not support XMLHTTP.");
-    }
-};
-
-webtex.httpCallback = function(xmlhttp, img, post_fn) {
-    if (xmlhttp.readyState==4) {
-	if (xmlhttp.status==200) { //"OK"
-	    
-	    img.math = new Object();
-	    img.math.log = decodeURIComponent(xmlhttp.getResponseHeader("X-MathImage-log"));
-	    img.math.depth = xmlhttp.getResponseHeader("X-MathImage-depth");
-
-	    //img.style.verticalAlign = -img.depth+'px';
+    var res = $.ajax(img.src)
+        .done(function() {
+            img.math = new Object();
+	    img.math.log = decodeURIComponent(res.getResponseHeader("X-MathImage-log"));
+	    img.math.depth = res.getResponseHeader("X-MathImage-depth");
+            
 	    if (img.math.depth[0] != '-') {
 		img.className +=' dp' + img.math.depth;
 	    } else {
 		img.className +=' dp_' + img.math.depth.substring(1);
 	    }
-	    
-	    if (post_fn) {
-		post_fn(img);
-	    }
-	} else {
-	    alert("Problem retrieving XML data");
-	}
-    }
+            if (post_fn) {
+	        post_fn(img);
+            }
+        })
+        .fail(function() {
+            alert("Failed to load data");
+        });
 };
 
 webtex.addEvent(window, 'load', webtex.init, false);
