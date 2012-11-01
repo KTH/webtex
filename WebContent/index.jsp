@@ -85,13 +85,16 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <p>
       The other method to include mathematical bitmaps in your web pages is to use the utility
       JavaScript webtex.js. This will also align the bitmaps properly in the text.
-      First, put the magic URLs<br />
-      <code>
-	&lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;<br/>
-	&lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
-      </code>
-      <br /> in the HEAD of your web page.
+      First, put these magic URLs in the head section of the web page.
     </p>
+    <pre>
+      &lt;head&gt;
+      ...
+      &lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;
+      &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
+      ...
+      &lt;/head&gt;
+    </pre>
 
     <p>
       Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
