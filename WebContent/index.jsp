@@ -43,6 +43,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
     <h2>Adding math to your webpage</h2>
 
+    <h3>JavaScript way</h3>
     <p>
       It's now quick and easy to put high-quality (typeset by TeX)
       mathematical bitmaps on your web pages. First, put the magic URLs<br />
@@ -61,6 +62,31 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
       <img alt="tex:{}^2" />
     </p>
+
+    <h3>Direct link to image generating service</h3>
+    <p>
+      The image generating service is located at <code><%=request.getRequestURL()%>WebTex</code>
+      and takes two parameters.
+    </p>
+    <dl>
+      <dt><code>tex</code></dt>
+      <dd>
+        An URL encoded LaTeX math expression without the surrounding delimiters you would 
+        use to identify a math block in a LaTeX document.
+      </dd>
+      <dt><code>D</code></dt>
+      <dd>
+        An optional scaling 1-10 of the image size, defaults to 2.
+      </dd>
+    </dl>
+    <p>
+      For example, the img tag <code>&lt;img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/&gt; </code> generates the image:
+    </p>
+    <p>
+      <img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/>
+    </p>
+
+    <h2>Acknowledgements</h2>
 
     <p>
       This software is based on the open source software Mathtran, Copyright

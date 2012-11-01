@@ -124,7 +124,7 @@ IMG
     BORDER-BOTTOM: 0px
 }
 
-P
+P,PRE,DL
 {
     PADDING-RIGHT: 5px;
     PADDING-LEFT: 10px;
