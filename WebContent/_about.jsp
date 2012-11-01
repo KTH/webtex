@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<%@page session="false" contentType="text/html; charset=utf-8"%>
 <%@page import="java.util.ResourceBundle"%>
-<%@page contentType="text/html; charset=utf-8"%>
 <%
 String hostName = java.net.InetAddress.getLocalHost().getHostName();
 String serverName = request.getServerName();
