@@ -55,9 +55,9 @@ webtex.init = function () {
 	    img.className +=' tex';
             // Fetch to get scaling.
             webtex.httpRequest(img);
-	}
+		}
     }
-    webtex.hideElementById("webtex.error");
+    $('#webtex.error').hide();
 };
 
 //Utility function. Could define webtex.getTexImages=function.
@@ -104,37 +104,16 @@ webtex.contextSize = function(img) {
     return resize;
 };
 
-//Utility function.
-webtex.hideElementById = function (id) {
-    var obj = document.getElementById(id);
-    if (obj) {
-	obj.style.display = 'none';
-    }
-    return obj;
-};
-
-//Utility function, should be a prototype on 'document' or 'node'.
-webtex.getElementsByClassName = function(classname) {
-    var a = [],
-        re = new RegExp('\\b' + classname + '\\b'),
-        els = document.getElementsByTagName("*"), //node
-        i, j;
-
-    for (i=0, j=els.length; i<j; i++) {
-	if(re.test(els[i].className))a.push(els[i]);
-    }
-    return a;
-};
-
 webtex.getStyle = function(elem, styleProp) {
     var y = "";
     if (window.getComputedStyle) { //For Mozilla.
-	y = document.defaultView.getComputedStyle(elem, null).getPropertyValue(styleProp);
-    }
-    else if (elem.currentStyle) { //For Internet Explorer.
-	styleProp = styleProp.replace(/\-(\w)/,
-				      function(str, p1, offset, s){ return p1.toUpperCase(); } );
-	y = elem.currentStyle[styleProp];
+    	y = document.defaultView.getComputedStyle(elem, null).getPropertyValue(styleProp);
+    } else if (elem.currentStyle) { //For Internet Explorer.
+    	styleProp = styleProp.replace(/\-(\w)/,
+    			function(str, p1, offset, s) {
+    				return p1.toUpperCase();
+				});
+    	y = elem.currentStyle[styleProp];
     }
     return y;
 };
@@ -143,16 +122,16 @@ webtex.httpRequest = function(img, post_fn) {
     var res = $.ajax(img.src)
         .done(function() {
             img.math = new Object();
-	    img.math.log = decodeURIComponent(res.getResponseHeader("X-MathImage-log"));
-	    img.math.depth = res.getResponseHeader("X-MathImage-depth");
+		    img.math.log = decodeURIComponent(res.getResponseHeader("X-MathImage-log"));
+		    img.math.depth = res.getResponseHeader("X-MathImage-depth");
             
-	    if (img.math.depth[0] != '-') {
-		img.className +=' dp' + img.math.depth;
-	    } else {
-		img.className +=' dp_' + img.math.depth.substring(1);
-	    }
+		    if (img.math.depth[0] != '-') {
+		    	img.className +=' dp' + img.math.depth;
+		    } else {
+		    	img.className +=' dp_' + img.math.depth.substring(1);
+		    }
             if (post_fn) {
-	        post_fn(img);
+            	post_fn(img);
             }
         })
         .fail(function() {

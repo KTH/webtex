@@ -61,7 +61,7 @@ webtex.textips.copyAlt = function (img, textip_no) {
 webtex.textips.init = function () {
 
 	// Process each DIV with class textips.
-    var elems = webtex.getElementsByClassName('textips'),
+    var elems = $('.textips'),
         textip_no = -1,
         i, j, htmlStr, r, parsedHTML, form, fn, fn_string, img, images;
     
@@ -104,11 +104,11 @@ webtex.textips.init = function () {
 	for (j=0; j < images.length; j++) {
 	    img = images[j];
 	    if (webtex.isTexImage(img))  {
-		img.onclick = fn;
+	    	img.onclick = fn;
 	    }
 	}
     }
-    webtex.hideElementById("webtex.textips.error");
+    $('#webtex.textips.error').hide();
 };
 
 $('body').ready(webtex.textips.init);
