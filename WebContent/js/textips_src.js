@@ -42,7 +42,7 @@ webtex.textips.targets = new Array();
 webtex.textips.submit = function (textip_no) {
     var tex_src = webtex.textips.inputs[textip_no].value,
         target = webtex.textips.targets[textip_no],
-        img_src = webtex.getImgSrc(tex_src, 1);
+        img_src = webtex.imgSrc + 'tex=' + encodeURIComponent(tex_src);
     target.innerHTML = '<img src="' + img_src + '" alt="" />';
     img =  target.getElementsByTagName('img')[0];
     webtex.httpRequest(img, function() {
@@ -63,7 +63,7 @@ webtex.textips.init = function () {
 	// Process each DIV with class textips.
     var elems = $('.textips'),
         textip_no = -1,
-        i, j, htmlStr, r, parsedHTML, form, fn, fn_string, img, images;
+        i, htmlStr, r, parsedHTML, form, fn, fn_string;
     
     for (i=0; i < elems.length; i++) {
 	div = elems[i];
@@ -100,13 +100,7 @@ webtex.textips.init = function () {
 	fn = new Function(fn_string);
 	
 	// Process each IMG with tex ALT text.
-	images = div.getElementsByTagName("img");
-	for (j=0; j < images.length; j++) {
-	    img = images[j];
-	    if (webtex.isTexImage(img))  {
-	    	img.onclick = fn;
-	    }
-	}
+	$('img[alt^="tex\\:"]').click(fn);
     }
     $('#webtex.textips.error').hide();
 };

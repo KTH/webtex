@@ -26,84 +26,45 @@ webtex.MAX_D = 6;
 webtex.allowResize = false;
 
 //Set the path to the service script relative.
-webtex.imgSrc = document.getElementsByTagName('script');
-webtex.imgSrc = webtex.imgSrc[webtex.imgSrc.length-1].src.replace("js/webtex_src.js", "WebTex?");
+webtex.imgSrc = $('script[src]').last().attr('src').replace('js/webtex_src.js', 'WebTex?');
 
 //Function to transform the whole document.  Add SRC to each IMG with
 //ALT text starting with "tex:".  However, skip if element already
 //has a SRC.  Note that 'src=""' may be a non-empty src, because the
 //browser will prefix the base URL.
 webtex.init = function () {
-    if (! document.getElementsByTagName) {
-	return;
-    }
-
-    var objs = document.getElementsByTagName("img"), 
-        len = objs.length, 
-        i, img, tex_src;
-
-    for (i = 0; i<len; i++) {
-	img = objs[i];
-	if (webtex.isTexImage(img)) {
-	    
-	    if (!img.src) {
-		tex_src = img.alt.substring(4);
-		size = webtex.contextSize(img);
-		img.src = webtex.getImgSrc(tex_src, size);
-	    }
-	    // Append TEX to the class of the IMG.
-	    img.className +=' tex';
-            // Fetch to get scaling.
-            webtex.httpRequest(img);
-		}
-    }
+	// All images with alt starting with 'tex:' and no src attribute.
+    $('img[alt^="tex\\:"]:not([src])')
+    	.addClass('tex')
+    	.each(function(index, img) {
+    		var tex_src = img.alt.substring(4);
+			if (webtex.allowResize) {
+				img.src = webtex.imgSrc 
+					+ 'D=' + webtex.contextSize(img)
+					+ '&tex=' + encodeURIComponent(tex_src);
+			} else {
+				img.src = webtex.imgSrc 
+					+ 'tex=' + encodeURIComponent(tex_src);
+			}
+		    // Fetch to get depth.
+	        webtex.httpRequest(img);
+	    });
     $('#webtex.error').hide();
 };
 
-//Utility function. Could define webtex.getTexImages=function.
-webtex.isTexImage = function(img) {
-    return (img.alt.substring(0,4) == 'tex:'); //img.alt.substring(4);
-};
-
-//Utility function.
-webtex.getImgSrc = function(tex_src, size) {
-    var size_frag;
-
-    if (size == null) {
-    	size_frag = '';
-    } else {
-    	size_frag = 'D=' + size + '&';
-    }
-
-    // See http://xkr.us/articles/javascript/encode-compare/
-    return webtex.imgSrc + size_frag + 'tex=' + encodeURIComponent(tex_src);
-};
-
 webtex.contextSize = function(img) {
-	if (!webtex.allowResize) {
-		return;
-    }
-    
-    var fontSize = $(img).css('font-size'),
-        pos = fontSize.indexOf('p'), //Mozilla Opera px | MSIE pt.
-        unit = fontSize.substr(pos),
-        divide = 11,
-        resize;
+	var fs = $(img).css('font-size'), s;
 
-    alert(fontSize);
-    
-    if (unit == 'pt') {
-	divide=12;
+    if (fs.substr(fs.indexOf('p')) == 'pt') {
+    	s = Math.round(fs.substr(0, pos)/12);
+    } else {
+    	s = Math.round(fs.substr(0, pos)/11);
     }
 
-    resize = Math.round(fontSize.substr(0, pos)/divide);
-    
-    if (resize > webtex.MAX_D) {
-	resize = webtex.MAX_D;
-    }
+    s = Math.max(s, webtex.MAX_D);
 
-    img.title = 'Debug: '+ fontSize +' | D='+resize;
-    return resize;
+    console.log('Debug: font size: %s | D=%s', fs, s);
+    return s;
 };
 
 webtex.httpRequest = function(img, post_fn) {
@@ -118,12 +79,12 @@ webtex.httpRequest = function(img, post_fn) {
 		    } else {
 		    	img.className +=' dp_' + img.math.depth.substring(1);
 		    }
-            if (post_fn) {
-            	post_fn(img);
+		    if (post_fn) {
+		    	post_fn(img);
             }
         })
         .fail(function() {
-            alert("Failed to load data");
+            console.log("Failed to load data: %s", img.src);
         });
 };
 
