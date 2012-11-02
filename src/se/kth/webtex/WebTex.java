@@ -42,11 +42,17 @@ public class WebTex extends HttpServlet {
     public void init(ServletConfig config) {
         ServletContext context = config.getServletContext();
         String root = context.getRealPath("");
-        this.cache = Cache.initCache(context, root);
-        this.texRunner = new TexRunner(root);
+        cache = Cache.initCache(context, root);
+        texRunner = new TexRunner(root);
     }
 
+    
+    @Override
+    public void destroy() {
+    	cache.destroy();
+	}
 
+    
     /**
      * @see HttpServlet#getLastModified(HttpServletRequest)
      */

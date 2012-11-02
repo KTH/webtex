@@ -1,6 +1,5 @@
 package se.kth.webtex;
 
-
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,19 +37,19 @@ public class Cache implements Runnable {
     }
 
     public int size() {
-        return this.cache.size();
+        return cache.size();
     }
 
     public long getAdditions() {
-        return this.additions;
+        return additions;
     }
 
     public long getExpired() {
-        return this.expired;
+        return expired;
     }
     
     public long getDiskSize() {
-        return this.diskSize;
+        return diskSize;
     }
     
     public long getUptime() {
@@ -121,24 +120,31 @@ public class Cache implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
-            for (CacheKey key : cache.keySet()) {
-                Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
-                if (timestamp(key.key, key.resolution).before(bestAfter)) {
-                    remove(key.key, key.resolution);
-                }
-                try {
+        try {
+        	while (! Thread.currentThread().isInterrupted()) {
+	            for (CacheKey key : cache.keySet()) {
+	            	if (Thread.currentThread().isInterrupted()) {
+	            		return;
+	            	}
+	            	
+	            	Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
+	                if (timestamp(key.key, key.resolution).before(bestAfter)) {
+	                    remove(key.key, key.resolution);
+	                }
                     Thread.sleep(TIME_BETWEEN_EVICTIONS);
-                } catch (InterruptedException e) {
-                }
-            }
-            try {
-                Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
-            } catch (InterruptedException e) {
-            }
-        }
+	            }
+	            Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
+	        }
+        } catch (InterruptedException e) {}
     }
-
+    
+    public void destroy() {
+    	try {
+        	cachePurger.interrupt();
+			cachePurger.wait();
+		} catch (InterruptedException e) {}
+    }
+    
     /**
      * @param key
      * @param resolution
@@ -187,8 +193,10 @@ public class Cache implements Runnable {
      */
     private Cache(String root) {
         setCache(root + File.separator + "tmp" + File.separator + "cache");
-        this.cache = new ConcurrentHashMap<CacheKey, CacheData>();
-        this.cachePurger = new Thread(this);
+        cache = new ConcurrentHashMap<CacheKey, CacheData>();
+        cachePurger = new Thread(this);
+        cachePurger.setDaemon(true);
+        cachePurger.setName("Cache Purger");
         cachePurger.start();
     }
 
@@ -215,7 +223,7 @@ public class Cache implements Runnable {
     private synchronized void remove(String key, int resolution) {
         File cacheFile = file(key, resolution);
         cache.remove(new CacheKey(key, resolution));
-	diskSize -= cacheFile.length();
+        diskSize -= cacheFile.length();
         expired++;
         cacheFile.delete();
     }
