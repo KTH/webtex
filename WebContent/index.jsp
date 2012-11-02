@@ -68,10 +68,10 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
     <h3>Using the utility JavaScript webtex.js</h3>
     <p>
-      The other method to include mathematical bitmaps in your web pages is to use the utility
-      JavaScript webtex.js. This will also align the bitmaps properly in the text.
+      This method has the advantage that it will also align the bitmaps properly in the text.
       First, put these magic URLs in the head section of the web page. You can use your own
-      copy of jQuery if you are already using jquery, provided it is reasonably new.
+      copy of jQuery if you are already using jquery, provided it is reasonably new, and you
+      should probably host and use your own copy.
     </p>
     <pre>
       &lt;head&gt;
@@ -95,8 +95,11 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <p>
       Note that you have to consider regular javascript cross site issues if you want to use this
       at some other domain since the script will fetch images in order to align them properly. 
-      You should probably host your own webtex service at your site to avoid them. This is easy
-      to do.
+      You should probably host your own webtex service at your site to avoid them.
+    </p>
+    <p>
+      There is an uncompressed version of the webtex.js script available from the same place as
+      webtex_src.js for debugging purposes.
     </p>
 
     <h3>Direct link to image generating service</h3>
