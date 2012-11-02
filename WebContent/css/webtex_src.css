@@ -69,15 +69,3 @@ img.dp_27 { vertical-align: 27px }
 img.dp_28 { vertical-align: 28px }
 img.dp_29 { vertical-align: 29px }
 img.dp_30 { vertical-align: 30px }
-
-.textips img.tex { 
-    cursor: pointer;
-    border: 1px dotted blue;
-    margin: 0px 3px;
-    padding: 3px;
-}
-.textips .output { line-height: 4em; }
-.textips .output img { 
-    padding: 3px;
-    border: 1px dotted green; 
-}
