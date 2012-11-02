@@ -1,10 +1,11 @@
 WebTex 1.2.0-pre
 ==============
+* Change behaviour of webtex.js so pages can use WebTex and still validate.
+* Rewritten JavaScripts using jQuery.
+* Minified javascript and css.
+* Stop cache thread properly when servlet container destroys servlet.
 * Maintain disk size of cache and report in monitor page. This could be
   eventually be used to put a limit on the cache size.
-* Minified javascript and css. Removed old unused bits.
-* Stop cache thread properly when servlet container destroys servlet.
-* Rewritten JavaScripts using jQuery.
 * General cleanup and code review.
 
 WebTex 1.1.2
