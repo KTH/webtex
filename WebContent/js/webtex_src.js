@@ -22,8 +22,7 @@
 
 webtex = {
 	MAX_D : 10,
-	allowResize : false,
-
+	
 	//Function to transform the whole document.  Add SRC to each IMG with
 	//ALT text starting with "tex:".  However, skip if element already
 	//has a SRC.  Note that 'src=""' may be a non-empty src, because the
@@ -33,9 +32,8 @@ webtex = {
 	    	.addClass('tex')
 	    	.each(function(index, img) {
 	    		var params = {tex : img.alt.substring(4)};
-				if (webtex.allowResize) {
-					params.D = webtex.contextSize(img);
-				}
+	    		// Support for adaptation of size to surrounding text.
+//	    		params.D = webtex.contextSize(img);
 				img.src = webtex.imgSrc + $.param(params);
 			    // Fetch to get depth.
 		        webtex.httpRequest(img);
@@ -43,20 +41,20 @@ webtex = {
 	    $('#webtex.error').hide();
 	},
 
-	contextSize : function(img) {
-		var fs = $(img).css('font-size'), s;
-	
-	    if (fs.match(/pt$/ig)) {
-	    	s = Math.round(parseInt(fs)/12);
-	    } else {
-	    	s = Math.round(parseInt(fs)/11);
-	    }
-	
-	    s = Math.max(s, webtex.MAX_D);
-	
-	    console.log('Debug: font size: %s | D=%s', fs, s);
-	    return s;
-	},
+//	contextSize : function(img) {
+//		var fs = $(img).css('font-size'), s;
+//	
+//	    if (fs.match(/pt$/ig)) {
+//	    	s = Math.round(parseInt(fs)/12);
+//	    } else {
+//	    	s = Math.round(parseInt(fs)/11);
+//	    }
+//	
+//	    s = Math.max(s, webtex.MAX_D);
+//	
+//	    console.log('Debug: font size: %s | D=%s', fs, s);
+//	    return s;
+//	},
 
 	httpRequest : function(img, post_fn) {
 		$.ajax(img.src)
