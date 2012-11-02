@@ -112,7 +112,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       </dd>
       <dt><code>D</code></dt>
       <dd>
-        An optional scaling 1-10 of the image size, defaults to 2.
+        An optional scaling 1-10 of the image size, defaults to 1.
       </dd>
     </dl>
 
