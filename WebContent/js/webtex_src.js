@@ -52,8 +52,8 @@ webtex = {
 //	    return s;
 //	},
 
-	httpRequest : function(img, post_fn) {
-		$.ajax(img.src)
+	httpRequest : function(img, settings) {
+		$.ajax(img.src, settings)
 	        .done(function(d, s, xhr) {
 	        	img.webtex = {
 	        			log : decodeURIComponent(xhr.getResponseHeader("X-MathImage-log")),
@@ -61,9 +61,6 @@ webtex = {
 	        			tex : decodeURIComponent(xhr.getResponseHeader("X-MathImage-tex"))
 	        	};
 	 	    	$(img).addClass('dp' + img.webtex.depth.replace('-', '_'));
-			    if (post_fn) {
-			    	post_fn(img);
-	            }
 	        })
 	        .fail(function(d, s, xhr) {
 	            console.log("Failed to load data: %s: %s", s, img.src);
