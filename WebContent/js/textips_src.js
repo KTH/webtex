@@ -14,7 +14,7 @@ webtex.textips = {
 			img = document.createElement('img');
 		$(img).addClass('tex').attr('src', webtex.url + $.param(params));
 		webtex.httpRequest(img, function() {
-			$('#log').html(img.math.log);
+			$('#log').html(img.webtex.log);
 		});
 		$('#output').html(img);
 		return false;

@@ -33,15 +33,14 @@ webtex = {
 	    	.each(function(index, img) {
 	    		var params = {tex : img.alt.substring(4)};
 	    		// Support for adaptation of size to surrounding text.
-//	    		params.D = webtex.contextSize(img);
+//	    		params.D = webtex.size(img);
 				img.src = webtex.url + $.param(params);
 			    // Fetch to get depth.
 		        webtex.httpRequest(img);
 		    });
-	    $('#webtex.error').hide();
 	},
 
-//	contextSize : function(img) {
+//	size : function(img) {
 //		var fs = $(img).css('font-size'), s;
 //	
 //	    if (fs.match(/pt$/ig)) {
@@ -59,11 +58,12 @@ webtex = {
 	httpRequest : function(img, post_fn) {
 		$.ajax(img.src)
 	        .done(function(d, s, xhr) {
-	        	img.math = {
+	        	img.webtex = {
 	        			log : decodeURIComponent(xhr.getResponseHeader("X-MathImage-log")),
-	        			depth : xhr.getResponseHeader("X-MathImage-depth")
+	        			depth : xhr.getResponseHeader("X-MathImage-depth"),
+	        			tex : decodeURIComponent(xhr.getResponseHeader("X-MathImage-tex"))
 	        	};
-	 	    	$(img).addClass('dp' + img.math.depth.replace('-', '_'));
+	 	    	$(img).addClass('dp' + img.webtex.depth.replace('-', '_'));
 			    if (post_fn) {
 			    	post_fn(img);
 	            }
