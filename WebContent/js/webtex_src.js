@@ -77,6 +77,6 @@ webtex = {
 };
 
 //Set the path to the service script relative.
-webtex.imgSrc = $('script[src]').last().attr('src').replace('js/webtex_src.js', 'WebTex?');
+webtex.imgSrc = $('script[src]').last().attr('src').replace(/js\/webtex(_src)?\.js$/g, 'WebTex?');
 
 $(document).ready(webtex.init);
