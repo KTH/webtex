@@ -26,7 +26,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
     <h2>Demo</h2>
 
-    <p id="webtex.textips.error">Sorry, either your browser doesn't
+    <p id="not_initialized">Sorry, either your browser doesn't
     have Javascript enabled or there's a problem somewhere - so TeX tips
     won't work for you.</p>
 

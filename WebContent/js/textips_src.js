@@ -25,7 +25,7 @@ webtex.textips = {
 	    	$('#tex_src').val(this.webtex.tex);
 	    	$('#button').click();
 	    });
-	    $('#webtex.textips.error').hide();
+	    $('#not_initialized').hide();
 	}
 };
 
