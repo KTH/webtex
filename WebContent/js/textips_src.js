@@ -12,7 +12,7 @@ webtex.textips = {
 	submit : function() {
 		var params = {tex : $('#tex_src').val()},
 			img = document.createElement('img');
-		$(img).addClass('tex').attr('src', webtex.imgSrc + $.param(params));
+		$(img).addClass('tex').attr('src', webtex.url + $.param(params));
 		webtex.httpRequest(img, function() {
 			$('#log').html(img.math.log);
 		});

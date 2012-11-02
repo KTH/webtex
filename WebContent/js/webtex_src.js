@@ -34,7 +34,7 @@ webtex = {
 	    		var params = {tex : img.alt.substring(4)};
 	    		// Support for adaptation of size to surrounding text.
 //	    		params.D = webtex.contextSize(img);
-				img.src = webtex.imgSrc + $.param(params);
+				img.src = webtex.url + $.param(params);
 			    // Fetch to get depth.
 		        webtex.httpRequest(img);
 		    });
@@ -75,6 +75,6 @@ webtex = {
 };
 
 //Set the path to the service script relative.
-webtex.imgSrc = $('script[src]').last().attr('src').replace(/js\/webtex(_src)?\.js$/g, 'WebTex?');
+webtex.url = $('script[src]').last().attr('src').replace(/js\/webtex(_src)?\.js$/g, 'WebTex?');
 
 $(document).ready(webtex.init);
