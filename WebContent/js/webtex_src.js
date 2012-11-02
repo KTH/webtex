@@ -1,12 +1,11 @@
-//Copyright: (c) 2009-2012 KTH, Royal Institute of Technology, Stockholm, Sweden
-//Author: Fredrik Jönsson <fjo@kth.se>
-//
-//Based on:
-//Copyright: (c) 2007 The Open University, Milton Keynes, UK
-//Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
+// Javascript that uses WebTex to add images to your web page.
 
-//Javascript that uses WebTex to add images to your web page.
-//See http://webtex-1.sys.kth.se/webtex/ for examples.
+// Copyright: (c) 2009-2012 KTH, Royal Institute of Technology, Stockholm, Sweden
+// Author: Fredrik Jönsson <fjo@kth.se>
+//
+// Based on:
+// Copyright: (c) 2007 The Open University, Milton Keynes, UK
+// Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
 
 /* Typical use:
    ...
@@ -23,23 +22,24 @@
 webtex = {
 	MAX_D : 10,
 	
-	//Function to transform the whole document.  Add SRC to each IMG with
-	//ALT text starting with "tex:".  However, skip if element already
-	//has a SRC.  Note that 'src=""' may be a non-empty src, because the
-	//browser will prefix the base URL.
+	// Add src to each img with alt text starting with "tex:" if it does
+	// not already have a src. Note that 'src=""' may in reality be non-empty
+	// since the browser will prefix the base URL.
 	init : function () {
 	    $('img[alt^="tex\\:"]:not([src])')
 	    	.addClass('tex')
 	    	.each(function(index, img) {
+			    // This fetches in reality twice. Browser will load the image
+	    		// when src is set, but we have to fetch again to get the headers.
+	    		// The fetch should be cached by the browser and not cost anything.
 	    		var params = {tex : img.alt.substring(4)};
-	    		// Support for adaptation of size to surrounding text.
 //	    		params.D = webtex.size(img);
 				img.src = webtex.url + $.param(params);
-			    // Fetch to get depth.
 		        webtex.httpRequest(img);
 		    });
 	},
 
+	// Try to set a size depending on font-size in surrounding.
 //	size : function(img) {
 //		var fs = $(img).css('font-size'), s;
 //	
