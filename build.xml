@@ -88,6 +88,10 @@
       <fileset dir="." includes="**/*~" defaultexcludes="false"/>
       <fileset dir="." includes="*.war"/>
       <fileset dir="." includes="*.zip"/>
+  	  <fileset dir="WebContent/css" includes="master.css"/>
+  	  <fileset dir="WebContent/css" includes="webtex.css"/>
+  	  <fileset dir="WebContent/js" includes="textips.js"/>
+  	  <fileset dir="WebContent/js" includes="webtex.js"/>
     </delete>
   </target>
 </project>
