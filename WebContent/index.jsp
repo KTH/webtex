@@ -38,10 +38,22 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
         <img alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n" />
         <img alt="tex:\sum_0^n 2^{-n}" />
         <img alt="tex:\sum_0^\infty x^n/n!" />
-	<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" />
+		<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" />
         <img alt="tex:\sum_0^\infty x^n/n" />
       </p>
     </div>
+    <form id="form">
+    	<p>
+    		<input id="tex_src" type="text" size="50" />
+			<input id="button" type="button" value="Try it!" />
+		</p>
+     	<p class="output">
+     		<span id="output">
+	  		   	Output area.
+  		   	</span>
+   		</p>
+		<pre class="log" id="log">Log area.</pre>
+	</form>
 
     <h2>Adding math to your webpage</h2>
     <p>
