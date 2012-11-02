@@ -10,6 +10,7 @@
 
 /* Typical use:
    ...
+   <script type="text/javascript" src=".../js/jquery.js"></script>
    <script type="text/javascript" src=".../js/webtex.js"></script>
    ...
    <p>
@@ -20,11 +21,8 @@
  */
 
 webtex = {
-	MAX_D : 6,
+	MAX_D : 10,
 	allowResize : false,
-
-	//Set the path to the service script relative.
-	imgSrc : $('script[src]').last().attr('src').replace('js/webtex_src.js', 'WebTex?'),
 
 	//Function to transform the whole document.  Add SRC to each IMG with
 	//ALT text starting with "tex:".  However, skip if element already
@@ -77,5 +75,8 @@ webtex = {
 	        });
 	}
 };
+
+//Set the path to the service script relative.
+webtex.imgSrc = $('script[src]').last().attr('src').replace('js/webtex_src.js', 'WebTex?');
 
 $(document).ready(webtex.init);
