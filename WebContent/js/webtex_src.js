@@ -22,12 +22,9 @@
 webtex = {
 	MAX_D : 10,
 	
-	// Add src to each img with alt text starting with "tex:" if it does
-	// not already have a src. Note that 'src=""' may in reality be non-empty
-	// since the browser will prefix the base URL.
+	// Add src to each img class webtex and alt text starting with "tex:".
 	init : function () {
-	    $('img[alt^="tex\\:"]:not([src])')
-	    	.addClass('tex')
+	    $('img.webtex[alt^="tex\\:"]')
 	    	.each(function(index, img) {
 			    // This fetches in reality twice. Browser will load the image
 	    		// when src is set, but we have to fetch again to get the headers.

@@ -35,14 +35,14 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 	This is an example of TeX tips. Try clicking on one of the boxed
 	images below. The rendered image and the TeX log will appear below
 	the data entry form.<br />
-        <img alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n" />
-        <img alt="tex:\sum_0^n 2^{-n}" />
-        <img alt="tex:\sum_0^\infty x^n/n!" />
-		<img alt="tex:\sum_0^\infty (-1)^nx^n/n!" />
-        <img alt="tex:\sum_0^\infty x^n/n" />
+        <img class="webtex" src="" alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n"/>
+        <img class="webtex" src="" alt="tex:\sum_0^n 2^{-n}"/>
+        <img class="webtex" src="" alt="tex:\sum_0^\infty x^n/n!"/>
+		<img class="webtex" src="" alt="tex:\sum_0^\infty (-1)^nx^n/n!"/>
+        <img class="webtex" src="" alt="tex:\sum_0^\infty x^n/n"/>
       </p>
     </div>
-    <form id="form">
+    <form id="form" action="">
     	<p>
     		<input id="tex_src" type="text" size="50" />
 			<input id="button" type="button" value="Try it!" />
@@ -84,12 +84,12 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     </pre>
 
     <p>
-      Next, to get <img alt="tex:a^2+b^2=c^2" /> in your web page, put
-      <code>&lt;img alt="tex:a^2+b^2=c^2"&gt;</code>
-      in its HTML. That's all you need to do. More complicated equations are
-      done in the same way, of course. WebTex will vertically align the
-      formula for you, like this <img alt="tex:\int_0^1 x\, dx" /> and this
-      <img alt="tex:{}^2" />
+      Next, to get <img class="webtex" src="" alt="tex:a^2+b^2=c^2" /> in your web page, put
+      <code>&lt;img class="webtex" alt="tex:a^2+b^2=c^2"&gt;</code>
+      in its HTML. That's all you need to do. The 'webtex' class indicates to the script 
+      that it is a math image it should render from the backend service. WebTex will vertically
+      align the formula for you, like this <img class="webtex" src="" alt="tex:\int_0^1 x\, dx" />
+      and this <img class="webtex" src="" alt="tex:{}^2" />.
     </p>
 
     <p>
@@ -134,7 +134,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       For example, the img tag <code>&lt;img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/&gt; </code> generates the image:
     </p>
     <p>
-      <img src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/>
+      <img alt="" src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/>
     </p>
 
     <h2>Acknowledgements</h2>
