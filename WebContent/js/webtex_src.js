@@ -46,10 +46,10 @@ webtex = {
 	contextSize : function(img) {
 		var fs = $(img).css('font-size'), s;
 	
-	    if (fs.substr(fs.indexOf('p')) == 'pt') {
-	    	s = Math.round(fs.substr(0, pos)/12);
+	    if (fs.match(/pt$/ig)) {
+	    	s = Math.round(parseInt(fs)/12);
 	    } else {
-	    	s = Math.round(fs.substr(0, pos)/11);
+	    	s = Math.round(parseInt(fs)/11);
 	    }
 	
 	    s = Math.max(s, webtex.MAX_D);
