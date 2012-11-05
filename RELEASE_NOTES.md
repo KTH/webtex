@@ -10,6 +10,7 @@ Release notes
 * Maintain disk size of cache and report in monitor page. This could be
   eventually be used to put a limit on the cache size.
 * General cleanup and code review.
+* Prepared for public release.
 
 ## WebTex 1.1.2
 
