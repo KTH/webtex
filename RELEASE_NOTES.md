@@ -1,7 +1,7 @@
 Release notes
 -------------
 
-## WebTex 1.2.0-pre
+## WebTex 1.2.0
 
 * Change behaviour of webtex.js so pages can use WebTex and still validate.
 * Rewritten JavaScripts using jQuery.
