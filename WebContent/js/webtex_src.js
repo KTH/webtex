@@ -1,11 +1,27 @@
-// Javascript that uses WebTex to add images to your web page.
+/*
+  Copyright: (C) 2009-2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se/
+  Author: Fredrik Jonsson <fjo@kth.se>
+  Copyright: (C) 2007 The Open University, Milton Keynes, UK
+  Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
 
-// Copyright: (c) 2009-2012 KTH, Royal Institute of Technology, Stockholm, Sweden
-// Author: Fredrik Jönsson <fjo@kth.se>
-//
-// Based on:
-// Copyright: (c) 2007 The Open University, Milton Keynes, UK
-// Author: Jonathan Fine <jfine@pytex.org>, <J.Fine@open.ac.uk>
+
+  Javascript that uses WebTex to add images to your web page.
+
+  This file is part of WebTex.
+
+  WebTex is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  WebTex is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with WebTex.  If not, see <http://www.gnu.org/licenses/>.
+*/  
 
 /* Typical use:
    ...

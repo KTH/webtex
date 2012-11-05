@@ -77,8 +77,9 @@
   <target name="build-dist" depends="war" description="Build the distribution">
     <zip destfile="${ant.project.name}-${project.version}.zip">
       <fileset dir="" includes="${war}"/>
-      <fileset dir="doc" includes="releasenotes.txt"/>
-      <fileset dir="doc" includes="README.txt"/>
+      <fileset dir="." includes="README.md"/>
+      <fileset dir="." includes="RELEASE_NOTES.md"/>
+      <fileset dir="." includes="COPYING.txt"/>
     </zip>
   </target>
 
