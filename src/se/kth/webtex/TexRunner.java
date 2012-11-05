@@ -1,10 +1,28 @@
 package se.kth.webtex;
 
+/*
+  Copyright (C) 2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se
+
+  This file is part of WebTex.
+
+  WebTex is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  WebTex is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with WebTex.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -28,16 +46,14 @@ public class TexRunner {
     public static String IMAGE_SUFFIX = ".png";
 
     private static String DVI_COMMAND = "dvipng -T tight --depth -bg Transparent -D %s -o %s %s";
-    private static String TEX_COMMAND = "latex -interaction nonstopmode --output-comment '' -output-directory %s %s";
+    private static String TEX_COMMAND = "latex -interaction nonstopmode -no-shell-escape -output-comment '' -output-directory %s %s";
     private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 
     private File dir;
-    private String texFormats;
 
     public TexRunner(String servletPath) {
         this.dir = new File(servletPath + File.separator + "tmp" + File.separator + "tex");
         dir.mkdirs();
-        this.texFormats = servletPath + File.separator + "WEB-INF" + File.separator + "secsty";
     }
 
     public void create(String expression, int resolution, Cache cache) throws IOException, ServletException {
@@ -92,8 +108,6 @@ public class TexRunner {
         String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
         SystemCommandHandler tex = new SystemCommandHandler(command.split(" "));
         tex.setDirectory(dir);
-        Map<String, String> env = tex.environment();
-        env.put("TEXFORMATS", texFormats + File.pathSeparator);
         tex.enableStdOutStore();
         tex.executeAndWait();
         if (tex.getExitCode() != 0) {

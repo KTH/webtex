@@ -1,5 +1,23 @@
 package se.kth.webtex;
 
+/*
+  Copyright (C) 2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se
+
+  This file is part of WebTex.
+
+  WebTex is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  WebTex is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with WebTex.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 import java.io.File;
 import java.util.Calendar;
@@ -26,6 +44,7 @@ public class Cache implements Runnable {
 
     // Performance counters
     private long additions = 0;
+    private long diskSize = 0;
     private long expired = 0;
     private Calendar startTime = Calendar.getInstance();
 
@@ -37,15 +56,19 @@ public class Cache implements Runnable {
     }
 
     public int size() {
-        return this.cache.size();
+        return cache.size();
     }
 
     public long getAdditions() {
-        return this.additions;
+        return additions;
     }
 
     public long getExpired() {
-        return this.expired;
+        return expired;
+    }
+    
+    public long getDiskSize() {
+        return diskSize;
     }
     
     public long getUptime() {
@@ -116,24 +139,31 @@ public class Cache implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
-            for (CacheKey key : cache.keySet()) {
-                Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
-                if (timestamp(key.key, key.resolution).before(bestAfter)) {
-                    remove(key.key, key.resolution);
-                }
-                try {
+        try {
+        	while (! Thread.currentThread().isInterrupted()) {
+	            for (CacheKey key : cache.keySet()) {
+	            	if (Thread.currentThread().isInterrupted()) {
+	            		return;
+	            	}
+	            	
+	            	Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
+	                if (timestamp(key.key, key.resolution).before(bestAfter)) {
+	                    remove(key.key, key.resolution);
+	                }
                     Thread.sleep(TIME_BETWEEN_EVICTIONS);
-                } catch (InterruptedException e) {
-                }
-            }
-            try {
-                Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
-            } catch (InterruptedException e) {
-            }
-        }
+	            }
+	            Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
+	        }
+        } catch (InterruptedException e) {}
     }
-
+    
+    public void destroy() {
+    	try {
+        	cachePurger.interrupt();
+			cachePurger.wait();
+		} catch (InterruptedException e) {}
+    }
+    
     /**
      * @param key
      * @param resolution
@@ -159,7 +189,8 @@ public class Cache implements Runnable {
         File cacheFile = fileForKey(key, resolution);
         file.renameTo(cacheFile);
         cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
-        this.additions++;
+        additions++;
+	diskSize += cacheFile.length();
     }
 
     private File fileForKey(String key, int resolution) {
@@ -181,8 +212,10 @@ public class Cache implements Runnable {
      */
     private Cache(String root) {
         setCache(root + File.separator + "tmp" + File.separator + "cache");
-        this.cache = new ConcurrentHashMap<CacheKey, CacheData>();
-        this.cachePurger = new Thread(this);
+        cache = new ConcurrentHashMap<CacheKey, CacheData>();
+        cachePurger = new Thread(this);
+        cachePurger.setDaemon(true);
+        cachePurger.setName("Cache Purger");
         cachePurger.start();
     }
 
@@ -209,10 +242,10 @@ public class Cache implements Runnable {
     private synchronized void remove(String key, int resolution) {
         File cacheFile = file(key, resolution);
         cache.remove(new CacheKey(key, resolution));
+        diskSize -= cacheFile.length();
+        expired++;
         cacheFile.delete();
-        this.expired++;
     }
-
 
     /**
      * Cache entries are keyed on the expression string and resolution.

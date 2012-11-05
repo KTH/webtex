@@ -1,10 +1,28 @@
 package se.kth.webtex;
 
+/*
+  Copyright (C) 2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se
+
+  This file is part of WebTex.
+
+  WebTex is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  WebTex is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with WebTex.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
@@ -43,8 +61,34 @@ public class WebTex extends HttpServlet {
     public void init(ServletConfig config) {
         ServletContext context = config.getServletContext();
         String root = context.getRealPath("");
-        this.cache = Cache.initCache(context, root);
-        this.texRunner = new TexRunner(root);
+        cache = Cache.initCache(context, root);
+        texRunner = new TexRunner(root);
+    }
+
+    
+    @Override
+    public void destroy() {
+    	cache.destroy();
+	}
+
+    
+    /**
+     * @see HttpServlet#getLastModified(HttpServletRequest)
+     */
+    protected long getLastModified(HttpServletRequest request) {
+        try {
+            String expression = request.getParameter(PARAMETER_TEX);
+            if (isValid(expression)) {
+                int resolution = getResolution(request);
+                createImage(expression, resolution);
+                File file = cache.file(expression, resolution);
+                return file.lastModified();
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
 
@@ -120,9 +164,7 @@ public class WebTex extends HttpServlet {
 
         response.addHeader("X-MathImage-tex", expression);
         response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
-        response.addHeader("Cache-Control", "max-age=" + EXPIRES_AFTER);
-        response.addDateHeader("Expires", System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(EXPIRES_AFTER, TimeUnit.SECONDS));
-        response.addDateHeader("Last-Modified", file.lastModified());
+        response.addHeader("Cache-Control", "public, max-age=" + EXPIRES_AFTER);
         response.setContentType("image/png");
         response.setContentLength((int)file.length());
     }

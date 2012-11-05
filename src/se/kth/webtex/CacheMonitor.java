@@ -1,5 +1,24 @@
 package se.kth.webtex;
 
+/*
+  Copyright (C) 2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se
+
+  This file is part of WebTex.
+
+  WebTex is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  WebTex is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with WebTex.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 import java.util.concurrent.Callable;
 
 import se.kth.sys.util.ApplicationMonitor;
@@ -18,11 +37,13 @@ Callable<Status> {
 
     @Override
     public Status call() throws Exception {
-        return Status.OK(cache.size() + " items in cache. Totals: " 
-                + cache.getAdditions() + " additions, " 
-                + cache.getExpired() + " expirations. "
-                + "Uptime: " + uptime()
-                );
+        return Status.OK(String.format(
+	    "%d items in cache. Totals: %d additions, %d expirations, size: %d kb. Uptime: %s",
+	    cache.size(),
+	    cache.getAdditions(),
+	    cache.getExpired(),
+	    cache.getDiskSize() / 1024,
+	    uptime()));
     }
     
     private String uptime() {

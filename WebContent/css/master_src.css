@@ -1,0 +1,65 @@
+BODY
+{
+    BACKGROUND: #ffffff;
+    MARGIN: 0px;
+    COLOR: #000;
+    TEXT-ALIGN: left
+}
+
+A
+{
+    TEXT-DECORATION: underline
+}
+
+A:link
+{
+    COLOR: #0000D0;
+}
+
+A:visited
+{
+    COLOR: #900000;
+}
+
+A.img
+{
+	BORDER: 0;
+}
+
+h1, h2, h3
+{
+	PADDING: 5px;
+    COLOR: #00b1ea;
+    BORDER-TOP: #c4c4c4 1px solid;
+	BORDER-BOTTOM: #c4c4c4 1px solid;
+}
+
+h1
+{
+    COLOR: #000;
+}
+
+img
+{
+	PADDING: 0;
+	BORDER: 0;
+	MARGIN: 0;
+}
+
+P,PRE,DL
+{
+	PADDING: 10px 5px 0 10px;
+    MARGIN: 0;
+}
+
+.textips img.webtex { 
+    cursor: pointer;
+    border: 1px dotted blue;
+    margin: 0px 3px;
+    padding: 3px;
+}
+.textips .output { line-height: 4em; }
+.textips .output img { 
+    padding: 3px;
+    border: 1px dotted green; 
+}
