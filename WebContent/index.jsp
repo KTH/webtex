@@ -126,11 +126,11 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     </p>
     <dl>
       <dt><code>X-MathImage-tex</code></dt>
-      <dd>Contains the tex expression used to generate the image.</dd>
+      <dd>Contains the TeX expression used to generate the image, URL encoded.</dd>
       <dt><code>X-MathImage-depth</code></dt>
       <dd>Contains a numeric value indicating the base line position of the image which can be used for positioning.</dd>
       <dt><code>X-MathImage-log</code></dt>
-      <dd>The error message from LaTeX or 'OK' if no errors where encountered.</dd>
+      <dd>The error message from LaTeX or 'OK' if no errors where encountered, URL encoded.</dd>
     </dl>
 
     <p>

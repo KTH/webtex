@@ -21,28 +21,30 @@
   
   You should have received a copy of the GNU General Public License
   along with WebTex.  If not, see <http://www.gnu.org/licenses/>.
-*/  
+ */
 
 webtex.textips = {
-	submit : function() {
-		var params = {tex : $('#tex_src').val()},
-			img = document.createElement('img');
-		$(img).addClass('webtex').attr('src', webtex.url + $.param(params));
-		webtex.httpRequest(img, {async : false});
-		$('#output').html(img);
-		$('#log').html(img.webtex.log);
-		return false;
-	},
+    submit : function() {
+        var params = { tex : $('#tex_src').val() },
+            img = document.createElement('img');
+        $(img).addClass('webtex').attr('src', webtex.url + $.param(params));
+        webtex.httpRequest(img, {
+            async : false
+        });
+        $('#output').html(img);
+        $('#log').html(img.webtex.log);
+        return false;
+    },
 
-	init : function () {
-	    $('#button').click(webtex.textips.submit);
-	    $('#form').submit(webtex.textips.submit);
-	    $('div.textips img').click(function() {
-	    	$('#tex_src').val(this.webtex.tex);
-	    	$('#button').click();
-	    });
-	    $('#not_initialized').hide();
-	}
+    init : function() {
+        $('#button').click(webtex.textips.submit);
+        $('#form').submit(webtex.textips.submit);
+        $('div.textips img').click(function() {
+            $('#tex_src').val(this.webtex.tex);
+            $('#button').click();
+        });
+        $('#not_initialized').hide();
+    }
 };
 
 $(document).ready(webtex.textips.init);
