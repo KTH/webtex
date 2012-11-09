@@ -23,9 +23,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -49,6 +51,7 @@ public class WebTex extends HttpServlet {
 
     private Cache cache;
     private TexRunner texRunner;
+    private static final ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -140,7 +143,6 @@ public class WebTex extends HttpServlet {
 
 
     private String getTeX(HttpServletRequest request) {
-//    	return request.getParameter(PARAMETER_TEX).replaceAll("\\r\\n|\\r|\\n", " ");
     	return request.getParameter(PARAMETER_TEX);
     }
 
@@ -155,6 +157,18 @@ public class WebTex extends HttpServlet {
         }
     }
 
+    private String encodeURIComponent (String unencoded) {
+    	try {
+    		String escaped = unencoded.replace("\\",  "\\\\")
+    				.replaceAll("(\\r|\\n)+", " ")
+    				.replace("'", "\\'");
+    		return (String) engine.eval("encodeURIComponent('" + escaped + "')");
+    	} catch (ScriptException e) {
+    		System.out.println("Error encoding string: '" + unencoded + "': " + e.getMessage());
+    		return "";
+    	}
+    }
+    
     private void writeHeaders(HttpServletResponse response, String expression, int resolution) {
         File file = cache.file(expression, resolution);
         String logMessage = cache.logMessage(expression, resolution);
@@ -162,14 +176,14 @@ public class WebTex extends HttpServlet {
         if (logMessage == null) {
             response.addHeader("X-MathImage-log", "OK");
         } else {
-            response.addHeader("X-MathImage-log", logMessage);
+            response.addHeader("X-MathImage-log", encodeURIComponent(logMessage));
         }
 
         if (file == null) {
             return;
         }
 
-        response.addHeader("X-MathImage-tex", URLEncoder.encode(expression));
+        response.addHeader("X-MathImage-tex", encodeURIComponent(expression));
         response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
         response.addHeader("Cache-Control", "public, max-age=" + EXPIRES_AFTER);
         response.setContentType("image/png");
