@@ -26,7 +26,7 @@
 webtex.textips = {
     submit : function() {
         var params = { tex : $('#tex_src').val() },
-            img = document.createElement('img');
+	    img = document.createElement('img');
         $(img).addClass('webtex').attr('src', webtex.url + $.param(params));
         webtex.httpRequest(img, {
             async : false
