@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex x.x.x
+
+* The X-MathImage-tex header should be URL encoded.
+
 ## WebTex 1.2.0
 
 * Change behaviour of webtex.js so pages can use WebTex and still validate.

@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
@@ -77,7 +78,7 @@ public class WebTex extends HttpServlet {
      */
     protected long getLastModified(HttpServletRequest request) {
         try {
-            String expression = request.getParameter(PARAMETER_TEX);
+            String expression = getTeX(request);
             if (isValid(expression)) {
                 int resolution = getResolution(request);
                 createImage(expression, resolution);
@@ -96,7 +97,7 @@ public class WebTex extends HttpServlet {
      * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
      */
     protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String expression = request.getParameter(PARAMETER_TEX);
+        String expression = getTeX(request);
         if (isValid(expression)) {
             int resolution = getResolution(request);
             createImage(expression, resolution);
@@ -114,7 +115,7 @@ public class WebTex extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String expression = request.getParameter(PARAMETER_TEX);
+        String expression = getTeX(request);
         if (isValid(expression)) {
             int resolution = getResolution(request);
             createImage(expression, resolution);
@@ -135,6 +136,12 @@ public class WebTex extends HttpServlet {
         }
 
         return false;
+    }
+
+
+    private String getTeX(HttpServletRequest request) {
+//    	return request.getParameter(PARAMETER_TEX).replaceAll("\\r\\n|\\r|\\n", " ");
+    	return request.getParameter(PARAMETER_TEX);
     }
 
 
@@ -162,7 +169,7 @@ public class WebTex extends HttpServlet {
             return;
         }
 
-        response.addHeader("X-MathImage-tex", expression);
+        response.addHeader("X-MathImage-tex", URLEncoder.encode(expression));
         response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
         response.addHeader("Cache-Control", "public, max-age=" + EXPIRES_AFTER);
         response.setContentType("image/png");
