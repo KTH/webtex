@@ -1,7 +1,7 @@
 Release notes
 -------------
 
-## WebTex x.x.x
+## WebTex 1.2.1
 
 * The X-MathImage-tex header should be URL encoded.
 
