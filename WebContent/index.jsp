@@ -149,6 +149,14 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       <img alt="" src="<%=request.getRequestURL()%>WebTex?D=4&amp;tex=%5Cdisplaystyle%7B%7B%7Be%7D%7D%5E%7B%7B%7Bi%7D%5Cpi%7D%7D%2B%7B1%7D%3D%7B0%7D%7D"/>
     </p>
 
+    <h2>Download WebTex</h2>
+    <p>
+      WebTex is available as open source at GitHub at 
+      <a href="http://github.com/fjollberg/webtex/">github.com/fjollberg/webtex/</a>, 
+      please feel free to fork and improve and send a pull request so we may
+      integrate your patches.
+    </p>
+
     <h2>Acknowledgements</h2>
     <p>
       This software is based on the open source software Mathtran, Copyright
