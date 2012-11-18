@@ -1,6 +1,11 @@
 Release notes
 -------------
 
+## WebTex 1.3.0
+
+* Added X-MathImage-width and X-MathImage-height headers. This is a 
+  backwards compatible API change adding to the previously sent headers.
+
 ## WebTex 1.2.2
 
 * The X-MathImage-tex header should be encoded.

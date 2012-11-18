@@ -135,6 +135,19 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
         Contains a numeric value indicating the base line position of the image which
         can be used for positioning.
       </dd>
+      <dt><code>X-MathImage-width</code></dt>
+      <dd>
+        Integer containing the width of the image in pixels.
+      </dd>
+      <dt><code>X-MathImage-height</code></dt>
+      <dd>
+        Integer containing the height of the image in pixels.
+      </dd>
+      <dt><code>X-MathImage-depth</code></dt>
+      <dd>
+        Contains a numeric value indicating the base line position of the image which
+        can be used for positioning.
+      </dd>
       <dt><code>X-MathImage-log</code></dt>
       <dd>
         The error message from LaTeX or 'OK' if no errors where encountered, encoded for

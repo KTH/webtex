@@ -63,7 +63,6 @@ public class TexRunner {
             createTexFile(fileName, expression);
             String output = runTex(fileName);
             int depth = runDvi(fileName, resolution);
-
             cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
         } catch (IOException e) {
             throw new ServletException("An error occuring when running 'tex'.", e);
