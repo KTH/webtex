@@ -75,10 +75,14 @@ webtex = {
                 function(d, s, xhr) {
                     img.webtex = {
                         log : decodeURIComponent(xhr.getResponseHeader("X-MathImage-log")),
+                        tex : decodeURIComponent(xhr.getResponseHeader("X-MathImage-tex")),
                         depth : xhr.getResponseHeader("X-MathImage-depth"),
-                        tex : decodeURIComponent(xhr.getResponseHeader("X-MathImage-tex"))
+                        width : xhr.getResponseHeader("X-MathImage-width"),
+                        height : xhr.getResponseHeader("X-MathImage-height")
                     };
-                    $(img).addClass('dp' + img.webtex.depth.replace('-', '_'));
+                    $(img).addClass('dp' + img.webtex.depth.replace('-', '_'))
+                        .attr('width', img.webtex.width)
+                        .attr('height', img.webtex.height);
             })
             .fail(function(d, s, xhr) {
                 console.log("Failed to load data: %s: %s", s, img.src);
