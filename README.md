@@ -50,8 +50,13 @@ the `src` attribute is mandatory for `img` tags in validating pages.
 
 ### Servlet interface
 
-The servlet interface is identical to the original Mathtran interface. It takes
-two paramters:
+The servlet request interface is identical to the original Mathtran interface. 
+A couple of headers are added with more information about the generated image.
+
+#### Request
+
+HEAD and GET requests are supported. Both include the same headers but the 
+HEAD request does not contain the image data (obviously).
 
 `tex` A URLencoded LaTeX expression.
 
@@ -61,6 +66,26 @@ NOTE: It is identical with the difference that the expressions are all expressio
 supported by LaTeX with the mathtools package enabled, which should be a super
 set of the expressions supported by the mathtran package this code was built to
 replace.
+
+#### Response
+
+The servlet response contains non-standard headers with information about the 
+generated picture, both in HEAD and GET requests.
+
+`X-MathImage-tex` JavaScript encodeURIComponent-encoded string with the requested
+TeX expression. This is currently equivalent to the `tex` request parameter but may
+in a future release be a normalized version of the TeX expression.
+
+`X-MathImage-log` JS encodeURIComponent-encoded string with error information or
+'OK' if successful. 
+
+`X-MathImage-depth` integer with base line offset information in approximate pixels.
+
+`X-MathImage-width` integer with image width in pixels.
+
+`X-MathImage-height` integer with image height in pixels.
+
+Apart from these headers standard headers with cache control information are sent.
 
 
 ## Installation
