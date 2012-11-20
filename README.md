@@ -50,8 +50,13 @@ the `src` attribute is mandatory for `img` tags in validating pages.
 
 ### Servlet interface
 
-The servlet interface is identical to the original Mathtran interface. It takes
-two paramters:
+The servlet request interface is identical to the original Mathtran interface. 
+A couple of headers are added with more information about the generated image.
+
+#### Request
+
+HEAD and GET requests are supported. Both include the same headers but the 
+HEAD request does not contain the image data (obviously).
 
 `tex` A URLencoded LaTeX expression.
 
@@ -61,6 +66,26 @@ NOTE: It is identical with the difference that the expressions are all expressio
 supported by LaTeX with the mathtools package enabled, which should be a super
 set of the expressions supported by the mathtran package this code was built to
 replace.
+
+#### Response
+
+The servlet response contains non-standard headers with information about the 
+generated picture, both in HEAD and GET requests.
+
+`X-MathImage-tex` JavaScript encodeURIComponent-encoded string with the requested
+TeX expression. This is currently equivalent to the `tex` request parameter but may
+in a future release be a normalized version of the TeX expression.
+
+`X-MathImage-log` JS encodeURIComponent-encoded string with error information or
+'OK' if successful. 
+
+`X-MathImage-depth` integer with base line offset information in approximate pixels.
+
+`X-MathImage-width` integer with image width in pixels.
+
+`X-MathImage-height` integer with image height in pixels.
+
+Apart from these headers standard headers with cache control information are sent.
 
 
 ## Installation
@@ -111,14 +136,13 @@ The servlet was originally intended to be an almost drop-in replacement for
 the Python script used by www.mathtran.org which is available as free source
 under GPL.
 
-Mathtran uses a pre-forked TeX binary that expressions is piped 
-through. This was one way of increasing speed of the service, but used only
+Mathtran uses a pre-forked TeX binary that expressions are piped 
+through. This was one way to increase speed of the service, but used only
 one or a pool of TeX binaries. The produced images were not stored anywhere,
-but recreated every time unless a particular browser caches the image. Since
-all requests shared a TeX instance, the secsty format was necessary and made
-it difficult to support newer constructs users normally use in documents.
-The service also suffered a bit from somewhat weird behaviour of the TeX
-IPC mechanism.
+but recreated every time the image was requested. Since many requests
+shared a TeX instance, the secsty format was necessary and made it difficult
+to support newer constructs users normally use in documents. The service
+also suffered a bit from somewhat weird behaviour of the TeX IPC mechanism.
 
 
 ### WebTeX
@@ -130,7 +154,7 @@ reliable and less complicated. Each servlet thread runs its own LaTeX and
 multiple requests are handled by the servlet container threading up as necessary.
 
 Since then, also the JavaScripts have been rewritten using jQuery and
-optimized and very little of the original code is left (mostly css).
+optimized and very little of the original code is left (mostly some css).
 
 The fact that LaTeX is not run in IPC mode means that we can get rid of the
 TeX secsty format and the limitations it brings, and use a full LaTeX with
@@ -140,7 +164,7 @@ mathtools enabled providing many more math features.
 ## Contact
 
 WebTex is created and maintained by the Infosys group <infosys@kth.se> 
-at KTH, Kunliga tekniska hogskolan, http://www.kth.se/.
+at KTH, Kunliga tekniska högskolan, http://www.kth.se/.
 
 
 ## License and acknowledgements
@@ -157,10 +181,10 @@ free software under GPL at http://sourceforge.net/projects/mathtran/.
 There is not much left of the original code by now apart from some css,
 but the interfaces are much the same.
 
-A copy of yuilibrary is included to minify JavaScript and CSS.
+A copy of yuicompressor is included to minify JavaScript and CSS.
 Copyright © 2012 Yahoo! Inc. All rights reserved.
 http://yuilibrary.com/license/
 
-A copy of servlet-api is included to build.
+A copy of servlet-api is included to build the servlet.
 Copyright 1999-2012 The Apache Software Foundation
 http://www.apache.org/licenses/LICENSE-2.0
