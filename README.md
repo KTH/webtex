@@ -5,7 +5,7 @@ WebTeX is a simple servlet that creates PNG images for publishing on the web
 given TeX expressions as input. It is used to show nicely formatted math
 expressions on web pages and as a back end for a sort-of wysiwyg tinymce 
 plugin math editor to make such images at a site at KTH, the Royal institute
-of technology, Stockholm, Sweden.
+of technology, Stockholm, Sweden, http://www.kth.se/.
 
 
 ## API
@@ -164,7 +164,7 @@ mathtools enabled providing many more math features.
 ## Contact
 
 WebTex is created and maintained by the Infosys group <infosys@kth.se> 
-at KTH, Kunliga tekniska högskolan, http://www.kth.se/.
+at KTH, Kungliga tekniska högskolan, http://www.kth.se/.
 
 
 ## License and acknowledgements
