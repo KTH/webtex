@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import se.kth.sys.util.StringUtil;
+import se.kth.webtex.Cache.CacheData;
 
 /**
  * Servlet implementation. Does the parameter handling and response/request logic.
@@ -85,7 +86,7 @@ public class WebTex extends HttpServlet {
             if (isValid(expression)) {
                 int resolution = getResolution(request);
                 createImage(expression, resolution);
-                File file = cache.file(expression, resolution);
+                File file = cache.get(expression, resolution).getFile();
                 return file.lastModified();
             } else {
                 return -1;
@@ -170,8 +171,9 @@ public class WebTex extends HttpServlet {
     }
     
     private void writeHeaders(HttpServletResponse response, String expression, int resolution) {
-        File file = cache.file(expression, resolution);
-        String logMessage = cache.logMessage(expression, resolution);
+    	CacheData data = cache.get(expression, resolution);
+        File file = data.getFile();
+        String logMessage = data.getLogMessage();
 
         if (logMessage == null) {
             response.addHeader("X-MathImage-log", "OK");
@@ -184,14 +186,16 @@ public class WebTex extends HttpServlet {
         }
 
         response.addHeader("X-MathImage-tex", encodeURIComponent(expression));
-        response.addIntHeader("X-MathImage-depth", cache.depth(expression, resolution));
+        response.addIntHeader("X-MathImage-depth", data.getDepth());
+        response.addIntHeader("X-MathImage-width", data.getWidth());
+        response.addIntHeader("X-MathImage-height", data.getHeight());
         response.addHeader("Cache-Control", "public, max-age=" + EXPIRES_AFTER);
         response.setContentType("image/png");
         response.setContentLength((int)file.length());
     }
 
     private void writeImage(HttpServletResponse response, String expression, int resolution) throws ServletException, IOException {
-        File file = cache.file(expression, resolution);
+        File file = cache.get(expression, resolution).getFile();
 
         InputStream fileContents;
         fileContents = new FileInputStream(file);

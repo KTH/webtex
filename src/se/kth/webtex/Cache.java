@@ -19,13 +19,16 @@ package se.kth.webtex;
   along with WebTex.  If not, see <http://www.gnu.org/licenses/>
  */
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 
 /**
@@ -77,51 +80,23 @@ public class Cache implements Runnable {
         return now.getTimeInMillis();
     }
 
-    /**
-     * @param key
-     * @param resolution
-     * @return the image file as a File object.
-     */
-    public File file(String key, int resolution) {
-        CacheKey cacheKey = new CacheKey(key, resolution);
-        if (cache.containsKey(cacheKey)) {
-            touch(cacheKey);
-            return cache.get(cacheKey).file;
-        } else {
-            return null;
-        }
-    }
 
     /**
      * @param key
      * @param resolution
      * @return an integer representing offset from the x-axis.
      */
-    public int depth(String key, int resolution) {
+    protected CacheData get(String key, int resolution) {
         CacheKey cacheKey = new CacheKey(key, resolution);
         if (cache.containsKey(cacheKey)) {
             touch(cacheKey);
-            return cache.get(cacheKey).depth;
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * @param key
-     * @param resolution
-     * @return the log message from the image generation.
-     */
-    public String logMessage(String key, int resolution) {
-        CacheKey cacheKey = new CacheKey(key, resolution);
-        if (cache.containsKey(cacheKey)) {
-            touch(cacheKey);
-            return cache.get(cacheKey).logMessage;
+            return cache.get(cacheKey);
         } else {
             return null;
         }
     }
 
+    
     private void touch(CacheKey key) {
         CacheData data = cache.get(key);
         data.timestamp = new Date();
@@ -133,7 +108,11 @@ public class Cache implements Runnable {
      * @return true if an entry exists for the key - resolution combination.
      */
     public boolean contains(String key, int resolution) {
-        File file = file(key, resolution);		
+    	CacheData data = get(key, resolution);
+    	if (data == null) {
+    		return false;
+    	}
+        File file = data.getFile();		
         return (file != null) && file.exists();
     }
 
@@ -186,11 +165,22 @@ public class Cache implements Runnable {
      * @param logMessage
      */
     public synchronized void put(String key, int resolution, int depth, File file, String logMessage) {
-        File cacheFile = fileForKey(key, resolution);
+    	int width = 0;
+    	int height = 0;
+
+    	try {
+			BufferedImage image = ImageIO.read(file);
+			width = image.getWidth();
+			height = image.getHeight();
+			image.flush();
+		} catch (IOException e) {}
+
+		File cacheFile = fileForKey(key, resolution);
         file.renameTo(cacheFile);
-        cache.put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, logMessage));
+        cache.put(new CacheKey(key, resolution), 
+    		new CacheData(depth, cacheFile, width, height, logMessage));
         additions++;
-	diskSize += cacheFile.length();
+        diskSize += cacheFile.length();
     }
 
     private File fileForKey(String key, int resolution) {
@@ -240,7 +230,7 @@ public class Cache implements Runnable {
      * @param resolution
      */
     private synchronized void remove(String key, int resolution) {
-        File cacheFile = file(key, resolution);
+        File cacheFile = get(key, resolution).getFile();
         cache.remove(new CacheKey(key, resolution));
         diskSize -= cacheFile.length();
         expired++;
@@ -280,17 +270,45 @@ public class Cache implements Runnable {
      * along the y-axis the image should be transposed in order to line up
      * correctly on the web page.
      */
-    private class CacheData {
-        public int depth;
-        public File file;
-        public String logMessage;
-        public Date timestamp;
+    protected final class CacheData {
+        private int depth;
+        private int width;
+        private int height;
+        private File file;
+        private String logMessage;
+        private Date timestamp;
 
-        public CacheData(int depth, File file, String logMessage) {
+        public CacheData(int depth, File file, int width, int height, String logMessage) {
             this.depth = depth;
+            this.width = width;
+            this.height = height;
             this.file = file;
             this.logMessage = logMessage;
             this.timestamp = new Date();
         }
+
+		public int getDepth() {
+			return depth;
+		}
+        
+		public int getWidth() {
+			return width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public File getFile() {
+			return file;
+		}
+
+		public String getLogMessage() {
+			return logMessage;
+		}
+
+		public Date getTimestamp() {
+			return timestamp;
+		}
     }
 }
