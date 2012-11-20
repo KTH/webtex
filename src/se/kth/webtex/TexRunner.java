@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 
@@ -49,6 +51,8 @@ public class TexRunner {
     private static String TEX_COMMAND = "latex -interaction nonstopmode -no-shell-escape -output-comment '' -output-directory %s %s";
     private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 
+    private static final Pattern DEPTH_PATTERN = Pattern.compile(".*depth=(-?[0-9]+).*");
+    
     private File dir;
 
     public TexRunner(String servletPath) {
@@ -93,7 +97,7 @@ public class TexRunner {
 
     private void createTexFile(String fileName, String expression) throws IOException {
         PrintWriter texFile = new PrintWriter(new FileWriter(fileName + ".tex"));
-        texFile.println("\\documentclass[fleqn]{minimal}");
+        texFile.println("\\documentclass[fleqn]{standalone}");
         texFile.println("\\usepackage{mathtools}");
         texFile.println("\\usepackage[displaymath,active,textmath,tightpage]{preview}");
         texFile.println("\\begin{document}");
@@ -150,10 +154,12 @@ public class TexRunner {
             throw new ServletException("Command 'dvi' failed during execution.");
 
         for (String output : dvi.getStdOutStore()) {
-            String[] split = output.split("=|]");
-            if (split.length > 1) {
-                depth = Integer.parseInt(split[1]);
-            }
+        	Matcher matcher = DEPTH_PATTERN.matcher(output);
+        	if (matcher.matches()) {
+	        	String depthStr = matcher.group(1);
+                depth = Integer.parseInt(depthStr);
+                break;
+        	}
         }
 
         return depth;

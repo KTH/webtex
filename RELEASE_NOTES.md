@@ -5,6 +5,7 @@ Release notes
 
 * Added X-MathImage-width and X-MathImage-height headers. This is a 
   backwards compatible API change adding to the previously sent headers.
+* Use documentclass standalone to avoid too narrow typesetting.
 
 ## WebTex 1.2.2
 
