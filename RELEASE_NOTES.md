@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.3.2
+
+* Enable amssymb package to get mathbb et al.
+
 ## WebTex 1.3.1
 
 * Updated documentation with instructions on how to install the standalone
