@@ -98,7 +98,7 @@ public class TexRunner {
     private void createTexFile(String fileName, String expression) throws IOException {
         PrintWriter texFile = new PrintWriter(new FileWriter(fileName + ".tex"));
         texFile.println("\\documentclass[fleqn]{standalone}");
-        texFile.println("\\usepackage{mathtools}");
+        texFile.println("\\usepackage{amssymb, mathtools}");
         texFile.println("\\usepackage[displaymath,active,textmath,tightpage]{preview}");
         texFile.println("\\begin{document}");
         texFile.println("\\(" + expression + "\\)");
