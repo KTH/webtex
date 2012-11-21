@@ -1,6 +1,12 @@
 Release notes
 -------------
 
+## WebTex 1.3.1
+
+* Updated documentation with instructions on how to install the standalone
+  LaTeX document class since it is not yet standard in common distributions.
+  See README.md. No functional changes.
+
 ## WebTex 1.3.0
 
 * Added X-MathImage-width and X-MathImage-height headers. This is a 

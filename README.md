@@ -96,9 +96,21 @@ WebTeX needs a LaTeX installation. It also needs the dvipng software to
 create images from the TeX DVI output. Both the latex and dvipng 
 binaries must be executable using the system path of the servlet container.
 
-This require, e.g, at least the texlive-latex, dvipng and tomcat6 packages 
+This requires, e.g, at least the texlive-latex, dvipng and tomcat6 packages 
 to be installed on RHEL6. WebTex uses the mathtools package from LaTeX which
-is included in modern LaTeX distributions.
+is included in most LaTeX distributions.
+
+### Install the standalone document class
+
+WebTex also requires the standalone package which relatively recently was 
+included into TeXLive and is not yet included in common texlive distributions
+but can be easily be installed separately.
+
+Download the standalone document class here:
+http://mirrors.ctan.org/install/macros/latex/contrib/standalone.tds.zip
+
+Unzip into the tex installation source, e.g. often /usr/share/texmf on Linux and
+run `sudo texhash` to update the TeX index.
 
 ### Deployment
 
