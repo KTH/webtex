@@ -7,6 +7,9 @@ expressions on web pages and as a back end for a sort-of wysiwyg tinymce
 plugin math editor to make such images at a site at KTH, the Royal institute
 of technology, Stockholm, Sweden, http://www.kth.se/.
 
+Latest version of WebTex is available on github, http://github.com/KTHse/webtex
+You may also be interested in the TinyMCE front end plugin available at
+http://github.com/KTHse/tinywebtex
 
 ## API
 
@@ -86,6 +89,13 @@ in a future release be a normalized version of the TeX expression.
 `X-MathImage-height` integer with image height in pixels.
 
 Apart from these headers standard headers with cache control information are sent.
+
+### Monitor
+
+Not really a part of the interface, there are two pages at the URLs _about and 
+_monitor providing version information and cache statistics respectively. This 
+is an implementation of a minimal web application monitoring scheme we use. Use
+them as you wish, but you should be aware that they are there. 
 
 
 ## Installation
