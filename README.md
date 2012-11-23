@@ -8,8 +8,9 @@ plugin math editor to make such images at a site at KTH, the Royal institute
 of technology, Stockholm, Sweden, http://www.kth.se/.
 
 Latest version of WebTex is available on github, http://github.com/KTHse/webtex.
-You may also be interested in the TinyMCE front end plugin available at
-http://github.com/KTHse/tinywebtex.
+
+You may also be interested in the TinyMCE front end plugin Tiny WebTex available
+at http://github.com/KTHse/tinywebtex.
 
 ## API
 
@@ -136,7 +137,8 @@ on the server.
 
 ### Security Considerations
 
-There is no limit on the cache size. It will continue to fill the available
+Items in the cache are expired and removed if not requested for a week, but
+there is no limit on the cache size. It will continue to fill the available
 disk and memory spaces until out of resources. It is hence currently
 possible to achieve a DoS-attack by generating lots of images.
 
