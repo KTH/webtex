@@ -165,7 +165,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <h2>Download WebTex</h2>
     <p>
       WebTex is available as open source at GitHub at 
-      <a href="http://github.com/fjollberg/webtex/">github.com/fjollberg/webtex/</a>, 
+      <a href="http://github.com/KTHse/webtex/">github.com/KTHse/webtex/</a>, 
       please feel free to fork and improve and send a pull request so we may
       integrate your patches.
     </p>

@@ -7,6 +7,10 @@ expressions on web pages and as a back end for a sort-of wysiwyg tinymce
 plugin math editor to make such images at a site at KTH, the Royal institute
 of technology, Stockholm, Sweden, http://www.kth.se/.
 
+Latest version of WebTex is available on github, http://github.com/KTHse/webtex.
+
+You may also be interested in the TinyMCE front end plugin Tiny WebTex available
+at http://github.com/KTHse/tinywebtex.
 
 ## API
 
@@ -87,6 +91,13 @@ in a future release be a normalized version of the TeX expression.
 
 Apart from these headers standard headers with cache control information are sent.
 
+### Monitor
+
+Not really a part of the interface, there are two pages at the URLs _about and 
+_monitor providing version information and cache statistics respectively. This 
+is an implementation of a minimal web application monitoring scheme we use. Use
+them as you wish, but you should be aware that they are there. 
+
 
 ## Installation
 
@@ -126,7 +137,8 @@ on the server.
 
 ### Security Considerations
 
-There is no limit on the cache size. It will continue to fill the available
+Items in the cache are expired and removed if not requested for a week, but
+there is no limit on the cache size. It will continue to fill the available
 disk and memory spaces until out of resources. It is hence currently
 possible to achieve a DoS-attack by generating lots of images.
 
