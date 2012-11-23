@@ -7,9 +7,9 @@ expressions on web pages and as a back end for a sort-of wysiwyg tinymce
 plugin math editor to make such images at a site at KTH, the Royal institute
 of technology, Stockholm, Sweden, http://www.kth.se/.
 
-Latest version of WebTex is available on github, http://github.com/KTHse/webtex
+Latest version of WebTex is available on github, http://github.com/KTHse/webtex.
 You may also be interested in the TinyMCE front end plugin available at
-http://github.com/KTHse/tinywebtex
+http://github.com/KTHse/tinywebtex.
 
 ## API
 
