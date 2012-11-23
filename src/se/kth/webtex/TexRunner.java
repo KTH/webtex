@@ -151,7 +151,7 @@ public class TexRunner {
         if (dvi.getStdErrIOException() != null)
             throw new ServletException("An IO error occuring when running 'dvi'.", dvi.getStdErrIOException());
         if (dvi.getExitCode() != 0)
-            throw new ServletException("Command 'dvi' failed during execution.");
+            throw new DviException("Command 'dvi' failed during execution.");
 
         for (String output : dvi.getStdOutStore()) {
         	Matcher matcher = DEPTH_PATTERN.matcher(output);

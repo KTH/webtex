@@ -101,17 +101,19 @@ public class WebTex extends HttpServlet {
      * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
      */
     protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String expression = getTeX(request);
-        if (isValid(expression)) {
-            int resolution = getResolution(request);
-            createImage(expression, resolution);
-            writeHeaders(response, expression, resolution);		
-        } else {
-            // Handle the case where there is no parameter.
-            // Probably use some sort of default error image.
-            System.out.println(request.getQueryString());
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
+    	try {
+	        String expression = getTeX(request);
+	        if (isValid(expression)) {
+	            int resolution = getResolution(request);
+	            createImage(expression, resolution);
+	            writeHeaders(response, expression, resolution);		
+	        } else {
+	            // Handle the case where there is no parameter.
+	            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	        }
+    	} catch (DviException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    	}
     }
 
 
@@ -119,18 +121,21 @@ public class WebTex extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String expression = getTeX(request);
-        if (isValid(expression)) {
-            int resolution = getResolution(request);
-            createImage(expression, resolution);
-            writeHeaders(response, expression, resolution);
-            writeImage(response, expression, resolution);
-        } else {
-            // Handle the case where there is no parameter.
-            // Probably use some sort of default error image.
-            System.out.println(request.getQueryString());
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
+    	try {
+	        String expression = getTeX(request);
+	        if (isValid(expression)) {
+	            int resolution = getResolution(request);
+	            createImage(expression, resolution);
+	            writeHeaders(response, expression, resolution);
+	            writeImage(response, expression, resolution);
+	        } else {
+	            // Handle the case where there is no parameter.
+	            // Could possibly use some sort of default error image.
+	            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	        }
+		} catch (DviException e) {
+	        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		}
     }
 
     private boolean isValid(String expression) {
