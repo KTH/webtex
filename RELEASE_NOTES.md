@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.3.3
+
+* Return 400 rather than 500 and stack trace when dvipng returns error.
+
 ## WebTex 1.3.2
 
 * Enable amssymb package to get mathbb et al.
