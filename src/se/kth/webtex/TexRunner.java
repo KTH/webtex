@@ -66,8 +66,12 @@ public class TexRunner {
         try {
             createTexFile(fileName, expression);
             String output = runTex(fileName);
-            int depth = runDvi(fileName, resolution);
-            cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
+            if (output != null) {
+                cache.put(expression, resolution, 0, null, output);
+            } else {
+	            int depth = runDvi(fileName, resolution);
+	            cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
+            }
         } catch (IOException e) {
             throw new ServletException("An error occuring when running 'tex'.", e);
         } catch (InterruptedException e) {
@@ -101,7 +105,9 @@ public class TexRunner {
         texFile.println("\\usepackage{amssymb, mathtools}");
         texFile.println("\\usepackage[displaymath,active,textmath,tightpage]{preview}");
         texFile.println("\\begin{document}");
-        texFile.println("\\(" + expression + "\\)");
+        texFile.println("\\(");
+        texFile.println(expression);
+        texFile.println("\\)");
         texFile.println("\\end{document}");
         texFile.close();
     }
