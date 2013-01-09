@@ -180,28 +180,36 @@ public class WebTex extends HttpServlet {
         File file = data.getFile();
         String logMessage = data.getLogMessage();
 
+        response.addHeader("X-MathImage-tex", encodeURIComponent(expression));
+
         if (logMessage == null) {
             response.addHeader("X-MathImage-log", "OK");
         } else {
             response.addHeader("X-MathImage-log", encodeURIComponent(logMessage));
         }
 
-        if (file == null) {
-            return;
-        }
-
-        response.addHeader("X-MathImage-tex", encodeURIComponent(expression));
-        response.addIntHeader("X-MathImage-depth", data.getDepth());
-        response.addIntHeader("X-MathImage-width", data.getWidth());
-        response.addIntHeader("X-MathImage-height", data.getHeight());
         response.addHeader("Cache-Control", "public, max-age=" + EXPIRES_AFTER);
         response.setContentType("image/png");
-        response.setContentLength((int)file.length());
+
+        if (file == null) {
+            response.addIntHeader("X-MathImage-depth", 0);
+            response.addIntHeader("X-MathImage-width", 0);
+            response.addIntHeader("X-MathImage-height", 0);
+            response.setContentLength(0);
+        } else {
+	        response.addIntHeader("X-MathImage-depth", data.getDepth());
+	        response.addIntHeader("X-MathImage-width", data.getWidth());
+	        response.addIntHeader("X-MathImage-height", data.getHeight());
+	        response.setContentLength((int)file.length());
+        }
     }
 
     private void writeImage(HttpServletResponse response, String expression, int resolution) throws ServletException, IOException {
         File file = cache.get(expression, resolution).getFile();
-
+        if (file == null) {
+        	return;
+        }
+        
         InputStream fileContents;
         fileContents = new FileInputStream(file);
         ServletOutputStream outputStream = response.getOutputStream();

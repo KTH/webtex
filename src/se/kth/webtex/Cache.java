@@ -21,7 +21,6 @@ package se.kth.webtex;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
@@ -167,20 +166,21 @@ public class Cache implements Runnable {
     public synchronized void put(String key, int resolution, int depth, File file, String logMessage) {
     	int width = 0;
     	int height = 0;
+    	File cacheFile = null;
 
     	try {
 			BufferedImage image = ImageIO.read(file);
 			width = image.getWidth();
 			height = image.getHeight();
 			image.flush();
-		} catch (IOException e) {}
+			cacheFile = fileForKey(key, resolution);
+	        file.renameTo(cacheFile);
+	        diskSize += cacheFile.length();
+		} catch (Exception e) {}
 
-		File cacheFile = fileForKey(key, resolution);
-        file.renameTo(cacheFile);
         cache.put(new CacheKey(key, resolution), 
     		new CacheData(depth, cacheFile, width, height, logMessage));
         additions++;
-        diskSize += cacheFile.length();
     }
 
     private File fileForKey(String key, int resolution) {
@@ -232,9 +232,11 @@ public class Cache implements Runnable {
     private synchronized void remove(String key, int resolution) {
         File cacheFile = get(key, resolution).getFile();
         cache.remove(new CacheKey(key, resolution));
-        diskSize -= cacheFile.length();
         expired++;
-        cacheFile.delete();
+        if (cacheFile != null) {
+	        diskSize -= cacheFile.length();
+	        cacheFile.delete();
+        }
     }
 
     /**
