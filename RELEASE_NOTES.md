@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.3.4
+
+* Halt on error to avoid looping LaTeX-processes on some input.
+
 ## WebTex 1.3.3
 
 * Return 400 rather than 500 and stack trace when dvipng returns error.
