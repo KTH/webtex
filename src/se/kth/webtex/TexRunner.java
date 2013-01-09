@@ -48,7 +48,7 @@ public class TexRunner {
     public static String IMAGE_SUFFIX = ".png";
 
     private static String DVI_COMMAND = "dvipng -T tight --depth -bg Transparent -D %s -o %s %s";
-    private static String TEX_COMMAND = "latex -interaction nonstopmode -no-shell-escape -output-comment '' -output-directory %s %s";
+    private static String TEX_COMMAND = "latex -halt-on-error -interaction nonstopmode -no-shell-escape -output-comment '' -output-directory %s %s";
     private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 
     private static final Pattern DEPTH_PATTERN = Pattern.compile(".*depth=(-?[0-9]+).*");
