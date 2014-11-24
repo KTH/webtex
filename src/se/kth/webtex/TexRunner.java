@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,9 +74,9 @@ public class TexRunner {
                 cache.put(expression, resolution, 0, null, output);
             }
         } catch (IOException e) {
-            throw new ServletException("Error when running 'tex'.", e);
+            throw new ServletException("An error occuring when running 'tex'.", e);
         } catch (InterruptedException e) {
-            throw new ServletException("Error when running 'tex'.", e);
+            throw new ServletException("An error occuring when running 'tex'.", e);
         } finally {
             removeTemporaryFiles(fileName);
         }
@@ -125,14 +126,21 @@ public class TexRunner {
     }
 
     private String getErrorMessage(SystemCommandHandler tex) throws IOException {
-        String output = "";
+        boolean errorMessage = false;
+        Iterator<String> stdOutIterator = tex.getStdOutStore().listIterator();
 
-        for (String line : tex.getStdOutStore()) {
+        // Get the first error line and the line succeeding it, if any.
+        while (stdOutIterator.hasNext()) {
+            String line = stdOutIterator.next();
             if (line.matches("!.*")) {
-                output += line + " ";
+                String output = line;
+                if (stdOutIterator.hasNext()) {
+                    output += " " + stdOutIterator.next();
+                }
+                return output.trim();
             }
         }
-        return output.trim();
+        return "";
     }
 
     private int runDvi(String fileName, int resolution) throws IOException, InterruptedException, ServletException {

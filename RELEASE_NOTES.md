@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.3.7
+
+* Get the first and consequent error line. That's where the good stuff is.
+
 ## WebTex 1.3.5
 
 * Get all lines of error into the tex error log output.
