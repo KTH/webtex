@@ -126,7 +126,6 @@ public class TexRunner {
     }
 
     private String getErrorMessage(SystemCommandHandler tex) throws IOException {
-        boolean errorMessage = false;
         Iterator<String> stdOutIterator = tex.getStdOutStore().listIterator();
 
         // Get the first error line and the line succeeding it, if any.
