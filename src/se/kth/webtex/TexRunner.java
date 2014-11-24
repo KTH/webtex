@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,14 +129,16 @@ public class TexRunner {
     private String getErrorMessage(SystemCommandHandler tex) throws IOException {
         String output = null;
         boolean errorMessage = false;
+        Iterator<String> stdOutIterator = tex.getStdOutStore().listIterator();
 
-        for (String line : tex.getStdOutStore()) {
+        while (stdOutIterator.hasNext()) {
+            String line = stdOutIterator.next();
             if (line.matches("!.*")) {
-                output = line + " ";
-                errorMessage = true;
-            } else if (errorMessage) {
-                output += line;
-                errorMessage = false;
+                output = line;
+                if (stdOutIterator.hasNext()) {
+                    output += " " + stdOutIterator.next();
+                }
+                break;
             }
         }
         return output;
