@@ -66,16 +66,16 @@ public class TexRunner {
         try {
             createTexFile(fileName, expression);
             String output = runTex(fileName);
-            if (output != null) {
-                cache.put(expression, resolution, 0, null, output);
+            if (output.isEmpty()) {
+                int depth = runDvi(fileName, resolution);
+                cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), null);
             } else {
-	            int depth = runDvi(fileName, resolution);
-	            cache.put(expression, resolution, depth, new File(fileName + IMAGE_SUFFIX), output);
+                cache.put(expression, resolution, 0, null, output);
             }
         } catch (IOException e) {
-            throw new ServletException("An error occuring when running 'tex'.", e);
+            throw new ServletException("Error when running 'tex'.", e);
         } catch (InterruptedException e) {
-            throw new ServletException("An error occuring when running 'tex'.", e);
+            throw new ServletException("Error when running 'tex'.", e);
         } finally {
             removeTemporaryFiles(fileName);
         }
@@ -113,32 +113,26 @@ public class TexRunner {
     }
 
     private String runTex(String fileName) throws IOException, InterruptedException {
-        String output = null;
         String command = String.format(TEX_COMMAND, dir, fileName + ".tex");
         SystemCommandHandler tex = new SystemCommandHandler(command.split(" "));
         tex.setDirectory(dir);
         tex.enableStdOutStore();
         tex.executeAndWait();
         if (tex.getExitCode() != 0) {
-            output = getErrorMessage(tex);
+            return getErrorMessage(tex);
         }
-        return output;
+        return "";
     }
 
     private String getErrorMessage(SystemCommandHandler tex) throws IOException {
-        String output = null;
-        boolean errorMessage = false;
+        String output = "";
 
         for (String line : tex.getStdOutStore()) {
             if (line.matches("!.*")) {
-                output = line + " ";
-                errorMessage = true;
-            } else if (errorMessage) {
-                output += line;
-                errorMessage = false;
+                output += line + " ";
             }
         }
-        return output;
+        return output.trim();
     }
 
     private int runDvi(String fileName, int resolution) throws IOException, InterruptedException, ServletException {
