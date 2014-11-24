@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.3.5
+
+* Get all lines of error into the tex error log output.
+
 ## WebTex 1.3.4
 
 * Halt on error to avoid looping LaTeX-processes on some input.

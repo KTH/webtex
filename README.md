@@ -197,9 +197,8 @@ at KTH, Kungliga tekniska högskolan, http://www.kth.se/.
 ## License and acknowledgements
 
 The WebTex source is released under GPLv3, see COPYING.txt. The distribution
-also contains a library, infosysutil.jar the source for which currently
-is not available as free software, but you are free to use it as it is. Source
-can be provided on demand.
+also contains a library, infosysutil.jar the source for which is available in
+a separate repository https://github.com/KTHse/infosysutil
 
 The WebTex service is inspired by and to some extent based on the Mathtran 
 service, http://www.mathtran.org/, the source for which is available as 
