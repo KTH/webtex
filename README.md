@@ -111,6 +111,9 @@ This requires, e.g, at least the texlive-latex, dvipng and tomcat6 packages
 to be installed on RHEL6. WebTex uses the mathtools package from LaTeX which
 is included in most LaTeX distributions.
 
+As another example, on Ubuntu 14.04.1 you need at least:
+`apt-get install texlive texlive-latex-extra texlive-math-extra dvipng`
+
 ### Install the standalone document class
 
 WebTex also requires the standalone package which relatively recently was 
