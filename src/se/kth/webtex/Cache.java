@@ -9,12 +9,12 @@ package se.kth.webtex;
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
-  
+
   WebTex is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with WebTex.  If not, see <http://www.gnu.org/licenses/>
  */
@@ -68,11 +68,11 @@ public class Cache implements Runnable {
     public long getExpired() {
         return expired;
     }
-    
+
     public long getDiskSize() {
         return diskSize;
     }
-    
+
     public long getUptime() {
         return System.currentTimeMillis() - startTime.getTimeInMillis();
     }
@@ -93,7 +93,7 @@ public class Cache implements Runnable {
         }
     }
 
-    
+
     private void touch(CacheKey key) {
         CacheData data = cache.get(key);
         data.timestamp = new Date();
@@ -105,10 +105,10 @@ public class Cache implements Runnable {
      * @return true if an entry exists for the key - resolution combination.
      */
     public boolean contains(String key, int resolution) {
-    	CacheData data = get(key, resolution);
-    	if (data == null) {
-    		return false;
-    	}
+        CacheData data = get(key, resolution);
+        if (data == null) {
+            return false;
+        }
         File file = data.getFile();		
         return (file != null) && file.exists();
     }
@@ -116,30 +116,30 @@ public class Cache implements Runnable {
     @Override
     public void run() {
         try {
-        	while (! Thread.currentThread().isInterrupted()) {
-	            for (CacheKey key : cache.keySet()) {
-	            	if (Thread.currentThread().isInterrupted()) {
-	            		return;
-	            	}
-	            	
-	            	Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
-	                if (timestamp(key.key, key.resolution).before(bestAfter)) {
-	                    remove(key.key, key.resolution);
-	                }
+            while (! Thread.currentThread().isInterrupted()) {
+                for (CacheKey key : cache.keySet()) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        return;
+                    }
+
+                    Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
+                    if (timestamp(key.key, key.resolution).before(bestAfter)) {
+                        remove(key.key, key.resolution);
+                    }
                     Thread.sleep(TIME_BETWEEN_EVICTIONS);
-	            }
-	            Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
-	        }
+                }
+                Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
+            }
         } catch (InterruptedException e) {}
     }
-    
+
     public void destroy() {
-    	try {
-        	cachePurger.interrupt();
-			cachePurger.wait();
-		} catch (InterruptedException e) {}
+        try {
+            cachePurger.interrupt();
+            cachePurger.wait();
+        } catch (InterruptedException e) {}
     }
-    
+
     /**
      * @param key
      * @param resolution
@@ -162,22 +162,22 @@ public class Cache implements Runnable {
      * @param logMessage
      */
     public synchronized void put(String key, int resolution, int depth, File file, String logMessage) {
-    	int width = 0;
-    	int height = 0;
-    	File cacheFile = null;
+        int width = 0;
+        int height = 0;
+        File cacheFile = null;
 
-    	try {
-			BufferedImage image = ImageIO.read(file);
-			width = image.getWidth();
-			height = image.getHeight();
-			image.flush();
-			cacheFile = fileForKey(key, resolution);
-	        file.renameTo(cacheFile);
-	        diskSize += cacheFile.length();
-		} catch (Exception e) {}
+        try {
+            BufferedImage image = ImageIO.read(file);
+            width = image.getWidth();
+            height = image.getHeight();
+            image.flush();
+            cacheFile = fileForKey(key, resolution);
+            file.renameTo(cacheFile);
+            diskSize += cacheFile.length();
+        } catch (Exception e) {}
 
         cache.put(new CacheKey(key, resolution), 
-    		new CacheData(depth, cacheFile, width, height, logMessage));
+                new CacheData(depth, cacheFile, width, height, logMessage));
         additions++;
     }
 
@@ -232,8 +232,8 @@ public class Cache implements Runnable {
         cache.remove(new CacheKey(key, resolution));
         expired++;
         if (cacheFile != null) {
-	        diskSize -= cacheFile.length();
-	        cacheFile.delete();
+            diskSize -= cacheFile.length();
+            cacheFile.delete();
         }
     }
 
@@ -287,28 +287,28 @@ public class Cache implements Runnable {
             this.timestamp = new Date();
         }
 
-		public int getDepth() {
-			return depth;
-		}
-        
-		public int getWidth() {
-			return width;
-		}
+        public int getDepth() {
+            return depth;
+        }
 
-		public int getHeight() {
-			return height;
-		}
+        public int getWidth() {
+            return width;
+        }
 
-		public File getFile() {
-			return file;
-		}
+        public int getHeight() {
+            return height;
+        }
 
-		public String getLogMessage() {
-			return logMessage;
-		}
+        public File getFile() {
+            return file;
+        }
 
-		public Date getTimestamp() {
-			return timestamp;
-		}
+        public String getLogMessage() {
+            return logMessage;
+        }
+
+        public Date getTimestamp() {
+            return timestamp;
+        }
     }
 }

@@ -9,12 +9,12 @@ package se.kth.webtex;
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
-  
+
   WebTex is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with WebTex.  If not, see <http://www.gnu.org/licenses/>
  */
@@ -70,13 +70,13 @@ public class WebTex extends HttpServlet {
         texRunner = new TexRunner(root);
     }
 
-    
+
     @Override
     public void destroy() {
-    	cache.destroy();
-	}
+        cache.destroy();
+    }
 
-    
+
     /**
      * @see HttpServlet#getLastModified(HttpServletRequest)
      */
@@ -101,19 +101,19 @@ public class WebTex extends HttpServlet {
      * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
      */
     protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	try {
-	        String expression = getTeX(request);
-	        if (isValid(expression)) {
-	            int resolution = getResolution(request);
-	            createImage(expression, resolution);
-	            writeHeaders(response, expression, resolution);		
-	        } else {
-	            // Handle the case where there is no parameter.
-	            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	        }
-    	} catch (DviException e) {
+        try {
+            String expression = getTeX(request);
+            if (isValid(expression)) {
+                int resolution = getResolution(request);
+                createImage(expression, resolution);
+                writeHeaders(response, expression, resolution);		
+            } else {
+                // Handle the case where there is no parameter.
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (DviException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-    	}
+        }
     }
 
 
@@ -121,21 +121,21 @@ public class WebTex extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	try {
-	        String expression = getTeX(request);
-	        if (isValid(expression)) {
-	            int resolution = getResolution(request);
-	            createImage(expression, resolution);
-	            writeHeaders(response, expression, resolution);
-	            writeImage(response, expression, resolution);
-	        } else {
-	            // Handle the case where there is no parameter.
-	            // Could possibly use some sort of default error image.
-	            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	        }
-		} catch (DviException e) {
-	        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		}
+        try {
+            String expression = getTeX(request);
+            if (isValid(expression)) {
+                int resolution = getResolution(request);
+                createImage(expression, resolution);
+                writeHeaders(response, expression, resolution);
+                writeImage(response, expression, resolution);
+            } else {
+                // Handle the case where there is no parameter.
+                // Could possibly use some sort of default error image.
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } catch (DviException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     private boolean isValid(String expression) {
@@ -149,7 +149,7 @@ public class WebTex extends HttpServlet {
 
 
     private String getTeX(HttpServletRequest request) {
-    	return request.getParameter(PARAMETER_TEX);
+        return request.getParameter(PARAMETER_TEX);
     }
 
 
@@ -164,19 +164,19 @@ public class WebTex extends HttpServlet {
     }
 
     private String encodeURIComponent (String unencoded) {
-    	try {
-    		String escaped = unencoded.replace("\\",  "\\\\")
-    				.replaceAll("(\\r|\\n)+", " ")
-    				.replace("'", "\\'");
-    		return (String) engine.eval("encodeURIComponent('" + escaped + "')");
-    	} catch (ScriptException e) {
-    		System.out.println("Error encoding string: '" + unencoded + "': " + e.getMessage());
-    		return "";
-    	}
+        try {
+            String escaped = unencoded.replace("\\",  "\\\\")
+                    .replaceAll("(\\r|\\n)+", " ")
+                    .replace("'", "\\'");
+            return (String) engine.eval("encodeURIComponent('" + escaped + "')");
+        } catch (ScriptException e) {
+            System.out.println("Error encoding string: '" + unencoded + "': " + e.getMessage());
+            return "";
+        }
     }
-    
+
     private void writeHeaders(HttpServletResponse response, String expression, int resolution) {
-    	CacheData data = cache.get(expression, resolution);
+        CacheData data = cache.get(expression, resolution);
         File file = data.getFile();
         String logMessage = data.getLogMessage();
 
@@ -197,19 +197,19 @@ public class WebTex extends HttpServlet {
             response.addIntHeader("X-MathImage-height", 0);
             response.setContentLength(0);
         } else {
-	        response.addIntHeader("X-MathImage-depth", data.getDepth());
-	        response.addIntHeader("X-MathImage-width", data.getWidth());
-	        response.addIntHeader("X-MathImage-height", data.getHeight());
-	        response.setContentLength((int)file.length());
+            response.addIntHeader("X-MathImage-depth", data.getDepth());
+            response.addIntHeader("X-MathImage-width", data.getWidth());
+            response.addIntHeader("X-MathImage-height", data.getHeight());
+            response.setContentLength((int)file.length());
         }
     }
 
     private void writeImage(HttpServletResponse response, String expression, int resolution) throws ServletException, IOException {
         File file = cache.get(expression, resolution).getFile();
         if (file == null) {
-        	return;
+            return;
         }
-        
+
         InputStream fileContents;
         fileContents = new FileInputStream(file);
         ServletOutputStream outputStream = response.getOutputStream();

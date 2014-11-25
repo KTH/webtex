@@ -9,12 +9,12 @@ package se.kth.webtex;
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
-  
+
   WebTex is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with WebTex.  If not, see <http://www.gnu.org/licenses/>
  */
@@ -53,7 +53,7 @@ public class TexRunner {
     private static int[] RESOLUTIONS = {100, 119, 141, 168, 200, 238, 283, 336, 400, 476, 566};
 
     private static final Pattern DEPTH_PATTERN = Pattern.compile(".*depth=(-?[0-9]+).*");
-    
+
     private File dir;
 
     public TexRunner(String servletPath) {
@@ -161,12 +161,12 @@ public class TexRunner {
             throw new DviException("Command 'dvi' failed during execution.");
 
         for (String output : dvi.getStdOutStore()) {
-        	Matcher matcher = DEPTH_PATTERN.matcher(output);
-        	if (matcher.matches()) {
-	        	String depthStr = matcher.group(1);
+            Matcher matcher = DEPTH_PATTERN.matcher(output);
+            if (matcher.matches()) {
+                String depthStr = matcher.group(1);
                 depth = Integer.parseInt(depthStr);
                 break;
-        	}
+            }
         }
 
         return depth;
