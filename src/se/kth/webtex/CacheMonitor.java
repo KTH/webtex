@@ -45,9 +45,9 @@ Callable<Status> {
 	    cache.getDiskSize() / 1024,
 	    uptime()));
     }
-    
+
     private String uptime() {
-        int uptimeInSeconds = (int) cache.getUptime() / 1000;
+        long uptimeInSeconds = cache.getUptime() / 1000;
         
         String res = "";
         if (uptimeInSeconds / SECONDS_PER_DAY > 0) {

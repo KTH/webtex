@@ -74,9 +74,7 @@ public class Cache implements Runnable {
     }
     
     public long getUptime() {
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.SECOND, (int) -startTime.getTimeInMillis()/1000);
-        return now.getTimeInMillis();
+        return System.currentTimeMillis() - startTime.getTimeInMillis();
     }
 
 
