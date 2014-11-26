@@ -221,9 +221,9 @@ public class WebTex extends HttpServlet {
         fileContents.close();
     }
 
-    private void createImage(String expression, Integer depth) throws IOException, ServletException {
-        if (! cache.contains(expression, depth)) {
-            texRunner.create(expression, depth, cache);
+    private void createImage(String expression, Integer resolution) throws IOException, ServletException {
+        if (! cache.contains(expression, resolution)) {
+            texRunner.create(expression, resolution, cache);
         }
     }
 }
