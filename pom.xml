@@ -101,6 +101,28 @@
 
     <plugins>
       <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>yuicompressor-maven-plugin</artifactId>
+        <version>1.5.1</version>
+        <executions>
+          <execution>
+            <id>minify</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>compress</goal>
+            </goals>
+          </execution>
+        </executions>
+
+        <configuration>
+          <nosuffix>true</nosuffix>
+          <excludes>
+            <exclude>**/jquery.js</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warName>webtex</warName>
@@ -191,8 +213,7 @@
           <image>kthse/${project.artifactId}</image>
           <newName>kthse/${project.artifactId}</newName>
           <useConfigFile>true</useConfigFile>
-<!-- This is a heavy build, cache at lesta for now. -->
-<!--           <noCache>true</noCache> -->
+          <noCache>true</noCache>
           <pullOnBuild>true</pullOnBuild>
           <imageTags>
             <imageTag>latest</imageTag>
