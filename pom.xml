@@ -191,7 +191,8 @@
           <image>kthse/${project.artifactId}</image>
           <newName>kthse/${project.artifactId}</newName>
           <useConfigFile>true</useConfigFile>
-          <noCache>true</noCache>
+<!-- This is a heavy build, cache at lesta for now. -->
+<!--           <noCache>true</noCache> -->
           <pullOnBuild>true</pullOnBuild>
           <imageTags>
             <imageTag>latest</imageTag>
