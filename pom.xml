@@ -41,60 +41,9 @@
     </dependency>
   </dependencies>
 
-  <profiles>
-    <profile>
-      <id>ref</id>
-      <activation>
-        <property>
-          <name>ref</name>
-        </property>
-      </activation>
-      <properties>
-        <build>prod</build>
-      </properties>
-<!--
-      <build>
-        <filters>
-          <filter>ref.properties</filter>
-        </filters>
-      </build>
--->
-    </profile>
-
-    <profile>
-      <id>prod</id>
-      <activation>
-        <property>
-          <name>prod</name>
-        </property>
-      </activation>
-      <properties>
-        <build>prod</build>
-      </properties>
-      <build>
-        <filters>
-          <filter>prod.properties</filter>
-        </filters>
-      </build>
-    </profile>
-
-    <profile>
-      <id>dev</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <build>dev</build>
-      </properties>
-<!--
-      <build>
-        <filters>
-          <filter>dev.properties</filter>
-        </filters>
-      </build>
--->
-    </profile>
-  </profiles>
+  <properties>
+    <build>dev</build>
+  </properties>
 
   <build>
     <finalName>webtex</finalName>
@@ -213,7 +162,7 @@
           <image>kthse/${project.artifactId}</image>
           <newName>kthse/${project.artifactId}</newName>
           <useConfigFile>true</useConfigFile>
-          <noCache>true</noCache>
+<!--           <noCache>true</noCache> -->
           <pullOnBuild>true</pullOnBuild>
           <imageTags>
             <imageTag>latest</imageTag>
