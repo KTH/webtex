@@ -1,11 +1,6 @@
 # Compiled package
-webtex.war
-WebContent/WEB-INF/classes
+/.settings
+/.classpath
+/pom.xml.versionsBackup
+/target/
 *~
-/build
-webtex-*.zip
-WebContent/css/master.css
-WebContent/css/webtex.css
-WebContent/js/textips.js
-WebContent/js/webtex.js
-.settings

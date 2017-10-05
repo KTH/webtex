@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.4.0
+
+* Dockerized.
+
 ## WebTex 1.3.7
 
 * Get the first and consequent error line. That's where the good stuff is.
