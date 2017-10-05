@@ -9,3 +9,5 @@ WebContent/css/webtex.css
 WebContent/js/textips.js
 WebContent/js/webtex.js
 .settings
+.classpath
+/target/
