@@ -14,10 +14,10 @@ at http://github.com/KTHse/tinywebtex.
 
 ## API
 
-Once the WAR is deployed, see Installation below, there is a fully working
-demo page available at the root of the context which also contains brief 
-documentation of the two available interfaces. The interfaces are made up 
-of the supplied JavaScript and the servlet interface.
+Once the application is started, see Installation below, there is a fully working
+demo page available at the root of the context (http://localhost:8080/webtex) 
+which also contains brief documentation of the two available interfaces.
+The interfaces are made up of the supplied JavaScript and the servlet interface.
 
 ### JavaScript
 
@@ -101,42 +101,13 @@ them as you wish, but you should be aware that they are there.
 
 ## Installation
 
-### Prerequisites
+The application is now containerized and pre-built binaries available on Docker hub.
+All you need to do to run it in Docker is:
 
-WebTeX needs a LaTeX installation. It also needs the dvipng software to
-create images from the TeX DVI output. Both the latex and dvipng 
-binaries must be executable using the system path of the servlet container.
+```docker run -p 8080:8080 kthse/webtex:latest```
 
-This requires, e.g, at least the texlive-latex, dvipng and tomcat6 packages 
-to be installed on RHEL6. WebTex uses the mathtools package from LaTeX which
-is included in most LaTeX distributions.
-
-As another example, on Ubuntu 14.04.1 you need at least:
-`apt-get install texlive texlive-latex-extra texlive-math-extra dvipng`
-
-### Install the standalone document class
-
-WebTex also requires the standalone package which relatively recently was 
-included into TeXLive and is not yet included in common texlive distributions
-but can be easily be installed separately.
-
-Download the standalone document class here:
-http://mirrors.ctan.org/install/macros/latex/contrib/standalone.tds.zip
-
-Unzip into the tex installation source, e.g. often /usr/share/texmf on Linux and
-run `sudo texhash` to update the TeX index.
-
-### Deployment
-
-Apart from the prerequisites, installation should be the simple matter of 
-copying the WAR file to the application folder in the servlet container. 
-The created image files will be cached in a sub directory tmp. Redeploying 
-the application will expire the cache and cause all files to be regenerated
-on demand.
-
-The WAR file supports deployment in sub-contexts, it can hence be named 
-something like foo#bar.war in order to be reachable on the path foo/bar/
-on the server.
+The container is based on the tomcat/9 container with it's options for ports and
+configuration.
 
 ### Security Considerations
 
