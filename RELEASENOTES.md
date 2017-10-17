@@ -1,6 +1,11 @@
 Release notes
 -------------
 
+## WebTex 1.4.1
+
+* Bunyan log format.
+* Optional SSL support.
+
 ## WebTex 1.4.0
 
 * Dockerized.
