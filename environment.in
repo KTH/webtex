@@ -1,0 +1,4 @@
+# Optional SSL configuration
+#
+#SSLCERTIFICATE_FILE=/path/to/cert.p12
+#SSLCERTIFICATE_KEY=/path/to/file-containing-key-to-cert

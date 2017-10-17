@@ -99,21 +99,32 @@ is an implementation of a minimal web application monitoring scheme we use. Use
 them as you wish, but you should be aware that they are there. 
 
 
-## Installation
+## Running
 
-The application is now containerized and pre-built binaries available on Docker hub.
-All you need to do to run it in Docker is:
+This application is now containerized, start with:
+```docker run -p 8080:8080 --env-file environment kthse/webtex:latest```
 
-```docker run -p 8080:8080 kthse/webtex:latest```
+Where the file environment can be created using the skeleton environment.in in the Git repository.
 
 The container is based on the tomcat/9 container with it's options for ports and
 configuration.
+
+### SSL configuration
+
+SSL is optional, unless both SSL variables are given, the tomcat SSL endpoint on 8443
+will not be enabled.
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| SSL_CERTIFICATE_FILE | no |  | The path to a certificate PKCS12 keystore. |
+| SSL_CERTIFICATE_KEY | no |  | The path to a file containing the passphrase for the certificate. |
 
 ### Security Considerations
 
 Items in the cache are expired and removed if not requested for a week, but
 there is no limit on the cache size. It will continue to fill the available
 disk and memory spaces until out of resources. It is hence currently
+
 possible to achieve a DoS-attack by generating lots of images.
 
 It is thus recommended to run WebTex on a dedicated server. It is also 
@@ -124,7 +135,6 @@ and size it properly.
 A future version of WebTex may provide customizable max settings for 
 number of items and disk size of cache if necessary, but so far this 
 requirement has not been a high priority.
-
 
 ## Rationale and history
 
