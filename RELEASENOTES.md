@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.4.3
+
+* Smaller image.
+
 ## WebTex 1.4.2
 
 * Bunyan log format.
