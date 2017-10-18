@@ -6,9 +6,9 @@ ENV APP_CONTEXT  webtex.war
 #ENV SSLCERTIFICATE_FILE /path/to/cert.p12
 #ENV SSLCERTIFICATE_KEY  /path/to/file-containing-key-to-cert
 
-RUN apt-get update -q && apt-get install -qy \
-    texlive texlive-latex-extra texlive-math-extra dvipng \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    texlive texlive-latex-extra texlive-math-extra dvipng
 
 ADD run.sh /opt/local/bin/run.sh
 RUN chmod +x /opt/local/bin/run.sh; rm -rf /usr/local/tomcat/webapps/*
