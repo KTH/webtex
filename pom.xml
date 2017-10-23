@@ -69,7 +69,7 @@
         </executions>
 
         <configuration>
-          <nosuffix>true</nosuffix>
+<!--           <nosuffix>true</nosuffix> -->
           <excludes>
             <exclude>**/jquery.js</exclude>
           </excludes>
