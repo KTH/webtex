@@ -61,7 +61,7 @@
         <executions>
           <execution>
             <id>minify</id>
-            <phase>generate-sources</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>compress</goal>
             </goals>
@@ -73,6 +73,7 @@
           <excludes>
             <exclude>**/jquery.js</exclude>
           </excludes>
+          <webappDirectory>${project.build.directory}/min</webappDirectory>
         </configuration>
       </plugin>
 
@@ -96,20 +97,10 @@
                 <include>**/web.xml</include>
               </includes>
             </resource>
+            <resource>
+              <directory>${project.build.directory}/min</directory>
+            </resource>
           </webResources>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.8</version>
-        <configuration>
-          <projectNameTemplate>[artifactId]-[version]</projectNameTemplate>
-          <wtpmanifest>true</wtpmanifest>
-          <wtpapplicationxml>true</wtpapplicationxml>
-          <wtpversion>2.0</wtpversion>
-          <manifest>${basedir}/src/main/META-INF/MANIFEST.MF</manifest>
         </configuration>
       </plugin>
 
