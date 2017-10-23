@@ -1,5 +1,7 @@
 package se.kth.webtex;
 
+import java.time.Period;
+
 /*
   Copyright (C) 2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se
 
@@ -21,14 +23,16 @@ package se.kth.webtex;
 
 import java.util.concurrent.Callable;
 
+import org.joda.time.Duration;
+import org.joda.time.format.PeriodFormat;
+import org.joda.time.format.PeriodFormatter;
+
 import se.kth.sys.util.ApplicationMonitor;
 import se.kth.sys.util.ApplicationMonitor.Status;
 
 public class CacheMonitor extends ApplicationMonitor implements
 Callable<Status> {
-    private static final int SECONDS_PER_HOUR = 3600;
-    private static final int SECONDS_PER_MINUTE = 60;
-    private static final int SECONDS_PER_DAY = SECONDS_PER_HOUR * 24;
+    private static final PeriodFormatter formatter = PeriodFormat.wordBased();
     private Cache cache;
 
     public void setCache(Cache cache) {
@@ -43,19 +47,6 @@ Callable<Status> {
                 cache.getAdditions(),
                 cache.getExpired(),
                 cache.getDiskSize() / 1024,
-                uptime()));
-    }
-
-    private String uptime() {
-        long uptimeInSeconds = cache.getUptime() / 1000;
-
-        String res = "";
-        if (uptimeInSeconds / SECONDS_PER_DAY > 0) {
-            res += String.format("%d days, ", uptimeInSeconds / SECONDS_PER_DAY); 
-        }
-        return res += String.format("%02d:%02d:%02d",
-                (uptimeInSeconds % SECONDS_PER_DAY) / SECONDS_PER_HOUR,
-                (uptimeInSeconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE,
-                (uptimeInSeconds % SECONDS_PER_MINUTE));
+                formatter.print(new Duration(cache.getUptime()).toPeriod())));
     }
 }
