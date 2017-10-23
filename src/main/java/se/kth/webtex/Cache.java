@@ -1,7 +1,7 @@
 package se.kth.webtex;
 
 /*
-  Copyright (C) 2012 KTH, Kungliga tekniska hogskolan, http://www.kth.se
+  Copyright (C) 2017 KTH, Kungliga tekniska hogskolan, http://www.kth.se
 
   This file is part of WebTex.
 
