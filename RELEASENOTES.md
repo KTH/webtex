@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.5.2
+
+* Make CSS and JS compression work again.
+
 ## WebTex 1.5.1
 
 * Convert to a fixed size FIFO cache in order to avoid potential DDOS
