@@ -38,7 +38,7 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
         <img class="webtex" src="" alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n"/>
         <img class="webtex" src="" alt="tex:\sum_0^n 2^{-n}"/>
         <img class="webtex" src="" alt="tex:\sum_0^\infty x^n/n!"/>
-	<img class="webtex" src="" alt="tex:\sum_0^\infty (-1)^nx^n/n!"/>
+		<img class="webtex" src="" alt="tex:\sum_0^\infty (-1)^nx^n/n!"/>
         <img class="webtex" src="" alt="tex:\sum_0^\infty x^n/n"/>
       </p>
     </div>
@@ -96,6 +96,10 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       Note that you have to consider regular javascript cross site issues if you want to use this
       at some other domain since the script will fetch images in order to align them properly. 
       You should probably host your own webtex service at your site to avoid them.
+    </p>
+    <p>
+      There is an uncompressed version of the webtex.js script available from the same place as
+      webtex_src.js for debugging purposes.
     </p>
 
     <h3>Direct link to image generating service</h3>
