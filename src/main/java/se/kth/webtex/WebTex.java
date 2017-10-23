@@ -49,7 +49,6 @@ public class WebTex extends HttpServlet {
     private static int EXPIRES_AFTER = 7*24*60*60;
     private static final Pattern INVALID_PATTERNS = 
             Pattern.compile(".*(\\\\def|\\\\input|\\\\output|\\\\read|\\\\write|\\\\openin|\\\\openout|\\\\catcode|\\\\let).*");
-    private static final int CACHE_SIZE = 10000;
 
     private Cache cache;
     private TexRunner texRunner;
@@ -67,7 +66,7 @@ public class WebTex extends HttpServlet {
     public void init(ServletConfig config) {
         ServletContext context = config.getServletContext();
         String root = context.getRealPath("");
-        cache = Cache.initCache(context, root, CACHE_SIZE);
+        cache = Cache.initCache(context, root);
         texRunner = new TexRunner(root);
     }
 

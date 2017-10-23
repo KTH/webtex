@@ -40,7 +40,7 @@ public class Monitor extends HttpServlet {
         ServletContext context = config.getServletContext();
         String root = context.getRealPath("");
         this.cache = Cache.initCache(context, root);
-    }    
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
