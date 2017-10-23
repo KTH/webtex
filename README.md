@@ -174,11 +174,3 @@ free software under GPL at http://sourceforge.net/projects/mathtran/.
 
 There is not much left of the original code by now apart from some css,
 but the interfaces are much the same.
-
-A copy of yuicompressor is included to minify JavaScript and CSS.
-Copyright © 2012 Yahoo! Inc. All rights reserved.
-http://yuilibrary.com/license/
-
-A copy of servlet-api is included to build the servlet.
-Copyright 1999-2012 The Apache Software Foundation
-http://www.apache.org/licenses/LICENSE-2.0
