@@ -24,8 +24,6 @@ import java.io.File;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
