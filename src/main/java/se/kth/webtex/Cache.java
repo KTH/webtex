@@ -24,8 +24,6 @@ import java.io.File;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -37,6 +35,7 @@ import javax.servlet.ServletContext;
 public class Cache extends LinkedHashMap<Cache.CacheKey, Cache.CacheData> {
     private static final long serialVersionUID = 1L;
     private static final long startTime = System.currentTimeMillis();
+    private static final int CACHE_SIZE = 10000;
 
     private String dir;
 
@@ -44,15 +43,14 @@ public class Cache extends LinkedHashMap<Cache.CacheKey, Cache.CacheData> {
     private long additions = 0;
     private long diskSize = 0;
     private long expired = 0;
-    private int size = 1000;
+    private int size = CACHE_SIZE;
 
     // Hide default constructor.
     private Cache() {}
 
-    public static synchronized Cache initCache(ServletContext context, String dir, int size) {
+    public static synchronized Cache initCache(ServletContext context, String dir) {
         if (context.getAttribute("cache") == null) {
             Cache cache = new Cache(dir);
-            cache.setSize(size);
             context.setAttribute("cache", cache);
         }
         return (Cache) context.getAttribute("cache");
