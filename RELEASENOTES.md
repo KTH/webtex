@@ -1,6 +1,13 @@
 Release notes
 -------------
 
+## WebTex 1.5.0
+
+* Convert to a fixed size FIFO cache in order to avoid potential DDOS
+  situations when running in a common infrastructure. Cache size may
+  be configurable in a later release, currently it is not.
+* Minor fix in _about.
+
 ## WebTex 1.4.3
 
 * Smaller image.
