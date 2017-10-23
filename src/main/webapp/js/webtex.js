@@ -91,6 +91,6 @@ webtex = {
 };
 
 // Set the path to the service script relative.
-webtex.url = $('script[src]').last().attr('src').replace(/js\/webtex(_src)?\.js$/g, 'WebTex?');
+webtex.url = $('script[src]').last().attr('src').replace(/js\/webtex(-min)?\.js$/g, 'WebTex?');
 
 $(document).ready(webtex.init);

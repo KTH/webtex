@@ -11,11 +11,11 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Online translation of mathematical content</title>
-    <link rel="stylesheet" type="text/css" href="css/master.css" />
-    <link rel="stylesheet" type="text/css" href="css/webtex.css" />
+    <link rel="stylesheet" type="text/css" href="css/master-min.css" />
+    <link rel="stylesheet" type="text/css" href="css/webtex-min.css" />
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/webtex.js"></script>
-    <script type="text/javascript" src="js/textips.js"></script>
+    <script type="text/javascript" src="js/webtex-min.js"></script>
+    <script type="text/javascript" src="js/textips-min.js"></script>
   </head>
   <body>
     <h1>
@@ -32,28 +32,26 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
 
     <div class="textips">
       <p>
-	This is an example of TeX tips. Try clicking on one of the boxed
-	images below. The rendered image and the TeX log will appear below
-	the data entry form.<br />
+    This is an example of TeX tips. Try clicking on one of the boxed
+    images below. The rendered image and the TeX log will appear below
+    the data entry form.<br />
         <img class="webtex" src="" alt="tex:1 + 1/2 + 1/4 + \ldots + 1/2^n"/>
         <img class="webtex" src="" alt="tex:\sum_0^n 2^{-n}"/>
         <img class="webtex" src="" alt="tex:\sum_0^\infty x^n/n!"/>
-		<img class="webtex" src="" alt="tex:\sum_0^\infty (-1)^nx^n/n!"/>
+        <img class="webtex" src="" alt="tex:\sum_0^\infty (-1)^nx^n/n!"/>
         <img class="webtex" src="" alt="tex:\sum_0^\infty x^n/n"/>
       </p>
     </div>
     <form id="form" action="">
-    	<p>
-    		<input id="tex_src" type="text" size="50" />
-			<input id="button" type="button" value="Try it!" />
-		</p>
-     	<p class="output">
-     		<span id="output">
-	  		   	Output area.
-  		   	</span>
-   		</p>
-		<pre class="log" id="log">Log area.</pre>
-	</form>
+      <p>
+        <input id="tex_src" type="text" size="50" />
+        <input id="button" type="button" value="Try it!" />
+      </p>
+      <p class="output">
+        <span id="output">Output area.</span>
+      </p>
+      <pre class="log" id="log">Log area.</pre>
+    </form>
 
     <h2>Adding math to your webpage</h2>
     <p>
@@ -76,9 +74,9 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <pre>
       &lt;head&gt;
       ...
-      &lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex.css"/&gt;
+      &lt;link rel="stylesheet" type="text/css" href="<%=request.getRequestURL()%>css/webtex-min.css"/&gt;
       &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/jquery.js"/&gt;
-      &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex.js"/&gt;
+      &lt;script type="text/javascript" src="<%=request.getRequestURL()%>js/webtex-min.js"/&gt;
       ...
       &lt;/head&gt;
     </pre>
@@ -98,8 +96,8 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
       You should probably host your own webtex service at your site to avoid them.
     </p>
     <p>
-      There is an uncompressed version of the webtex.js script available from the same place as
-      webtex_src.js for debugging purposes.
+      There is an uncompressed version of the webtex-min.js script available as webtex-min.js
+      from the same place but this is mostly unnecessary with modern browsers.
     </p>
 
     <h3>Direct link to image generating service</h3>
@@ -127,8 +125,8 @@ ResourceBundle resources = ResourceBundle.getBundle("webtex");
     <dl>
       <dt><code>X-MathImage-tex</code></dt>
       <dd>
-      	Contains the TeX expression used to generate the image, encoded for
-      	decoding with JavaScript decodeURIComponent.
+        Contains the TeX expression used to generate the image, encoded for
+        decoding with JavaScript decodeURIComponent.
       </dd>
       <dt><code>X-MathImage-depth</code></dt>
       <dd>
