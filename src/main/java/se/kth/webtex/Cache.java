@@ -21,11 +21,11 @@ package se.kth.webtex;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -34,31 +34,57 @@ import javax.servlet.ServletContext;
  * Cache meta data and keep track of the generated image files. The cache
  * has a built-in thread that expires data after one week.
  */
-public class Cache implements Runnable {
-    // One week expiration time in milliseconds on cached items.
-    private static final long EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
-    private static final long TIME_BETWEEN_EVICTIONS = 500;
-    private static final long TIME_BETWEEN_EVICTIONRUNS = TimeUnit.SECONDS.toMillis(1);
+public class Cache extends LinkedHashMap<Cache.CacheKey, Cache.CacheData> {
+    private static final long serialVersionUID = 1L;
+    private static final long startTime = System.currentTimeMillis();
 
     private String dir;
-    private ConcurrentMap<CacheKey, CacheData> cache; 
-    private Thread cachePurger;
 
     // Performance counters
     private long additions = 0;
     private long diskSize = 0;
     private long expired = 0;
-    private Calendar startTime = Calendar.getInstance();
+    private int size = 1000;
 
-    public static synchronized Cache initCache(ServletContext context, String dir) {
+    // Hide default constructor.
+    private Cache() {}
+
+    public static synchronized Cache initCache(ServletContext context, String dir, int size) {
         if (context.getAttribute("cache") == null) {
-            context.setAttribute("cache", new Cache(dir));
+            Cache cache = new Cache(dir);
+            cache.setSize(size);
+            context.setAttribute("cache", cache);
         }
         return (Cache) context.getAttribute("cache");
     }
 
-    public int size() {
-        return cache.size();
+    /**
+     * {@inheritDoc} 
+     */
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<Cache.CacheKey, Cache.CacheData> eldest) {
+        if (size() > size) {
+            remove(eldest.getKey());
+        }
+        return false;
+    }
+
+    /**
+     * Set the size of the FIFO cache.
+     * 
+     * @param size the size of the cache.
+     */
+    protected void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * Get the current size of the FIFO cache.
+     * 
+     * @return the current size.
+     */
+    protected int getSize() {
+        return size;
     }
 
     public long getAdditions() {
@@ -74,7 +100,7 @@ public class Cache implements Runnable {
     }
 
     public long getUptime() {
-        return System.currentTimeMillis() - startTime.getTimeInMillis();
+        return System.currentTimeMillis() - startTime;
     }
 
 
@@ -85,18 +111,7 @@ public class Cache implements Runnable {
      */
     protected CacheData get(String key, int resolution) {
         CacheKey cacheKey = new CacheKey(key, resolution);
-        if (cache.containsKey(cacheKey)) {
-            touch(cacheKey);
-            return cache.get(cacheKey);
-        } else {
-            return null;
-        }
-    }
-
-
-    private void touch(CacheKey key) {
-        CacheData data = cache.get(key);
-        data.timestamp = new Date();
+        return get(cacheKey);
     }
 
     /**
@@ -109,49 +124,8 @@ public class Cache implements Runnable {
         if (data == null) {
             return false;
         }
-        File file = data.getFile();		
+        File file = data.getFile();
         return (file != null) && file.exists();
-    }
-
-    @Override
-    public void run() {
-        try {
-            while (! Thread.currentThread().isInterrupted()) {
-                for (CacheKey key : cache.keySet()) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        return;
-                    }
-
-                    Date bestAfter = new Date(new Date().getTime() - EXPIRATION_TIME);
-                    if (timestamp(key.key, key.resolution).before(bestAfter)) {
-                        remove(key.key, key.resolution);
-                    }
-                    Thread.sleep(TIME_BETWEEN_EVICTIONS);
-                }
-                Thread.sleep(TIME_BETWEEN_EVICTIONRUNS);
-            }
-        } catch (InterruptedException e) {}
-    }
-
-    public void destroy() {
-        try {
-            cachePurger.interrupt();
-            cachePurger.wait();
-        } catch (InterruptedException e) {}
-    }
-
-    /**
-     * @param key
-     * @param resolution
-     * @return
-     */
-    private Date timestamp(String key, int resolution) {
-        CacheKey cacheKey = new CacheKey(key, resolution);
-        if (cache.containsKey(cacheKey)) {
-            return cache.get(cacheKey).timestamp;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -176,8 +150,7 @@ public class Cache implements Runnable {
             diskSize += cacheFile.length();
         } catch (Exception e) {}
 
-        cache.put(new CacheKey(key, resolution), 
-                new CacheData(depth, cacheFile, width, height, logMessage));
+        put(new CacheKey(key, resolution), new CacheData(depth, cacheFile, width, height, logMessage));
         additions++;
     }
 
@@ -199,48 +172,39 @@ public class Cache implements Runnable {
      * @param root 
      */
     private Cache(String root) {
-        setCache(root + File.separator + "tmp" + File.separator + "cache");
-        cache = new ConcurrentHashMap<CacheKey, CacheData>();
-        cachePurger = new Thread(this);
-        cachePurger.setDaemon(true);
-        cachePurger.setName("Cache Purger");
-        cachePurger.start();
+        createCache(root + File.separator + "tmp" + File.separator + "cache");
     }
 
-    private Cache() {}
-
-    private synchronized void setCache(String dir) {
-        new File(dir).mkdirs();
-        emptyCache(dir);
-        this.dir = dir;
-    }
-
-    private void emptyCache(String dir) {
+    private synchronized void createCache(String dir) {
         File directory = new File(dir);
+        directory.mkdirs();
         for (File file : directory.listFiles()) {
             file.delete();
         }
+        this.dir = dir;
     }
 
-    /**
-     * Remove an entry from the cache.
-     * @param key
-     * @param resolution
-     */
-    private synchronized void remove(String key, int resolution) {
-        File cacheFile = get(key, resolution).getFile();
-        cache.remove(new CacheKey(key, resolution));
+    public synchronized CacheData remove(Object key) {
+        CacheKey cacheKey = (CacheKey) key;
+        CacheData data = super.remove(cacheKey);
+
+        File cacheFile = data.getFile();
         expired++;
         if (cacheFile != null) {
             diskSize -= cacheFile.length();
             cacheFile.delete();
         }
+        return data;
+    }
+
+    public synchronized boolean remove(Object key, Object value) {
+        return remove(key) != null;
     }
 
     /**
      * Cache entries are keyed on the expression string and resolution.
      */
-    private class CacheKey {
+    protected final class CacheKey {
         public String key;
         public int resolution;
 

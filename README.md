@@ -98,6 +98,10 @@ _monitor providing version information and cache statistics respectively. This
 is an implementation of a minimal web application monitoring scheme we use. Use
 them as you wish, but you should be aware that they are there. 
 
+### Cache
+
+The images are kept in a FIFO cache with a fixed size of 10000 entries. This may 
+become more easily configured in a later version.
 
 ## Running
 
@@ -118,23 +122,6 @@ will not be enabled.
 |----------|----------|---------|-------------|
 | SSL_CERTIFICATE_FILE | no |  | The path to a certificate PKCS12 keystore. |
 | SSL_CERTIFICATE_KEY | no |  | The path to a file containing the passphrase for the certificate. |
-
-### Security Considerations
-
-Items in the cache are expired and removed if not requested for a week, but
-there is no limit on the cache size. It will continue to fill the available
-disk and memory spaces until out of resources. It is hence currently
-
-possible to achieve a DoS-attack by generating lots of images.
-
-It is thus recommended to run WebTex on a dedicated server. It is also 
-recommended to use a separate partition for the tomcat folder serving
-WebTex in order not to bring the hosting system down if the disk gets full,
-and size it properly.
-
-A future version of WebTex may provide customizable max settings for 
-number of items and disk size of cache if necessary, but so far this 
-requirement has not been a high priority.
 
 ## Rationale and history
 
