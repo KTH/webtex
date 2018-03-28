@@ -8,7 +8,7 @@ ENV APP_CONTEXT  webtex.war
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    texlive texlive-latex-extra texlive-math-extra dvipng
+    texlive texlive-latex-extra texlive-science dvipng
 
 ADD run.sh /opt/local/bin/run.sh
 RUN chmod +x /opt/local/bin/run.sh; rm -rf /usr/local/tomcat/webapps/*
