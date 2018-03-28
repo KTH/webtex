@@ -1,6 +1,10 @@
 Release notes
 -------------
 
+## WebTex 1.5.3
+
+* Fix build for new texlive.
+
 ## WebTex 1.5.2
 
 * Make CSS and JS compression work again.
