@@ -15,17 +15,17 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>WebTex</servlet-name>
-    <url-pattern>/WebTex</url-pattern>
+    <url-pattern>/api/WebTex</url-pattern>
   </servlet-mapping>
 
   <servlet>
     <servlet-name>about</servlet-name>
-    <jsp-file>/_about.jsp</jsp-file>
+    <jsp-file>/api/_about.jsp</jsp-file>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>about</servlet-name>
-    <url-pattern>/_about</url-pattern>
+    <url-pattern>/api/_about</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -36,7 +36,7 @@
 
   <servlet-mapping>
     <servlet-name>Monitor</servlet-name>
-    <url-pattern>/_monitor</url-pattern>
+    <url-pattern>/api/_monitor</url-pattern>
   </servlet-mapping>
 
 <!-- Tomcat 7 specifics
@@ -55,13 +55,13 @@
 
   <filter-mapping>
     <filter-name>ExpiresFilter</filter-name>
-    <url-pattern>/js/*</url-pattern>
+    <url-pattern>/api/js/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>ExpiresFilter</filter-name>
-    <url-pattern>/css/*</url-pattern>
+    <url-pattern>/api/css/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
 -->
