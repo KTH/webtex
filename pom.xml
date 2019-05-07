@@ -171,7 +171,7 @@
           <pullOnBuild>true</pullOnBuild>
           <imageTags>
             <imageTag>latest</imageTag>
-            <imageTag>${project.version}-${build}_${git.commit.id.abbrev}</imageTag>
+            <imageTag>${project.version}.${build}_${git.commit.id.abbrev}</imageTag>
             <imageTag>${git.commit.id.abbrev}</imageTag>
           </imageTags>
           <resources>
