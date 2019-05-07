@@ -4,7 +4,7 @@
   <groupId>se.kth.infosys</groupId>
   <artifactId>webtex</artifactId>
   <packaging>war</packaging>
-  <version>1.5.3</version>
+  <version>1.6.0</version>
   <name>WebTex</name>
   <url>https://github.com/KTHse/webtex</url>
   <organization>
