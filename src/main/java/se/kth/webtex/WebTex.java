@@ -40,15 +40,16 @@ import se.kth.sys.util.StringUtil;
 import se.kth.webtex.Cache.CacheData;
 
 /**
- * Servlet implementation. Does the parameter handling and response/request logic.
+ * Servlet implementation. Does the parameter handling and response/request
+ * logic.
  */
 public class WebTex extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String PARAMETER_TEX = "tex";
     private static final String PARAMETER_RESOLUTION = "D";
-    private static int EXPIRES_AFTER = 7*24*60*60;
-    private static final Pattern INVALID_PATTERNS = 
-            Pattern.compile(".*(\\\\def|\\\\input|\\\\output|\\\\read|\\\\write|\\\\openin|\\\\openout|\\\\catcode|\\\\let).*");
+    private static int EXPIRES_AFTER = 7 * 24 * 60 * 60;
+    private static final Pattern INVALID_PATTERNS = Pattern.compile(
+            ".*(\\\\def|\\\\input|\\\\output|\\\\read|\\\\write|\\\\openin|\\\\openout|\\\\catcode|\\\\let).*");
 
     private Cache cache;
     private TexRunner texRunner;
@@ -60,7 +61,6 @@ public class WebTex extends HttpServlet {
     public WebTex() {
         super();
     }
-
 
     @Override
     public void init(ServletConfig config) {
@@ -89,17 +89,17 @@ public class WebTex extends HttpServlet {
         }
     }
 
-
     /**
      * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
      */
-    protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doHead(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             String expression = getTeX(request);
             if (isValid(expression)) {
                 int resolution = getResolution(request);
                 createImage(expression, resolution);
-                writeHeaders(response, expression, resolution);		
+                writeHeaders(response, expression, resolution);
             } else {
                 // Handle the case where there is no parameter.
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -109,11 +109,12 @@ public class WebTex extends HttpServlet {
         }
     }
 
-
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             String expression = getTeX(request);
             if (isValid(expression)) {
@@ -132,19 +133,16 @@ public class WebTex extends HttpServlet {
     }
 
     private boolean isValid(String expression) {
-        if (StringUtil.isValue(expression) && 
-                !INVALID_PATTERNS.matcher(expression).matches()) {
+        if (StringUtil.isValue(expression) && !INVALID_PATTERNS.matcher(expression).matches()) {
             return true;
         }
 
         return false;
     }
 
-
     private String getTeX(HttpServletRequest request) {
         return request.getParameter(PARAMETER_TEX);
     }
-
 
     private int getResolution(HttpServletRequest request) {
         if (request.getParameter(PARAMETER_RESOLUTION) != null) {
@@ -156,11 +154,11 @@ public class WebTex extends HttpServlet {
         }
     }
 
-    private String encodeURIComponent (String unencoded) {
+    private String encodeURIComponent(String unencoded) {
         try {
-            String escaped = unencoded.replace("\\",  "\\\\")
-                    .replaceAll("(\\r|\\n)+", " ")
-                    .replace("'", "\\'");
+            String escaped = unencoded.replace("\\", "\\\\")
+	            .replaceAll("(\\r|\\n)+", " ")
+	            .replace("'", "\\'");
             return (String) engine.eval("encodeURIComponent('" + escaped + "')");
         } catch (ScriptException e) {
             System.out.println("Error encoding string: '" + unencoded + "': " + e.getMessage());
@@ -172,6 +170,11 @@ public class WebTex extends HttpServlet {
         CacheData data = cache.get(expression, resolution);
         File file = data.getFile();
         String logMessage = data.getLogMessage();
+
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "*");
+        response.addHeader("Access-Control-Allow-Headers", "*");
+        response.addHeader("Access-Control-Expose-Headers", "*");
 
         response.addHeader("X-MathImage-tex", encodeURIComponent(expression));
 
@@ -193,11 +196,12 @@ public class WebTex extends HttpServlet {
             response.addIntHeader("X-MathImage-depth", data.getDepth());
             response.addIntHeader("X-MathImage-width", data.getWidth());
             response.addIntHeader("X-MathImage-height", data.getHeight());
-            response.setContentLength((int)file.length());
+            response.setContentLength((int) file.length());
         }
     }
 
-    private void writeImage(HttpServletResponse response, String expression, int resolution) throws ServletException, IOException {
+    private void writeImage(HttpServletResponse response, String expression, int resolution)
+            throws ServletException, IOException {
         File file = cache.get(expression, resolution).getFile();
         if (file == null) {
             return;
@@ -215,7 +219,7 @@ public class WebTex extends HttpServlet {
     }
 
     private void createImage(String expression, Integer resolution) throws IOException, ServletException {
-        if (! cache.contains(expression, resolution)) {
+        if (!cache.contains(expression, resolution)) {
             texRunner.create(expression, resolution, cache);
         }
     }
