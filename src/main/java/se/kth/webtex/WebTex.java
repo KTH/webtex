@@ -156,7 +156,9 @@ public class WebTex extends HttpServlet {
 
     private String encodeURIComponent(String unencoded) {
         try {
-            String escaped = unencoded.replace("\\", "\\\\").replaceAll("(\\r|\\n)+", " ").replace("'", "\\'");
+            String escaped = unencoded.replace("\\", "\\\\")
+	            .replaceAll("(\\r|\\n)+", " ")
+	            .replace("'", "\\'");
             return (String) engine.eval("encodeURIComponent('" + escaped + "')");
         } catch (ScriptException e) {
             System.out.println("Error encoding string: '" + unencoded + "': " + e.getMessage());
