@@ -90,6 +90,15 @@ public class WebTex extends HttpServlet {
     }
 
     /**
+     * @see HttpServlet#doOptions(HttpServletRequest, HttpServletResponse)
+     */
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        writeCORSHeaders(response);
+        super.doOptions(request, response);
+    }
+
+    /**
      * @see HttpServlet#doHead(HttpServletRequest, HttpServletResponse)
      */
     protected void doHead(HttpServletRequest request, HttpServletResponse response)
@@ -156,9 +165,7 @@ public class WebTex extends HttpServlet {
 
     private String encodeURIComponent(String unencoded) {
         try {
-            String escaped = unencoded.replace("\\", "\\\\")
-	            .replaceAll("(\\r|\\n)+", " ")
-	            .replace("'", "\\'");
+            String escaped = unencoded.replace("\\", "\\\\").replaceAll("(\\r|\\n)+", " ").replace("'", "\\'");
             return (String) engine.eval("encodeURIComponent('" + escaped + "')");
         } catch (ScriptException e) {
             System.out.println("Error encoding string: '" + unencoded + "': " + e.getMessage());
@@ -166,15 +173,19 @@ public class WebTex extends HttpServlet {
         }
     }
 
+    private void writeCORSHeaders(HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "*");
+        response.addHeader("Access-Control-Allow-Headers", "*");
+        response.addHeader("Access-Control-Expose-Headers", "*");
+    }
+
     private void writeHeaders(HttpServletResponse response, String expression, int resolution) {
         CacheData data = cache.get(expression, resolution);
         File file = data.getFile();
         String logMessage = data.getLogMessage();
 
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "*");
-        response.addHeader("Access-Control-Allow-Headers", "*");
-        response.addHeader("Access-Control-Expose-Headers", "*");
+        writeCORSHeaders(response);
 
         response.addHeader("X-MathImage-tex", encodeURIComponent(expression));
 
