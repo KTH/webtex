@@ -95,7 +95,7 @@ public class WebTex extends HttpServlet {
     protected void doOptions(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         writeCORSHeaders(response);
-        response.setStatus(HttpServletResponse.SC_OK);
+        super.doOptions(request, response);
     }
 
     /**
